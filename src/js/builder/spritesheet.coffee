@@ -36,7 +36,8 @@ class Builder.SpriteSheet
 	# Add animation
 	#
 	# @param animation [String] the animation name
-	# @param 
+	# @param s...
+	# @return [self]
 	#
 	animation: ( animation, s... ) ->
 	
@@ -46,6 +47,13 @@ class Builder.SpriteSheet
 		
 		return this
 		
+	# Add animation extra
+	# @param animation [String] the animation name
+	# @param s...
+	# @param next [String]
+	# @param frequency [Integer]
+	# @return [self]
+	#
 	animationExtra: ( animation, s..., next, frequency ) ->
 	
 		@builder.addAnimation( animation, 

@@ -1,4 +1,4 @@
-class Builder.Player extends Builder.SpriteSheet
+class Builder.PlanePlayer extends Builder.SpriteSheet
 
 	#
 	#
