@@ -14,11 +14,11 @@
     }
 
     Container.prototype.update = function(event) {
-      var object, _i, _len, _ref;
+      var key, object, _ref;
 
       _ref = this.objects;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        object = _ref[_i];
+      for (key in _ref) {
+        object = _ref[key];
         object.update(event);
       }
       return this;
@@ -26,7 +26,7 @@
 
     Container.prototype.add = function(key, object) {
       if (this.get(key) != null) {
-        throw new Error;
+        throw new Error("There already is an object with that key (" + key + ").");
       }
       this.objects[key] = object;
       this.container.addChild(object.createjs);
@@ -37,7 +37,7 @@
       var object;
 
       if ((object = this.get(key)) == null) {
-        throw new Error;
+        throw new Error("There is not an object with that key (" + key + ").");
       }
       this.container.removeChild(object.createjs);
       delete this.objects[key];

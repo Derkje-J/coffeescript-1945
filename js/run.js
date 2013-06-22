@@ -3,7 +3,7 @@
   var _this = this;
 
   window.onload = (function() {
-    return (typeof exports !== "undefined" && exports !== null ? exports : _this).Canvas1945 = new Game.Game();
+    return (typeof exports !== "undefined" && exports !== null ? exports : _this).Canvas1945 = new Game.Canvas1945();
   });
 
 }).call(this);

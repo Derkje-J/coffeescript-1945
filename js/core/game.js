@@ -3,48 +3,77 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Game.Game = (function(_super) {
-    __extends(Game, _super);
+  Game.Canvas1945 = (function(_super) {
+    __extends(Canvas1945, _super);
 
-    Game.Width = (function() {
+    Canvas1945.Width = (function() {
       return 640;
     })();
 
-    Game.Height = (function() {
+    Canvas1945.Height = (function() {
       return 480;
     })();
 
-    function Game() {
+    function Canvas1945() {
       var canvas, container;
 
-      Game.__super__.constructor.apply(this, arguments);
+      Canvas1945.__super__.constructor.apply(this, arguments);
       canvas = document.createElement('canvas');
       canvas.id = 'game';
-      canvas.setAttribute('width', Game.Width);
-      canvas.setAttribute('height', Game.Height);
+      canvas.setAttribute('width', Canvas1945.Width);
+      canvas.setAttribute('height', Canvas1945.Height);
       container = document.getElementById("container");
       container.appendChild(canvas);
       this.stage = this.container = new createjs.Stage(canvas);
       this._setTicker();
+      this._createLayers();
+      this.addTo('hud', 'fps', new Display.FPS());
     }
 
-    Game.prototype._setTicker = function() {
+    Canvas1945.prototype._setTicker = function() {
       createjs.Ticker.addEventListener("tick", this.update);
       createjs.Ticker.useRAF = true;
       createjs.Ticker.setFPS(60);
       return this;
     };
 
-    Game.prototype.getStage = function() {
+    Canvas1945.prototype._createLayers = function() {
+      this.add('background', new Game.Container());
+      this.add('level', new Game.Container());
+      this.add('foreground', new Game.Container());
+      this.add('hud', new Game.Container());
+      return this;
+    };
+
+    Canvas1945.prototype._removeLayers = function() {
+      this.remove('hud');
+      this.remove('foreground');
+      this.remove('level');
+      this.remove('background');
+      return this;
+    };
+
+    Canvas1945.prototype.addTo = function(layer, key, object) {
+      (this.get(layer)).add(key, object);
+      return this;
+    };
+
+    Canvas1945.prototype.removeFrom = function(layer, key) {
+      (this.get(layer)).remove(key);
+      return this;
+    };
+
+    Canvas1945.prototype.getStage = function() {
       return this.stage;
     };
 
-    Game.prototype.update = function(event) {
-      Game.__super__.update.call(this, event);
-      return this.stage.update();
+    Canvas1945.prototype.update = function(event) {
+      Canvas1945.__super__.update.call(this, event);
+      this.stage.update();
+      return this;
     };
 
-    return Game;
+    return Canvas1945;
 
   })(Game.Container);
 
