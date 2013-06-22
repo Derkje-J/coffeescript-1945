@@ -1,35 +1,8 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		
 		<title>Canvas 1945</title>
-		
-		<style>
-			body {
-				margin: 0px;
-				padding: 0px;
-				background: rgb( 4, 6, 10 );
-			}
-			
-			#container {
-				top: 50%;
-				left: 50%;
-				width: 640px;
-				height: 480px;
-				margin-top: -240px;
-				margin-left: -320px;
-				position:fixed;
-			}
-	  
-			#container canvas {
-				background: rgb( 8, 54, 129 );
-				
-				-webkit-box-shadow: 1px 1px 3px rgba( 0, 0, 0, 0.8 );
-				   -moz-box-shadow: 1px 1px 3px rgba( 0, 0, 0, 0.8 );
-				     -o-box-shadow: 1px 1px 3px rgba( 0, 0, 0, 0.8 );
-				        box-shadow: 1px 1px 3px rgba( 0, 0, 0, 0.8 );
-			}
-		</style>
+		<link href="css/style.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
 		<div id="container"></div>
@@ -37,6 +10,10 @@
 		<script src="js/pre.js"></script>
 		<script src="js/core/game_container.js"></script>
 		<script src="js/core/game.js"></script>
+		<script src="js/core/sprite.js"></script>
+		<script src="js/builder/spritesheet.js"></script>
+		<script src="js/builder/player.js"></script>
+		<script src="js/display/fps.js"></script>
 		<script src="js/run.js"></script>
 	</body>
 </html>
