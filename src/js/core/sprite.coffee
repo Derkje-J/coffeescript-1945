@@ -1,3 +1,6 @@
+'use strict'
+# The core sprite class
+#
 class Game.Sprite
 
 	# The base bitmap for all the sprites
@@ -27,7 +30,25 @@ class Game.Sprite
 					@animation.y = Math.round value
 		)
 	
+	# Plays an animation
 	#
+	# @param animation [String] the animation string
+	# @return [self] the chainable self
+	#
+	play: ( animation ) ->
+		@createjs.gotoAndPlay animation
+		return this
+		
+	# Sets an animation, but doesn't play
+	#
+	# @param animation [String] the animation string
+	# @return [self] the chainable self
+	#
+	stop: ( animation ) ->
+		@createjs.gotoAndStop animation
+		return this
+	
+	# On tick update
 	#
 	update: ( event ) ->
 		
