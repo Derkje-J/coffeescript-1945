@@ -10,6 +10,9 @@ class Game.Canvas1945 extends Game.Container
 	#
 	@Height = ( -> return 480 )()
 	
+	#
+	#
+	@ScrollSpeed = ( -> return 100 )()
 		
 	# Creates a new Game
 	#
@@ -29,8 +32,18 @@ class Game.Canvas1945 extends Game.Container
 		@stage = @container = new createjs.Stage canvas
 		@_setTicker()
 		@_createLayers()
-		
+
+		# Create objects
+		@addTo 'background', 'islandA', Builder.BackgroundIsland.create 'A'
+		@addTo 'background', 'islandB', Builder.BackgroundIsland.create 'B'
+		@addTo 'background', 'islandC', Builder.BackgroundIsland.create 'C'
+		@addTo 'level', 'player', Builder.PlanePlayer.create()
 		@addTo 'hud', 'fps', new Display.FPS()
+		
+		a = @getFrom 'level', 'player'
+		a.x = 100
+		a.y = 100
+		a.createjs.gotoAndPlay 'idle'
 		
 	# Sets the ticker
 	#
@@ -74,6 +87,14 @@ class Game.Canvas1945 extends Game.Container
 	addTo: ( layer, key, object ) ->
 		( @get layer ).add key, object
 		return this
+		
+	# Gets from layer
+	#
+	# @param layer [String] the layer name
+	# @param key [String] the key
+	#
+	getFrom: ( layer, key ) ->
+		return ( @get layer ).get key
 		
 	# Remove from layer
 	#
