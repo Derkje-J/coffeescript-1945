@@ -1,14 +1,18 @@
 class Builder.SpriteSheet
 	
-	#
+	# Creates a new spritesheet builder
 	#
 	constructor: ->
-		@builder = new createjs.SpriteSheetBuilder()
 		
+		@data =
+			images: [ Game.Sprite.BaseSheet.image ]
+			frames: []
+			animations: {}
+			
 		Object.defineProperty( @, 'createjs',
-			get: -> return @builder
+			get: -> return new createjs.SpriteSheet @data
 		)
-	
+
 	# Creates a sequence of frames
 	#
 	# @param x [Integer] the starting x
@@ -29,7 +33,9 @@ class Builder.SpriteSheet
 		for i in [0...len]
 			i_x = x + ( ( w + gx ) * ( i % xlen ) )
 			i_y = y + ( ( y + gy ) * Math.floor( i / xlen ) )
-			sequence.push @builder.addFrame Game.Sprite.BaseSheet, new createjs.Rectangle( i_x, i_y, w, h )
+
+			sequence.push @data.frames.length
+			@data.frames.push [ i_x, i_y, w, h, 0, Math.floor( w / 2 ), Math.floor( h / 2 ) ]
 			
 		return sequence
 		
@@ -41,9 +47,8 @@ class Builder.SpriteSheet
 	#
 	animation: ( animation, s... ) ->
 	
-		@builder.addAnimation( animation, 
-			@sequence.apply( @, s )
-		)
+		@data.animations[ animation ] = 
+			frames: @sequence.apply( @, s )
 		
 		return this
 		
@@ -56,11 +61,10 @@ class Builder.SpriteSheet
 	#
 	animationExtra: ( animation, s..., next, frequency ) ->
 	
-		@builder.addAnimation( animation, 
-			@sequence.apply( @, s ),
-			next,
-			frequency
-		)
+		@data.animations[ animation ] = 
+			frames: @sequence.apply( @, s )
+			next: next
+			frequency: frequency
 		
 		return this
 		
