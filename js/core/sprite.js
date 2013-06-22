@@ -3,15 +3,41 @@
   Game.Sprite = (function() {
     Sprite.BaseSheet = new createjs.Bitmap("img/1945.png");
 
-    function Sprite(data) {
-      this.spritesheet = new createjs.SpriteSheet(data);
+    function Sprite(spritesheet) {
+      this.spritesheet = spritesheet;
       this.animation = new createjs.BitmapAnimation(this.spritesheet);
-      Object.defineProperty(this, 'createjs', {
-        get: function() {
-          return this.animation;
+      Object.defineProperties(this, {
+        'createjs': {
+          get: function() {
+            return this.animation;
+          }
+        },
+        'x': {
+          get: function() {
+            var _ref;
+
+            return (_ref = this._x) != null ? _ref : 0;
+          },
+          set: function(value) {
+            this._x = value;
+            return this.animation.x = Math.round(value);
+          }
+        },
+        'y': {
+          get: function() {
+            var _ref;
+
+            return (_ref = this._y) != null ? _ref : 0;
+          },
+          set: function(value) {
+            this._y = value;
+            return this.animation.y = Math.round(value);
+          }
         }
       });
     }
+
+    Sprite.prototype.update = function(event) {};
 
     return Sprite;
 

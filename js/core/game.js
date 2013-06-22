@@ -14,8 +14,12 @@
       return 480;
     })();
 
+    Canvas1945.ScrollSpeed = (function() {
+      return 100;
+    })();
+
     function Canvas1945() {
-      var canvas, container;
+      var a, canvas, container;
 
       Canvas1945.__super__.constructor.apply(this, arguments);
       canvas = document.createElement('canvas');
@@ -27,7 +31,15 @@
       this.stage = this.container = new createjs.Stage(canvas);
       this._setTicker();
       this._createLayers();
+      this.addTo('background', 'islandA', Builder.BackgroundIsland.create('A'));
+      this.addTo('background', 'islandB', Builder.BackgroundIsland.create('B'));
+      this.addTo('background', 'islandC', Builder.BackgroundIsland.create('C'));
+      this.addTo('level', 'player', Builder.PlanePlayer.create());
       this.addTo('hud', 'fps', new Display.FPS());
+      a = this.getFrom('level', 'player');
+      a.x = 100;
+      a.y = 100;
+      a.createjs.gotoAndPlay('idle');
     }
 
     Canvas1945.prototype._setTicker = function() {
@@ -56,6 +68,10 @@
     Canvas1945.prototype.addTo = function(layer, key, object) {
       (this.get(layer)).add(key, object);
       return this;
+    };
+
+    Canvas1945.prototype.getFrom = function(layer, key) {
+      return (this.get(layer)).get(key);
     };
 
     Canvas1945.prototype.removeFrom = function(layer, key) {

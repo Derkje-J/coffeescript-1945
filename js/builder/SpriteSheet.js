@@ -4,10 +4,14 @@
 
   Builder.SpriteSheet = (function() {
     function SpriteSheet() {
-      this.builder = new createjs.SpriteSheetBuilder();
+      this.data = {
+        images: [Game.Sprite.BaseSheet.image],
+        frames: [],
+        animations: {}
+      };
       Object.defineProperty(this, 'createjs', {
         get: function() {
-          return this.builder;
+          return new createjs.SpriteSheet(this.data);
         }
       });
     }
@@ -22,7 +26,8 @@
       for (i = _i = 0; 0 <= len ? _i < len : _i > len; i = 0 <= len ? ++_i : --_i) {
         i_x = x + ((w + gx) * (i % xlen));
         i_y = y + ((y + gy) * Math.floor(i / xlen));
-        sequence.push(this.builder.addFrame(Game.Sprite.BaseSheet, new createjs.Rectangle(i_x, i_y, w, h)));
+        sequence.push(this.data.frames.length);
+        this.data.frames.push([i_x, i_y, w, h, 0, Math.floor(w / 2), Math.floor(h / 2)]);
       }
       return sequence;
     };
@@ -31,7 +36,9 @@
       var animation, s;
 
       animation = arguments[0], s = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      this.builder.addAnimation(animation, this.sequence.apply(this, s));
+      this.data.animations[animation] = {
+        frames: this.sequence.apply(this, s)
+      };
       return this;
     };
 
@@ -39,7 +46,11 @@
       var animation, frequency, next, s, _i;
 
       animation = arguments[0], s = 4 <= arguments.length ? __slice.call(arguments, 1, _i = arguments.length - 2) : (_i = 1, []), next = arguments[_i++], frequency = arguments[_i++];
-      this.builder.addAnimation(animation, this.sequence.apply(this, s), next, frequency);
+      this.data.animations[animation] = {
+        frames: this.sequence.apply(this, s),
+        next: next,
+        frequency: frequency
+      };
       return this;
     };
 
