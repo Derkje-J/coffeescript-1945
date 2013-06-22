@@ -1,3 +1,6 @@
+'use strict'
+#
+#
 class Builder.SpriteSheet
 	
 	# Creates a new spritesheet builder

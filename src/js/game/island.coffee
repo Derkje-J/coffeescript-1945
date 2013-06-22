@@ -1,3 +1,4 @@
+'use strict'
 #
 #
 class Game.Island extends Game.Sprite
@@ -14,7 +15,7 @@ class Game.Island extends Game.Sprite
 	constructor: ( spritesheet, type = 'A' ) ->
 	
 		super spritesheet
-		@createjs.gotoAndStop 'type-' + type
+		
 		@x = Math.random() * Game.Canvas1945.Width
 		rel = Math.floor( Math.random() * ( Game.Canvas1945.Height / 3 - Island.Padding ) )
 		switch type
@@ -24,6 +25,8 @@ class Game.Island extends Game.Sprite
 				@y = rel + Game.Canvas1945.Height / 3 * 1
 			when 'C'
 				@y = rel + Game.Canvas1945.Height / 3 * 2
+		
+		@play 'type-' + type
 		
 	# Updates the island
 	#

@@ -1,3 +1,6 @@
+'use strict'
+#
+#
 class Builder.BackgroundIsland extends Builder.SpriteSheet
 
 	@SpriteSheet = null
