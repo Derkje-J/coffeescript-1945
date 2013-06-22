@@ -1,4 +1,5 @@
-#
+'use strict'
+# This is the main class for the canvas game
 #
 class Game.Canvas1945 extends Game.Container
 	
@@ -10,7 +11,7 @@ class Game.Canvas1945 extends Game.Container
 	#
 	@Height = ( -> return 480 )()
 	
-	#
+	# The current scroll speed of the game
 	#
 	@ScrollSpeed = ( -> return 100 )()
 		
@@ -32,18 +33,14 @@ class Game.Canvas1945 extends Game.Container
 		@stage = @container = new createjs.Stage canvas
 		@_setTicker()
 		@_createLayers()
-
-		# Create objects
-		@addTo 'background', 'islandA', Builder.BackgroundIsland.create 'A'
-		@addTo 'background', 'islandB', Builder.BackgroundIsland.create 'B'
-		@addTo 'background', 'islandC', Builder.BackgroundIsland.create 'C'
-		@addTo 'level', 'player', Builder.PlanePlayer.create()
-		@addTo 'hud', 'fps', new Display.FPS()
-		
-		a = @getFrom 'level', 'player'
-		a.x = 100
-		a.y = 100
-		a.createjs.gotoAndPlay 'idle'
+		@_createLevel()
+		@_createDebug()
+	
+		# Define some properties
+		Object.defineProperty( @, 'paused',
+			get: -> return createjs.Ticker.getPaused()
+			set: ( value ) ->  createjs.Ticker.setPaused value
+		)
 		
 	# Sets the ticker
 	#
@@ -64,6 +61,18 @@ class Game.Canvas1945 extends Game.Container
 		@add 'level', new Game.Container()
 		@add 'foreground', new Game.Container()
 		@add 'hud', new Game.Container()
+		return this
+		
+	#
+	#
+	_createLevel: ->		
+		@level = new Game.Level @
+		return this
+		
+	#
+	#
+	_createDebug: ->
+		@addTo 'hud', 'fps', new Display.FPS()
 		return this
 		
 	# Removes the layers
