@@ -7,6 +7,7 @@
     }
 
     Level.prototype.create = function() {
+      this.game.addLogic('collisions', this.collisions = new Game.CollisionManager());
       this.createBackground();
       this.createPlayer();
       this.createHeadsUpDisplay();
@@ -21,12 +22,14 @@
     };
 
     Level.prototype.createPlayer = function() {
-      var i, _i, _results;
+      var enemy, i, _i, _results;
 
       this.game.addTo('level', 'player', this.player = Builder.PlanePlayer.create());
+      this.collisions.add(Game.CollisionManager.Groups.Player, this.player);
       _results = [];
-      for (i = _i = 0; _i < 80; i = ++_i) {
-        _results.push(this.game.addTo('level', 'enemy-' + i, Builder.PlaneGreen.create()));
+      for (i = _i = 0; _i < 10; i = ++_i) {
+        this.game.addTo('level', 'enemy-' + i, enemy = Builder.PlaneGreen.create());
+        _results.push(this.collisions.add(Game.CollisionManager.Groups.Enemy, enemy));
       }
       return _results;
     };

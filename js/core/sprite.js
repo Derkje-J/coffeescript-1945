@@ -12,6 +12,7 @@
         y = 0;
       }
       this.animation = new createjs.BitmapAnimation(this.spritesheet);
+      this.globalize = _(this.animation.localToGlobal).bind(this.animation);
       Object.defineProperties(this, {
         'createjs': {
           get: function() {
@@ -38,6 +39,21 @@
           set: function(value) {
             this._y = value;
             return this.animation.y = (value + .5) | 0;
+          }
+        },
+        'width': {
+          get: function() {
+            return this.animation.getBounds().width;
+          }
+        },
+        'height': {
+          get: function() {
+            return this.animation.getBounds().height;
+          }
+        },
+        'bounds': {
+          get: function() {
+            return this.animation.getBounds();
           }
         }
       });

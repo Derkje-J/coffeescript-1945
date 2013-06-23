@@ -115,6 +115,11 @@
       return this;
     };
 
+    Canvas1945.prototype.addLogic = function(key, object) {
+      this.objects[key] = object;
+      return this;
+    };
+
     Canvas1945.prototype.getFrom = function(layer, key) {
       return (this.get(layer)).get(key);
     };

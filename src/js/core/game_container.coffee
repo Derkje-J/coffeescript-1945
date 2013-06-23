@@ -59,6 +59,7 @@ class Game.Container
 			throw new Error "There already is an object with that key (#{ key })."
 			
 		@objects[ key ] = object
+		
 		@container.addChild object.createjs ? object
 		return this
 	
