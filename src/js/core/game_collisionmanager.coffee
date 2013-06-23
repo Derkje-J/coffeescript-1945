@@ -64,6 +64,9 @@ class Game.CollisionManager
 		@_gridHeight = _( _( @_grid ).first() ).keys().length
 		
 		@_setupPixelPerfectCollision()
+		
+		Game.EventManager.on 'collidable.create', @, ( source, group, object ) => @add group, object
+		Game.EventManager.on 'collidable.destroy', @, ( source, group, object ) => @remove group, object
 
 	# Runs every tick and passes down the tick event
 	# 
@@ -116,9 +119,8 @@ class Game.CollisionManager
 										collided.push lefty
 										collided.push righty
 										
-										lefty.collide?( righty )
-										righty.collide?( lefty )
-										console.log 'collision'
+										lefty.collide?( groupb, righty )
+										righty.collide?( groupa, lefty )
 				
 				# Clear grid section
 				@_grid[ x ][ y ] = {}
@@ -162,8 +164,13 @@ class Game.CollisionManager
 	remove: ( group, object ) ->
 		@objects[ group ] = _( @objects[ group ] ).without object
 		return this
-		
-		
+	
+	# Clears the collision manager from collidable objects
+	#
+	clear: () ->
+		@objects = {}
+		return this
+	
 	# Setups the pixel perfect collision
 	#
 	_setupPixelPerfectCollision: () ->
