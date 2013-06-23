@@ -11,7 +11,15 @@ class Game.Level
 	
 		@create()
 		
+		#Game.EventManager.on 'plane.create', @, @onPlaneCreated
 		Game.EventManager.on 'plane.destroy', @, @onPlaneDestroyed
+		Game.EventManager.on 'bullet.create', @, @onBulletCreated
+		Game.EventManager.on 'bullet.destroy', @, @onBulletDestroyed
+		
+	#
+	#
+	#onPlaneCreated: ( source ) ->		
+		#@game.addTo 'level', _( 'plane' ).uniqueId(), source	
 		
 	#
 	#
@@ -20,6 +28,16 @@ class Game.Level
 			@game.removeFrom 'level', @game.get( 'level' ).findKey source
 		else if source instanceof Game.Player
 			@game.die()
+			
+	#
+	#
+	onBulletCreated: ( source, bullet ) ->
+		@game.addTo 'below-level', _( 'bullet' ).uniqueId(), bullet
+		
+	#
+	#
+	onBulletDestroyed: ( source ) ->
+		@game.removeFrom 'below-level', @game.get( 'below-level' ).findKey source
 		
 	# Creates the level
 	#
@@ -74,6 +92,15 @@ class Game.Level
 		@clearEnemies()
 		@clearHeadsUpDisplay()
 		return this
+	
+	#
+	#
+	kill: () ->
+		@clear()
+		
+		Game.EventManager.off 'plane.destroy', @, @onPlaneDestroyed
+		Game.EventManager.off 'bullet.create', @, @onBulletCreated
+		Game.EventManager.off 'bullet.destroy', @, @onBulletDestroyed
 		
 	# Clears the background
 	#
