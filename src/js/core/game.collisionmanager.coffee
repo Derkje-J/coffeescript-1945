@@ -3,7 +3,7 @@
   The MIT License
 
   Copyright (c) 2012 Olaf Horstmann, indiegamr.com ( pixel collision )
-  Copyright (c) 2013 Derk-Jan Karrenbeld, derk-jan.com ( fixes and collision manager )
+  Copyright (c) 2013 Derk-Jan Karrenbeld, derk-jan.com ( fixes, coffeescript and collision manager )
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal

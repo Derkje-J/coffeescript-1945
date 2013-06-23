@@ -15,6 +15,8 @@ class Game.EnemyPlane extends Game.Plane
 				x: 'spawn-random-x'
 				y: 'spawn-random-y'
 			ondeath: 'ondeath'
+		fire:
+			point: 'point'
 		
 	# Creates a new Game Plane
 	#

@@ -94,7 +94,9 @@ class Game.Canvas1945 extends Game.Container
 	#
 	_createLayers: ->
 		@add 'background', new Game.Container()
+		@add 'below-level', new Game.Container()
 		@add 'level', new Game.Container()
+		@add 'above-level', new Game.Container()
 		@add 'foreground', new Game.Container()
 		@add 'hud', new Game.Container()
 		return this
@@ -130,7 +132,9 @@ class Game.Canvas1945 extends Game.Container
 	_removeLayers: ->
 		@remove 'hud'
 		@remove 'foreground'
+		@remove 'above-level'
 		@remove 'level'
+		@remove 'below-level'
 		@remove 'background'
 		return this
 		
