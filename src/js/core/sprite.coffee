@@ -1,7 +1,7 @@
 'use strict'
 # The core sprite class
 #
-class Game.Sprite
+class Game.Sprite 
 
 	# The base bitmap for all the sprites
 	#
@@ -9,8 +9,8 @@ class Game.Sprite
 	
 	# Creates a new sprite from a spritesheet
 	#
-	constructor: ( @spritesheet ) ->
-		
+	constructor: ( @spritesheet, x = 0, y = 0 ) ->
+			
 		@animation = new createjs.BitmapAnimation @spritesheet
 		
 		Object.defineProperties( @, 
@@ -21,14 +21,17 @@ class Game.Sprite
 				get: -> return @_x ? 0
 				set: ( value ) -> 
 					@_x = value
-					@animation.x = Math.round value
+					@animation.x = ( value + .5 )| 0
 			
 			'y':
 				get: -> return @_y ? 0
 				set: ( value ) -> 
 					@_y = value
-					@animation.y = Math.round value
+					@animation.y = ( value + .5 ) | 0
 		)
+		
+		@x = x
+		@y = y
 	
 	# Plays an animation
 	#
