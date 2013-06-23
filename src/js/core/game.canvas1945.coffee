@@ -34,16 +34,30 @@ class Game.Canvas1945 extends Game.Container
 		@stage = @container = new createjs.Stage @canvas
 		@_setTicker()
 		@_setInput @canvas
-		@_createPersistantData()
-		@_createLayers()
-		@_createLevel()
-		@_createDebug()
 		
 		# Define some properties
 		Object.defineProperty( @, 'paused',
 			get: -> return createjs.Ticker.getPaused()
 			set: ( value ) ->  createjs.Ticker.setPaused value
 		)
+		
+		# Build the game
+		@addLogic 'collisions', @collisions = new Game.CollisionManager()
+		
+		@_createPersistantData()
+		@_createLayers()
+		@_createDebug()
+
+		# @TODO asset manager and loading bar. For now this will do
+		preload = new createjs.LoadQueue()
+		preload.setMaxConnections 5
+		preload.addEventListener "complete", () => @ready()
+		preload.loadFile Game.Sprite.BaseSheet.image.src
+		
+	#
+	# @TODO asset manager and loading bar. For now this will do
+	ready: ->
+		@level.create()
 		
 	# Sets the ticker
 	#
@@ -94,20 +108,9 @@ class Game.Canvas1945 extends Game.Container
 	#
 	_createLayers: ->
 		@add 'background', new Game.Container()
-		@add 'below-level', new Game.Container()
-		@add 'level', new Game.Container()
-		@add 'above-level', new Game.Container()
+		@add 'level', @level = new Game.Level @
 		@add 'foreground', new Game.Container()
 		@add 'hud', new Game.Container()
-		return this
-		
-	# Creates the level
-	#
-	# @return [self] the chainable self
-	#
-	_createLevel: ->		
-		@addLogic 'collisions', @collisions = new Game.CollisionManager()
-		@level = new Game.Level @
 		return this
 		
 	#
@@ -132,9 +135,7 @@ class Game.Canvas1945 extends Game.Container
 	_removeLayers: ->
 		@remove 'hud'
 		@remove 'foreground'
-		@remove 'above-level'
 		@remove 'level'
-		@remove 'below-level'
 		@remove 'background'
 		return this
 		
@@ -146,43 +147,11 @@ class Game.Canvas1945 extends Game.Container
 			@level.restart()
 		else
 			createjs.Ticker.setPaused on
-		
-	
-	# Add to layer
-	#
-	# @param layer [String] the layer name
-	# @param key [String] the key
-	# @param object [any] the object
-	# @return [self] the chainable self
-	#
-	addTo: ( layer, key, object ) ->
-		( @get layer ).add key, object
-		return this
-	
 	#
 	#
 	addLogic: ( key, object ) ->
 		@objects[ key ] = object
 		return this
-		
-	# Gets from layer
-	#
-	# @param layer [String] the layer name
-	# @param key [String] the key
-	#
-	getFrom: ( layer, key ) ->
-		return ( @get layer ).get key
-		
-	# Remove from layer
-	#
-	# @param layer [String] the layer name
-	# @param key [String] the key
-	# @return [self] the chainable self
-	#
-	removeFrom: ( layer, key ) ->
-		( @get layer ).remove key
-		return this
-	
 	# Runs every tick and passes down the tick event
 	# 
 	# @param event [Event] the update event
