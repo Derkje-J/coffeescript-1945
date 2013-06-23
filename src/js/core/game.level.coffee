@@ -1,16 +1,15 @@
 'use strict'
 # This is the base class for a level
 #
-class Game.Level
+class Game.Level extends Game.Container
 	
 	# Creates a level
 	#
 	# @param [Game.Canvas1945] the game reference
 	#
 	constructor: ( @game ) ->
-	
-		@create()
-		
+		super
+
 		#Game.EventManager.on 'plane.create', @, @onPlaneCreated
 		Game.EventManager.on 'plane.destroy', @, @onPlaneDestroyed
 		Game.EventManager.on 'bullet.create', @, @onBulletCreated
@@ -19,33 +18,32 @@ class Game.Level
 	#
 	#
 	#onPlaneCreated: ( source ) ->		
-		#@game.addTo 'level', _( 'plane' ).uniqueId(), source	
+		#@addTo 'level', _( 'plane' ).uniqueId(), source	
 		
 	#
 	#
 	onPlaneDestroyed: ( source ) ->
 		if source instanceof Game.EnemyPlane
-			@game.removeFrom 'level', @game.get( 'level' ).findKey source
+			@removeFrom 'level', @get( 'level' ).findKey source
 		else if source instanceof Game.Player
 			@game.die()
 			
 	#
 	#
 	onBulletCreated: ( source, bullet ) ->
-		@game.addTo 'below-level', _( 'bullet' ).uniqueId(), bullet
+		@addTo 'below', _( 'bullet' ).uniqueId(), bullet
 		
 	#
 	#
 	onBulletDestroyed: ( source ) ->
-		@game.removeFrom 'below-level', @game.get( 'below-level' ).findKey source
+		@removeFrom 'below', @get( 'below' ).findKey source
 		
 	# Creates the level
 	#
 	create: () ->
 	
 		@createBackground()
-		@createPlayer()
-		@createEnemies()
+		@createLayers()
 		@createHeadsUpDisplay()
 		
 		return this
@@ -60,19 +58,18 @@ class Game.Level
 		@game.addTo 'background', 'islandC', Builder.BackgroundIsland.create 'C'
 		return this
 		
-	# Creates the player
 	#
-	# @return [self] the chainable self
 	#
-	createPlayer: () ->
-		@game.addTo 'level', 'player', @player = Builder.PlayerPlane.create()
+	createLayers: () ->
+		@add 'below', new Game.Container()
+		@add 'level', new Game.Container()
+		@add 'above', new Game.Container()
 		
-	#
-	#
-	createEnemies: () ->
+		@addTo 'level', 'player', @player = Builder.PlayerPlane.create()
+		
 		for i in [0...15]
-			@game.addTo 'level', 'enemy-' + i, enemy = Builder.GreenEnemyPlane.create()
-
+			@addTo 'level', 'enemy-' + i, enemy = Builder.GreenEnemyPlane.create()
+		
 	# Creates the headsup display
 	#
 	# @return [self] the chainable self
@@ -88,8 +85,7 @@ class Game.Level
 		@game.get( 'collisions' ).clear()
 		
 		@clearBackground()
-		@clearPlayer()
-		@clearEnemies()
+		@clearLayers()
 		@clearHeadsUpDisplay()
 		return this
 	
@@ -112,19 +108,18 @@ class Game.Level
 		@game.removeFrom 'background', 'islandC'
 		return this
 		
-	# Clears the player
 	#
-	# @return [self] the chainable self
 	#
-	clearPlayer: () ->
-		@game.removeFrom 'level', 'player'
-		return this
+	#
+	clearLayers: () ->
+		@removeFrom 'level', 'player'
 		
-	#
-	#
-	clearEnemies: () ->
 		for i in [0...15]
-			@game.removeFrom 'level', 'enemy-' + i
+			@removeFrom 'level', 'enemy-' + i
+			
+		@remove 'above'
+		@remove 'level'
+		@remove 'below'
 		
 	# Clears the heads up display
 	#

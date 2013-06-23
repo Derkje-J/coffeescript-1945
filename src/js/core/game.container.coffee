@@ -83,6 +83,36 @@ class Game.Container
 	get: ( key ) ->
 		return @objects[ key ]
 	
+		
+	# Add to layer
+	#
+	# @param layer [String] the layer name
+	# @param key [String] the key
+	# @param object [any] the object
+	# @return [self] the chainable self
+	#
+	addTo: ( layer, key, object ) ->
+		( @get layer ).add key, object
+		return this
+		
+		# Gets from layer
+	#
+	# @param layer [String] the layer name
+	# @param key [String] the key
+	#
+	getFrom: ( layer, key ) ->
+		return ( @get layer ).get key
+		
+	# Remove from layer
+	#
+	# @param layer [String] the layer name
+	# @param key [String] the key
+	# @return [self] the chainable self
+	#
+	removeFrom: ( layer, key ) ->
+		( @get layer ).remove key
+		return this
+	
 	#
 	#
 	findKey: ( search ) ->
