@@ -38,6 +38,7 @@ class Game.Player extends Game.Plane
 	constructor: ( spritesheet ) ->
 		super spritesheet, undefined, Game.Canvas1945.LevelHeight
 		@health = 100
+		@_facing = Game.Plane.Direction.up
 	
 	# Updates the player
 	#
