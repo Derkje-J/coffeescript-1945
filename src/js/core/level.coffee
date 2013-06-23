@@ -8,15 +8,28 @@ class Game.Level
 	# @param [Game.Canvas1945] the game reference
 	#
 	constructor: ( @game ) ->
+	
 		@create()
+		
+		Game.EventManager.on 'plane.destroy', @, @onPlaneDestroyed
+		
+	#
+	#
+	onPlaneDestroyed: ( source ) ->
+		if source instanceof Game.PlaneEnemy
+			@game.removeFrom 'level', @game.get( 'level' ).findKey source
+		else if source instanceof Game.Player
+			@game.die()
 		
 	# Creates the level
 	#
 	create: () ->
-		@game.addLogic 'collisions', @collisions = new Game.CollisionManager()
+	
 		@createBackground()
 		@createPlayer()
+		@createEnemies()
 		@createHeadsUpDisplay()
+		
 		return this
 		
 	# Creates the background
@@ -35,12 +48,13 @@ class Game.Level
 	#
 	createPlayer: () ->
 		@game.addTo 'level', 'player', @player = Builder.PlanePlayer.create()
-		@collisions.add Game.CollisionManager.Groups.Player, @player
 		
+	#
+	#
+	createEnemies: () ->
 		for i in [0...10]
 			@game.addTo 'level', 'enemy-' + i, enemy = Builder.PlaneGreen.create()
-			@collisions.add Game.CollisionManager.Groups.Enemy, enemy
-		
+
 	# Creates the headsup display
 	#
 	# @return [self] the chainable self
@@ -53,8 +67,11 @@ class Game.Level
 	# @return [self] the chainable self
 	#
 	clear: ( ) ->
+		@game.get( 'collisions' ).clear()
+		
 		@clearBackground()
 		@clearPlayer()
+		@clearEnemies()
 		@clearHeadsUpDisplay()
 		return this
 		
@@ -76,12 +93,18 @@ class Game.Level
 		@game.removeFrom 'level', 'player'
 		return this
 		
+	#
+	#
+	clearEnemies: () ->
+		for i in [0...10]
+			@game.removeFrom 'level', 'enemy-' + i
+		
 	# Clears the heads up display
 	#
 	# @return [self] the chainable self
 	#
 	clearHeadsUpDisplay: () ->
-		@game.removeFrom 'hud', 'hud'
+		@game.removeFrom 'hud', 'bottom'
 		return this
 	
 	# Restart the level
