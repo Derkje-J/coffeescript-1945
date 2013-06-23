@@ -37,6 +37,17 @@ class Game.Plane extends Game.Movable
 		
 	#
 	#
+	inflict: ( damage ) ->
+		@health -= damage
+		if @health <= 0
+			@health = 0
+			@after 'explode', @destroy
+			@play 'explode'
+			return true
+		return false
+		
+	#
+	#
 	getDirectionModifier: ( direction ) ->
 		result = switch direction
 			when Plane.Direction.up
@@ -63,6 +74,12 @@ class Game.Plane extends Game.Movable
 		return if event.paused
 		super event
 		return this
+		
+	#
+	#
+	destroy: () ->
+		super
+		Game.EventManager.trigger 'plane.destroy', @, []
 		
 	# Sets the velocity according to the direction
 	#
