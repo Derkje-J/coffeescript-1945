@@ -13,6 +13,7 @@ class Game.Level
 	# Creates the level
 	#
 	create: () ->
+		@game.addLogic 'collisions', @collisions = new Game.CollisionManager()
 		@createBackground()
 		@createPlayer()
 		@createHeadsUpDisplay()
@@ -34,9 +35,11 @@ class Game.Level
 	#
 	createPlayer: () ->
 		@game.addTo 'level', 'player', @player = Builder.PlanePlayer.create()
+		@collisions.add Game.CollisionManager.Groups.Player, @player
 		
-		for i in [0...80]
-			@game.addTo 'level', 'enemy-' + i, Builder.PlaneGreen.create()
+		for i in [0...10]
+			@game.addTo 'level', 'enemy-' + i, enemy = Builder.PlaneGreen.create()
+			@collisions.add Game.CollisionManager.Groups.Enemy, enemy
 		
 	# Creates the headsup display
 	#
