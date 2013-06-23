@@ -21,7 +21,14 @@
     };
 
     Level.prototype.createPlayer = function() {
-      return this.game.addTo('level', 'player', this.player = Builder.PlanePlayer.create());
+      var i, _i, _results;
+
+      this.game.addTo('level', 'player', this.player = Builder.PlanePlayer.create());
+      _results = [];
+      for (i = _i = 0; _i < 80; i = ++_i) {
+        _results.push(this.game.addTo('level', 'enemy-' + i, Builder.PlaneGreen.create()));
+      }
+      return _results;
     };
 
     Level.prototype.createHeadsUpDisplay = function() {

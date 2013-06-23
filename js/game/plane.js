@@ -2,7 +2,8 @@
 (function() {
   'use strict';
   var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   Game.Plane = (function(_super) {
     __extends(Plane, _super);
@@ -14,39 +15,62 @@
       right: 'right'
     };
 
-    Plane.DirectionModifiers = {
-      up: {
-        y: -Game.Canvas1945.ScrollSpeed
-      },
-      down: {
-        y: Game.Canvas1945.ScrollSpeed
-      },
-      left: {
-        x: -Game.Canvas1945.ScrollSpeed
-      },
-      right: {
-        x: Game.Canvas1945.ScrollSpeed
-      }
-    };
-
-    function Plane(spritesheet, x, y) {
+    function Plane(spritesheet, x, y, health) {
       if (x == null) {
         x = (Game.Canvas1945.LevelWidth / 2 + .5) | 0;
       }
       if (y == null) {
-        y = 45;
+        y = -64;
+      }
+      if (health == null) {
+        health = 3;
       }
       Plane.__super__.constructor.call(this, spritesheet, x, y);
       this.play('idle');
+      this._facing = Plane.Direction.down;
       this.direction = [];
-      this.directionMultiplier = {
+      this.speed = {
         x: 1,
-        y: 1
+        y: 1,
+        facing: 1.3
       };
       this.primaryEnabled = false;
       this.secondaryEnabled = false;
       this.health = 3;
+      this.damage = 30;
     }
+
+    Plane.prototype.getDirectionModifier = function(direction) {
+      var p, result, v;
+
+      result = (function() {
+        switch (direction) {
+          case Plane.Direction.up:
+            return {
+              y: -Game.Canvas1945.ScrollSpeed
+            };
+          case Plane.Direction.down:
+            return {
+              y: Game.Canvas1945.ScrollSpeed
+            };
+          case Plane.Direction.left:
+            return {
+              x: -Game.Canvas1945.ScrollSpeed
+            };
+          case Plane.Direction.right:
+            return {
+              x: Game.Canvas1945.ScrollSpeed
+            };
+        }
+      })();
+      if (this._facing === direction && direction === Plane.Direction.down) {
+        for (p in result) {
+          v = result[p];
+          result[p] = v * this.speed.facing;
+        }
+      }
+      return result;
+    };
 
     Plane.prototype.update = function(event) {
       if (event.paused) {
@@ -57,12 +81,13 @@
     };
 
     Plane.prototype.setVelocity = function() {
-      var key, modifiers, value;
+      var key, modifiers, value,
+        _this = this;
 
       modifiers = _(this.direction).reduce(function(result, key) {
         var modifier, value, _ref;
 
-        _ref = Plane.DirectionModifiers[key];
+        _ref = _this.getDirectionModifier(key);
         for (modifier in _ref) {
           value = _ref[modifier];
           result[modifier] += value;
@@ -74,8 +99,17 @@
       });
       for (key in modifiers) {
         value = modifiers[key];
-        this.velocity[key] = value * this.directionMultiplier[key];
+        this.velocity[key] = value * this.speed[key];
       }
+      return this;
+    };
+
+    Plane.prototype.move = function(direction) {
+      if (__indexOf.call(this.direction, direction) >= 0) {
+        return this;
+      }
+      this.direction.push(direction);
+      this.setVelocity();
       return this;
     };
 

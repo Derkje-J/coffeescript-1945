@@ -38,7 +38,7 @@ class Game.Canvas1945 extends Game.Container
 		@_createLayers()
 		@_createLevel()
 		@_createDebug()
-	
+		
 		# Define some properties
 		Object.defineProperty( @, 'paused',
 			get: -> return createjs.Ticker.getPaused()

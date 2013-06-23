@@ -25,6 +25,7 @@
     function Player(spritesheet) {
       Player.__super__.constructor.call(this, spritesheet, void 0, Game.Canvas1945.LevelHeight);
       this.health = 100;
+      this._facing = Game.Plane.Direction.up;
     }
 
     Player.prototype.update = function(event) {
