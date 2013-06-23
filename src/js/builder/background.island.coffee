@@ -3,6 +3,8 @@
 #
 class Builder.BackgroundIsland extends Builder.SpriteSheet
 
+	#
+	#
 	@SpriteSheet = null
 
 	# Creates a new Background Island

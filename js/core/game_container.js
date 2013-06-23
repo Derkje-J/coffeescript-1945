@@ -5,11 +5,41 @@
 
   Game.Container = (function() {
     function Container() {
+      this.input = __bind(this.input, this);
       this.update = __bind(this.update, this);      this.objects = {};
       this.container = new createjs.Container();
-      Object.defineProperty(this, 'createjs', {
-        get: function() {
-          return this.container;
+      Object.defineProperties(this, {
+        'createjs': {
+          get: function() {
+            return this.container;
+          }
+        },
+        'x': {
+          get: function() {
+            var _ref;
+
+            return (_ref = this._x) != null ? _ref : 0;
+          },
+          set: function(value) {
+            this._x = value;
+            return this.container.x = (value + .5) | 0;
+          }
+        },
+        'y': {
+          get: function() {
+            var _ref;
+
+            return (_ref = this._y) != null ? _ref : 0;
+          },
+          set: function(value) {
+            this._y = value;
+            return this.container.y = (value + .5) | 0;
+          }
+        },
+        'length': {
+          get: function() {
+            return _(this.objects).keys().length;
+          }
         }
       });
     }
@@ -20,27 +50,45 @@
       _ref = this.objects;
       for (key in _ref) {
         object = _ref[key];
-        object.update(event);
+        if (object.update != null) {
+          object.update(event);
+        }
       }
       return this;
     };
 
+    Container.prototype.input = function(event, state) {
+      var key, object, _ref, _results;
+
+      _ref = this.objects;
+      _results = [];
+      for (key in _ref) {
+        object = _ref[key];
+        if (object.input != null) {
+          _results.push(object.input(event, state));
+        }
+      }
+      return _results;
+    };
+
     Container.prototype.add = function(key, object) {
+      var _ref;
+
       if (this.get(key) != null) {
         throw new Error("There already is an object with that key (" + key + ").");
       }
       this.objects[key] = object;
-      this.container.addChild(object.createjs);
+      this.container.addChild((_ref = object.createjs) != null ? _ref : object);
       return this;
     };
 
     Container.prototype.remove = function(key) {
-      var object;
+      var object, _ref;
 
       if ((object = this.get(key)) == null) {
         throw new Error("There is not an object with that key (" + key + ").");
       }
-      this.container.removeChild(object.createjs);
+      this.container.removeChild((_ref = object.createjs) != null ? _ref : object);
       delete this.objects[key];
       return this;
     };

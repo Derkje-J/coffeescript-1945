@@ -3,8 +3,14 @@
   'use strict';  Game.Sprite = (function() {
     Sprite.BaseSheet = new createjs.Bitmap("img/1945.png");
 
-    function Sprite(spritesheet) {
+    function Sprite(spritesheet, x, y) {
       this.spritesheet = spritesheet;
+      if (x == null) {
+        x = 0;
+      }
+      if (y == null) {
+        y = 0;
+      }
       this.animation = new createjs.BitmapAnimation(this.spritesheet);
       Object.defineProperties(this, {
         'createjs': {
@@ -20,7 +26,7 @@
           },
           set: function(value) {
             this._x = value;
-            return this.animation.x = Math.round(value);
+            return this.animation.x = (value + .5) | 0;
           }
         },
         'y': {
@@ -31,10 +37,12 @@
           },
           set: function(value) {
             this._y = value;
-            return this.animation.y = Math.round(value);
+            return this.animation.y = (value + .5) | 0;
           }
         }
       });
+      this.x = x;
+      this.y = y;
     }
 
     Sprite.prototype.play = function(animation) {

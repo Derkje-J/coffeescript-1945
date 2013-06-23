@@ -7,30 +7,23 @@
   Game.Canvas1945 = (function(_super) {
     __extends(Canvas1945, _super);
 
-    Canvas1945.Width = (function() {
-      return 640;
-    })();
+    Canvas1945.Width = 640;
 
-    Canvas1945.Height = (function() {
-      return 480;
-    })();
+    Canvas1945.LevelWidth = 640;
 
-    Canvas1945.ScrollSpeed = (function() {
-      return 100;
-    })();
+    Canvas1945.Height = 480;
+
+    Canvas1945.LevelHeight = 410;
+
+    Canvas1945.ScrollSpeed = 100;
 
     function Canvas1945() {
-      var canvas, container;
-
       Canvas1945.__super__.constructor.apply(this, arguments);
-      canvas = document.createElement('canvas');
-      canvas.id = 'game';
-      canvas.setAttribute('width', Canvas1945.Width);
-      canvas.setAttribute('height', Canvas1945.Height);
-      container = document.getElementById("container");
-      container.appendChild(canvas);
-      this.stage = this.container = new createjs.Stage(canvas);
+      this.canvas = this._createCanvas();
+      this.stage = this.container = new createjs.Stage(this.canvas);
       this._setTicker();
+      this._setInput(this.canvas);
+      this._createPersistantData();
       this._createLayers();
       this._createLevel();
       this._createDebug();
@@ -51,6 +44,40 @@
       return this;
     };
 
+    Canvas1945.prototype._setInput = function(canvas) {
+      var _this = this;
+
+      if (canvas == null) {
+        canvas = this.canvas;
+      }
+      canvas.onkeydown = function(event) {
+        _this.input(event, true);
+        return false;
+      };
+      canvas.onkeyup = function(event) {
+        _this.input(event, false);
+        return false;
+      };
+      return this;
+    };
+
+    Canvas1945.prototype._createCanvas = function() {
+      var canvas, container;
+
+      canvas = document.createElement('canvas');
+      canvas.id = 'game';
+      canvas.setAttribute('width', Canvas1945.Width);
+      canvas.setAttribute('height', Canvas1945.Height);
+      canvas.setAttribute('tabindex', 0);
+      container = document.getElementById("container");
+      container.appendChild(canvas);
+      canvas.onmousedown = function(event) {
+        canvas.focus();
+        return false;
+      };
+      return canvas;
+    };
+
     Canvas1945.prototype._createLayers = function() {
       this.add('background', new Game.Container());
       this.add('level', new Game.Container());
@@ -61,6 +88,12 @@
 
     Canvas1945.prototype._createLevel = function() {
       this.level = new Game.Level(this);
+      return this;
+    };
+
+    Canvas1945.prototype._createPersistantData = function() {
+      this.lives = 3;
+      this.score = 0;
       return this;
     };
 
@@ -89,10 +122,6 @@
     Canvas1945.prototype.removeFrom = function(layer, key) {
       (this.get(layer)).remove(key);
       return this;
-    };
-
-    Canvas1945.prototype.getStage = function() {
-      return this.stage;
     };
 
     Canvas1945.prototype.update = function(event) {

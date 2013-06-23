@@ -10,35 +10,29 @@
     Island.Padding = 50;
 
     function Island(spritesheet, type) {
-      var rel;
+      var rel, x, y;
 
       if (type == null) {
         type = 'A';
       }
-      Island.__super__.constructor.call(this, spritesheet);
-      this.x = Math.random() * Game.Canvas1945.Width;
-      rel = Math.floor(Math.random() * (Game.Canvas1945.Height / 3 - Island.Padding));
-      switch (type) {
-        case 'A':
-          this.y = rel;
-          break;
-        case 'B':
-          this.y = rel + Game.Canvas1945.Height / 3 * 1;
-          break;
-        case 'C':
-          this.y = rel + Game.Canvas1945.Height / 3 * 2;
-      }
+      rel = (Math.random() * (Game.Canvas1945.Height / 3 - Island.Padding) + .5) | 0;
+      x = Math.random() * Game.Canvas1945.Width;
+      y = (function() {
+        switch (type) {
+          case 'A':
+            return rel;
+          case 'B':
+            return rel + Game.Canvas1945.Height / 3 * 1;
+          case 'C':
+            return rel + Game.Canvas1945.Height / 3 * 2;
+        }
+      })();
+      Island.__super__.constructor.call(this, spritesheet, x, y, 0, Game.Canvas1945.ScrollSpeed);
       this.play('type-' + type);
     }
 
     Island.prototype.update = function(event) {
-      var dt;
-
-      if (event.paused) {
-        return;
-      }
-      dt = event.delta / 1000;
-      this.y += dt * Game.Canvas1945.ScrollSpeed;
+      Island.__super__.update.call(this, event);
       if (this.y > Game.Canvas1945.Height + Island.Padding) {
         this.y = -Island.Padding;
         return this.x = Math.random() * Game.Canvas1945.Width;
@@ -47,6 +41,6 @@
 
     return Island;
 
-  })(Game.Sprite);
+  })(Game.Movable);
 
 }).call(this);

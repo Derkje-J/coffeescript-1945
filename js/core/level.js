@@ -9,6 +9,7 @@
     Level.prototype.create = function() {
       this.createBackground();
       this.createPlayer();
+      this.createHeadsUpDisplay();
       return this;
     };
 
@@ -23,9 +24,14 @@
       return this.game.addTo('level', 'player', this.player = Builder.PlanePlayer.create());
     };
 
+    Level.prototype.createHeadsUpDisplay = function() {
+      return this.game.addTo('hud', 'bottom', this.hud = new Display.HeadsUpDisplay(this.game, this));
+    };
+
     Level.prototype.clear = function() {
       this.clearBackground();
       this.clearPlayer();
+      this.clearHeadsUpDisplay();
       return this;
     };
 
@@ -38,6 +44,11 @@
 
     Level.prototype.clearPlayer = function() {
       this.game.removeFrom('level', 'player');
+      return this;
+    };
+
+    Level.prototype.clearHeadsUpDisplay = function() {
+      this.game.removeFrom('hud', 'hud');
       return this;
     };
 

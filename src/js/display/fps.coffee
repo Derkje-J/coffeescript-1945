@@ -26,8 +26,8 @@ class Display.FPS
 	
 		if ( ( @_time += event.delta ) >= 1000 )
 			@_frameRate = @_frameCount
-			@_frameCount = 0;
-			@_time -= 1000;
+			@_frameCount = 0
+			@_time -= 1000
 			@text.text = "#{ @_frameRate } FPS"
 		
 		@_frameCount++

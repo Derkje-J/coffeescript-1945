@@ -2,26 +2,82 @@
 (function() {
   'use strict';
   var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   Game.Player = (function(_super) {
     __extends(Player, _super);
 
+    Player.KeyLeft = [37, 65, 100];
+
+    Player.KeyUp = [38, 87, 104];
+
+    Player.KeyRight = [39, 68, 101];
+
+    Player.KeyDown = [40, 83, 98];
+
+    Player.KeyPrimary = [32, 101];
+
+    Player.KeySecondary = [16, 96];
+
+    Player.Padding = 45;
+
     function Player(spritesheet) {
-      Player.__super__.constructor.call(this, spritesheet);
-      this.x = 100;
-      this.y = 100;
-      this.play('idle');
+      Player.__super__.constructor.call(this, spritesheet, void 0, Game.Canvas1945.LevelHeight);
+      this.health = 100;
     }
 
     Player.prototype.update = function(event) {
       if (event.paused) {
-
+        return;
       }
+      Player.__super__.update.call(this, event);
+      if (this.x < Player.Padding) {
+        this.x = Player.Padding;
+      }
+      if (this.x > Game.Canvas1945.LevelWidth - Player.Padding) {
+        this.x = Game.Canvas1945.LevelWidth - Player.Padding;
+      }
+      if (this.y < Player.Padding) {
+        this.y = Player.Padding;
+      }
+      if (this.y > Game.Canvas1945.LevelHeight - Player.Padding) {
+        this.y = Game.Canvas1945.LevelHeight - Player.Padding;
+      }
+      return this;
+    };
+
+    Player.prototype.input = function(event, state) {
+      var dir, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+
+      dir = null;
+      if (_ref = event.keyCode, __indexOf.call(Player.KeyDown, _ref) >= 0) {
+        dir = Game.Plane.Direction.down;
+      } else if (_ref1 = event.keyCode, __indexOf.call(Player.KeyUp, _ref1) >= 0) {
+        dir = Game.Plane.Direction.up;
+      } else if (_ref2 = event.keyCode, __indexOf.call(Player.KeyRight, _ref2) >= 0) {
+        dir = Game.Plane.Direction.right;
+      } else if (_ref3 = event.keyCode, __indexOf.call(Player.KeyLeft, _ref3) >= 0) {
+        dir = Game.Plane.Direction.left;
+      } else if (_ref4 = event.keyCode, __indexOf.call(Player.KeyPrimary, _ref4) >= 0) {
+        this.primaryEnabled = state;
+      } else if (_ref5 = event.keyCode, __indexOf.call(Player.KeySecondary, _ref5) >= 0) {
+        this.secondaryEnabled = state;
+      }
+      if (dir == null) {
+        return;
+      }
+      if (!state) {
+        this.direction = _(this.direction).without(dir);
+      } else if (!_(this.direction).contains(dir)) {
+        this.direction.push(dir);
+      }
+      this.setVelocity();
+      return this;
     };
 
     return Player;
 
-  })(Game.Sprite);
+  })(Game.Plane);
 
 }).call(this);
