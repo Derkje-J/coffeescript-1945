@@ -3,28 +3,7 @@
 #
 class Game.Plane extends Game.Movable
 		
-	# The direction strings
-	#
-	@Direction =
 	
-		# Directions
-		up: 'up'
-		down: 'down'
-		left: 'left'
-		right: 'right'
-		
-		# Inverses
-		notup: 'down'
-		notdown: 'up'
-		notleft: 'right'
-		notright: 'left'
-		
-		# Sides
-		sideup: [ 'left', 'right' ]
-		sidedown: [ 'right', 'left' ]
-		sideleft: [ 'down', 'up' ]
-		sideright: [ 'up', 'down' ]
-		
 	# The base speed
 	#
 	@BaseSpeed =
@@ -55,8 +34,8 @@ class Game.Plane extends Game.Movable
 		@damage = 30
 		
 		@play 'idle'
-		@face Plane.Direction.down
-		@move Plane.Direction.down
+		@face Game.Movable.Direction.down
+		@move Game.Movable.Direction.down
 		
 	# Inflicts damage to this plane
 	#
@@ -73,8 +52,8 @@ class Game.Plane extends Game.Movable
 			@play 'explode'
 			
 			# Face down and move along the scrollspeed
-			@_facing = Plane.Direction.down
-			@direction = [ Game.Plane.Direction.down ]
+			@_facing = Game.Movable.Direction.down
+			@direction = [ Game.Movable.Direction.down ]
 			@setVelocity()
 			
 			return true
@@ -86,31 +65,30 @@ class Game.Plane extends Game.Movable
 	# @return [Object] the modifiers
 	#
 	getDirectionModifier: ( direction ) ->
-
 		speed = 0
 		
 		# Base speed
 		if @_facing is direction 
 			speed = Plane.BaseSpeed.forward * @speed.forward
-		else if direction in Plane.Direction[ "side#{@_facing}" ]
+		else if direction in Game.Movable.Direction[ "side#{@_facing}" ]
 			speed = Plane.BaseSpeed.side * @speed.side
-		else if direction is Plane.Direction[ "not#{@_facing}" ]
+		else if direction is Game.Movable.Direction[ "not#{@_facing}" ]
 			speed = 0
 			
-		if direction is Plane.Direction.down
+		if direction is Game.Movable.Direction.down
 			speed += Game.Canvas1945.ScrollSpeed
 		
 		return switch direction
-			when Plane.Direction.up
+			when Game.Movable.Direction.up
 				{ y: -speed }
-			when Plane.Direction.left
+			when Game.Movable.Direction.left
 				{ x: -speed }
-			when Plane.Direction.right
+			when Game.Movable.Direction.right
 				{ x: speed }
-			when Plane.Direction.down
+			when Game.Movable.Direction.down
 				{ y: speed }
 	
-	# Updates the player
+	# Updates the plane
 	#
 	# @param event [TickEvent] the event
 	# @return [self] the chainable self

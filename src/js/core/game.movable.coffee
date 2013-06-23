@@ -3,6 +3,28 @@
 #
 class Game.Movable extends Game.Sprite
 	
+	# The direction strings
+	#
+	@Direction =
+	
+		# Directions
+		up: 'up'
+		down: 'down'
+		left: 'left'
+		right: 'right'
+		
+		# Inverses
+		notup: 'down'
+		notdown: 'up'
+		notleft: 'right'
+		notright: 'left'
+		
+		# Sides
+		sideup: [ 'left', 'right' ]
+		sidedown: [ 'right', 'left' ]
+		sideleft: [ 'down', 'up' ]
+		sideright: [ 'up', 'down' ]
+	
 	# Creates a new Game Movable
 	#
 	# @param spritesheet [createjs.SpriteSheet] the spritesheet for this sprite
