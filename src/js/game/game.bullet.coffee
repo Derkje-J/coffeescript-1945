@@ -29,3 +29,15 @@ class Game.Bullet extends Game.Movable
 		return if event.paused
 		super event
 		return this
+		
+	#
+	#
+	collide: ( group, object ) ->
+		@destroy()
+		
+	# Destroys this plane
+	#
+	destroy: () ->
+		super
+		Game.EventManager.trigger 'bullet.destroy', @, []
+		return this

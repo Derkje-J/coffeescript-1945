@@ -1,7 +1,7 @@
 'use strict'
 #
 #
-class Game.PlayerBullet extends Game.Movable
+class Game.PlayerBullet extends Game.Bullet
 	
 	# Creates a new Game Bullet
 	#
@@ -14,5 +14,12 @@ class Game.PlayerBullet extends Game.Movable
 	# @param damage [Integer] the damage
 	# @param args [Object] additional arguments
 	#
-	constructor: ( spritesheet, x, y, vx, vy, type = 'up', damage = 1, args = {} ) ->
+	constructor: ( spritesheet, x, y, vx = 0, vy = -150, type = 'up', damage = 3, args = {} ) ->
 		super spritesheet, x, y, vx, vy, type, damage, args
+		
+		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.PlayerBullet, @ ]
+		
+	destroy: ->
+		super
+		Game.EventManager.trigger 'collidable.destroy', @, [ Game.CollisionManager.Groups.PlayerBullet, @ ]
+		return this
