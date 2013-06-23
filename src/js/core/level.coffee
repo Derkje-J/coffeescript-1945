@@ -35,6 +35,9 @@ class Game.Level
 	createPlayer: () ->
 		@game.addTo 'level', 'player', @player = Builder.PlanePlayer.create()
 		
+		for i in [0...80]
+			@game.addTo 'level', 'enemy-' + i, Builder.PlaneGreen.create()
+		
 	# Creates the headsup display
 	#
 	# @return [self] the chainable self
