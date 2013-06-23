@@ -143,6 +143,12 @@ class Game.Canvas1945 extends Game.Container
 	addTo: ( layer, key, object ) ->
 		( @get layer ).add key, object
 		return this
+	
+	#
+	#
+	addLogic: ( key, object ) ->
+		@objects[ key ] = object
+		return this
 		
 	# Gets from layer
 	#
