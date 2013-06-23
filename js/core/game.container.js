@@ -97,6 +97,20 @@
       return this.objects[key];
     };
 
+    Container.prototype.addTo = function(layer, key, object) {
+      (this.get(layer)).add(key, object);
+      return this;
+    };
+
+    Container.prototype.getFrom = function(layer, key) {
+      return (this.get(layer)).get(key);
+    };
+
+    Container.prototype.removeFrom = function(layer, key) {
+      (this.get(layer)).remove(key);
+      return this;
+    };
+
     Container.prototype.findKey = function(search) {
       var result;
 

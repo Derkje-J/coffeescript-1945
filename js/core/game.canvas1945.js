@@ -18,15 +18,14 @@
     Canvas1945.ScrollSpeed = 100;
 
     function Canvas1945() {
+      var preload,
+        _this = this;
+
       Canvas1945.__super__.constructor.apply(this, arguments);
       this.canvas = this._createCanvas();
       this.stage = this.container = new createjs.Stage(this.canvas);
       this._setTicker();
       this._setInput(this.canvas);
-      this._createPersistantData();
-      this._createLayers();
-      this._createLevel();
-      this._createDebug();
       Object.defineProperty(this, 'paused', {
         get: function() {
           return createjs.Ticker.getPaused();
@@ -35,7 +34,21 @@
           return createjs.Ticker.setPaused(value);
         }
       });
+      this.addLogic('collisions', this.collisions = new Game.CollisionManager());
+      this._createPersistantData();
+      this._createLayers();
+      this._createDebug();
+      preload = new createjs.LoadQueue();
+      preload.setMaxConnections(5);
+      preload.addEventListener("complete", function() {
+        return _this.ready();
+      });
+      preload.loadFile(Game.Sprite.BaseSheet.image.src);
     }
+
+    Canvas1945.prototype.ready = function() {
+      return this.level.create();
+    };
 
     Canvas1945.prototype._setTicker = function() {
       createjs.Ticker.addEventListener("tick", this.update);
@@ -80,17 +93,9 @@
 
     Canvas1945.prototype._createLayers = function() {
       this.add('background', new Game.Container());
-      this.add('below-level', new Game.Container());
-      this.add('level', new Game.Container());
-      this.add('above-level', new Game.Container());
+      this.add('level', this.level = new Game.Level(this));
       this.add('foreground', new Game.Container());
       this.add('hud', new Game.Container());
-      return this;
-    };
-
-    Canvas1945.prototype._createLevel = function() {
-      this.addLogic('collisions', this.collisions = new Game.CollisionManager());
-      this.level = new Game.Level(this);
       return this;
     };
 
@@ -108,9 +113,7 @@
     Canvas1945.prototype._removeLayers = function() {
       this.remove('hud');
       this.remove('foreground');
-      this.remove('above-level');
       this.remove('level');
-      this.remove('below-level');
       this.remove('background');
       return this;
     };
@@ -123,22 +126,8 @@
       }
     };
 
-    Canvas1945.prototype.addTo = function(layer, key, object) {
-      (this.get(layer)).add(key, object);
-      return this;
-    };
-
     Canvas1945.prototype.addLogic = function(key, object) {
       this.objects[key] = object;
-      return this;
-    };
-
-    Canvas1945.prototype.getFrom = function(layer, key) {
-      return (this.get(layer)).get(key);
-    };
-
-    Canvas1945.prototype.removeFrom = function(layer, key) {
-      (this.get(layer)).remove(key);
       return this;
     };
 
