@@ -52,7 +52,7 @@ class Game.Level
 	#
 	#
 	createEnemies: () ->
-		for i in [0...10]
+		for i in [0...15]
 			@game.addTo 'level', 'enemy-' + i, enemy = Builder.PlaneGreen.create()
 
 	# Creates the headsup display
@@ -96,7 +96,7 @@ class Game.Level
 	#
 	#
 	clearEnemies: () ->
-		for i in [0...10]
+		for i in [0...15]
 			@game.removeFrom 'level', 'enemy-' + i
 		
 	# Clears the heads up display

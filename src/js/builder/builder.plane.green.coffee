@@ -13,10 +13,10 @@ class Builder.PlaneGreen extends Builder.SpriteSheet
 	
 		if PlaneGreen.SpriteSheet?
 			return ( new Game.PlaneEnemy PlaneGreen.SpriteSheet )
-				.move( 'down' )
 				.addBehaviour( Game.PlaneEnemy.Behaviour.looper )
 				.addBehaviour( Game.PlaneEnemy.Behaviour.spawn.random.x )
 				.addBehaviour( Game.PlaneEnemy.Behaviour.spawn.random.y )
+				.addBehaviour( Game.PlaneEnemy.Behaviour.spawn.ondeath )
 			
 		builder = new Builder.PlaneGreen()
 		builder.animationExtra( 'idle', 4, 466, 32, 32, 1, 1, 3, 3, true, 1 )
@@ -28,7 +28,7 @@ class Builder.PlaneGreen extends Builder.SpriteSheet
 		
 		PlaneGreen.SpriteSheet = builder.createjs
 		return ( new Game.PlaneEnemy PlaneGreen.SpriteSheet )
-			.move( 'down' )
 			.addBehaviour( Game.PlaneEnemy.Behaviour.looper )
 			.addBehaviour( Game.PlaneEnemy.Behaviour.spawn.random.x )
 			.addBehaviour( Game.PlaneEnemy.Behaviour.spawn.random.y )
+			.addBehaviour( Game.PlaneEnemy.Behaviour.spawn.ondeath )

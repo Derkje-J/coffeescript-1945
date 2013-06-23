@@ -38,7 +38,8 @@ class Game.Player extends Game.Plane
 	constructor: ( spritesheet ) ->
 		super spritesheet, undefined, Game.Canvas1945.LevelHeight
 		@health = 100
-		@_facing = Game.Plane.Direction.up
+		@face Game.Plane.Direction.up
+		@move()		
 		
 		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.Player, @ ]
 	
@@ -75,9 +76,6 @@ class Game.Player extends Game.Plane
 			
 		# Not movable if dead
 		if @health <= 0
-			if @direction.length isnt 1 or @direction[ 0 ] isnt Game.Plane.Direction.down
-				@direction = [ Game.Plane.Direction.down ]
-				@setVelocity()
 			return this
 		
 		dir = null
