@@ -39,6 +39,8 @@ class Game.Player extends Game.Plane
 		super spritesheet, undefined, Game.Canvas1945.LevelHeight
 		@health = 100
 		@_facing = Game.Plane.Direction.up
+		
+		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.Player, @ ]
 	
 	# Updates the player
 	#
@@ -57,6 +59,12 @@ class Game.Player extends Game.Plane
 		
 		return this
 		
+	#
+	#
+	collide: ( group, object ) ->
+		if @inflict object.damage
+			Game.EventManager.trigger 'collidable.destroy', @, [ Game.CollisionManager.Groups.Player, @ ]
+		
 	# Update input for the player
 	#
 	# @param event [KeyboardEvent] the event
@@ -64,7 +72,14 @@ class Game.Player extends Game.Plane
 	# @return [self] the chainable self
 	#
 	input: ( event, state ) ->
-
+			
+		# Not movable if dead
+		if @health <= 0
+			if @direction.length isnt 1 or @direction[ 0 ] isnt Game.Plane.Direction.down
+				@direction = [ Game.Plane.Direction.down ]
+				@setVelocity()
+			return this
+		
 		dir = null
 		
 		# Direction keycodes
@@ -83,7 +98,7 @@ class Game.Player extends Game.Plane
 		else if event.keyCode in Player.KeySecondary
 			@secondaryEnabled = state
 			
-		return unless dir?
+		return this unless dir?
 		
 		# Update the direction array
 		unless state
