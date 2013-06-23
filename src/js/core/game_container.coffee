@@ -10,8 +10,24 @@ class Game.Container
 		@objects = {}
 		@container = new createjs.Container()
 		
-		Object.defineProperty( @, 'createjs',
-			get: -> return @container
+		Object.defineProperties( @, 
+			'createjs':
+				get: -> return @container
+			
+			'x':
+				get: -> return @_x ? 0
+				set: ( value ) -> 
+					@_x = value
+					@container.x = ( value + .5 )| 0
+			
+			'y':
+				get: -> return @_y ? 0
+				set: ( value ) -> 
+					@_y = value
+					@container.y = ( value + .5 ) | 0
+					
+			'length':
+				get: -> return _( @objects ).keys().length
 		)
 		
 	# Runs every tick and passes down the tick event
@@ -20,9 +36,16 @@ class Game.Container
 	# @return [self] the chainable self
 	#
 	update: ( event ) =>
-		for key, object of @objects
+		for key, object of @objects when object.update?
 			object.update event
 		return this
+		
+	#
+	#
+	#
+	input: ( event, state ) =>
+		for key, object of @objects when object.input?
+			object.input event, state
 	
 	# Adds an object
 	#
@@ -36,7 +59,7 @@ class Game.Container
 			throw new Error "There already is an object with that key (#{ key })."
 			
 		@objects[ key ] = object
-		@container.addChild object.createjs
+		@container.addChild object.createjs ? object
 		return this
 	
 	# Removes an object
@@ -48,7 +71,7 @@ class Game.Container
 		unless ( object = @get( key ) )?
 			throw new Error "There is not an object with that key (#{ key })."
 			
-		@container.removeChild object.createjs
+		@container.removeChild object.createjs ? object
 		delete @objects[ key ]
 		return this
 	
