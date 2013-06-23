@@ -5,30 +5,30 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Builder.PlanePlayer = (function(_super) {
-    __extends(PlanePlayer, _super);
+  Builder.PlayerPlane = (function(_super) {
+    __extends(PlayerPlane, _super);
 
-    function PlanePlayer() {
-      _ref = PlanePlayer.__super__.constructor.apply(this, arguments);
+    function PlayerPlane() {
+      _ref = PlayerPlane.__super__.constructor.apply(this, arguments);
       return _ref;
     }
 
-    PlanePlayer.SpriteSheet = null;
+    PlayerPlane.SpriteSheet = null;
 
-    PlanePlayer.create = function() {
+    PlayerPlane.create = function() {
       var builder;
 
-      if (PlanePlayer.SpriteSheet != null) {
-        return new Game.Player(PlanePlayer.SpriteSheet);
+      if (PlayerPlane.SpriteSheet != null) {
+        return new Game.Player(PlayerPlane.SpriteSheet);
       }
-      builder = new Builder.PlanePlayer();
+      builder = new Builder.PlayerPlane();
       builder.animation('idle', 4, 400, 65, 65, 1, 1, 3, 3);
       builder.animationExtra('explode', 4, 301, 65, 65, 1, 1, 7, 7, false, 3);
-      PlanePlayer.SpriteSheet = builder.createjs;
-      return new Game.Player(PlanePlayer.SpriteSheet);
+      PlayerPlane.SpriteSheet = builder.createjs;
+      return new Game.Player(PlayerPlane.SpriteSheet);
     };
 
-    return PlanePlayer;
+    return PlayerPlane;
 
   })(Builder.SpriteSheet);
 

@@ -7,6 +7,21 @@
   Game.Movable = (function(_super) {
     __extends(Movable, _super);
 
+    Movable.Direction = {
+      up: 'up',
+      down: 'down',
+      left: 'left',
+      right: 'right',
+      notup: 'down',
+      notdown: 'up',
+      notleft: 'right',
+      notright: 'left',
+      sideup: ['left', 'right'],
+      sidedown: ['right', 'left'],
+      sideleft: ['down', 'up'],
+      sideright: ['up', 'down']
+    };
+
     function Movable(spritesheet, x, y, vx, vy) {
       if (vx == null) {
         vx = 0;

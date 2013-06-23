@@ -25,7 +25,7 @@
     function Player(spritesheet) {
       Player.__super__.constructor.call(this, spritesheet, void 0, Game.Canvas1945.LevelHeight);
       this.health = 100;
-      this.face(Game.Plane.Direction.up);
+      this.face(Game.Movable.Direction.up);
       this.move();
       Game.EventManager.trigger('collidable.create', this, [Game.CollisionManager.Groups.Player, this]);
     }
@@ -64,13 +64,13 @@
       }
       dir = null;
       if (_ref = event.keyCode, __indexOf.call(Player.KeyDown, _ref) >= 0) {
-        dir = Game.Plane.Direction.down;
+        dir = Game.Movable.Direction.down;
       } else if (_ref1 = event.keyCode, __indexOf.call(Player.KeyUp, _ref1) >= 0) {
-        dir = Game.Plane.Direction.up;
+        dir = Game.Movable.Direction.up;
       } else if (_ref2 = event.keyCode, __indexOf.call(Player.KeyRight, _ref2) >= 0) {
-        dir = Game.Plane.Direction.right;
+        dir = Game.Movable.Direction.right;
       } else if (_ref3 = event.keyCode, __indexOf.call(Player.KeyLeft, _ref3) >= 0) {
-        dir = Game.Plane.Direction.left;
+        dir = Game.Movable.Direction.left;
       } else if (_ref4 = event.keyCode, __indexOf.call(Player.KeyPrimary, _ref4) >= 0) {
         this.primaryEnabled = state;
       } else if (_ref5 = event.keyCode, __indexOf.call(Player.KeySecondary, _ref5) >= 0) {
@@ -86,6 +86,10 @@
       }
       this.setVelocity();
       return this;
+    };
+
+    Player.prototype.primaryAction = function() {
+      return Game.EventManager.trigger('bullet.create', this, [Builder.Bullet.create(Game.PlayerBullet, this.x, this.y)]);
     };
 
     return Player;

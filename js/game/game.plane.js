@@ -9,21 +9,6 @@
   Game.Plane = (function(_super) {
     __extends(Plane, _super);
 
-    Plane.Direction = {
-      up: 'up',
-      down: 'down',
-      left: 'left',
-      right: 'right',
-      notup: 'down',
-      notdown: 'up',
-      notleft: 'right',
-      notright: 'left',
-      sideup: ['left', 'right'],
-      sidedown: ['right', 'left'],
-      sideleft: ['down', 'up'],
-      sideright: ['up', 'down']
-    };
-
     Plane.BaseSpeed = {
       side: 100,
       forward: 100
@@ -47,11 +32,13 @@
       };
       this.primaryEnabled = false;
       this.secondaryEnabled = false;
+      this._nextActionTime = 0;
+      this._throttleActionTime = 350;
       this.health = this.maxhealth = 3;
       this.damage = 30;
       this.play('idle');
-      this.face(Plane.Direction.down);
-      this.move(Plane.Direction.down);
+      this.face(Game.Movable.Direction.down);
+      this.move(Game.Movable.Direction.down);
     }
 
     Plane.prototype.inflict = function(damage) {
@@ -59,8 +46,8 @@
         this.health = 0;
         this.after('explode', this.destroy);
         this.play('explode');
-        this._facing = Plane.Direction.down;
-        this.direction = [Game.Plane.Direction.down];
+        this._facing = Game.Movable.Direction.down;
+        this.direction = [Game.Movable.Direction.down];
         this.setVelocity();
         return true;
       }
@@ -73,28 +60,28 @@
       speed = 0;
       if (this._facing === direction) {
         speed = Plane.BaseSpeed.forward * this.speed.forward;
-      } else if (__indexOf.call(Plane.Direction["side" + this._facing], direction) >= 0) {
+      } else if (__indexOf.call(Game.Movable.Direction["side" + this._facing], direction) >= 0) {
         speed = Plane.BaseSpeed.side * this.speed.side;
-      } else if (direction === Plane.Direction["not" + this._facing]) {
+      } else if (direction === Game.Movable.Direction["not" + this._facing]) {
         speed = 0;
       }
-      if (direction === Plane.Direction.down) {
+      if (direction === Game.Movable.Direction.down) {
         speed += Game.Canvas1945.ScrollSpeed;
       }
       switch (direction) {
-        case Plane.Direction.up:
+        case Game.Movable.Direction.up:
           return {
             y: -speed
           };
-        case Plane.Direction.left:
+        case Game.Movable.Direction.left:
           return {
             x: -speed
           };
-        case Plane.Direction.right:
+        case Game.Movable.Direction.right:
           return {
             x: speed
           };
-        case Plane.Direction.down:
+        case Game.Movable.Direction.down:
           return {
             y: speed
           };
@@ -106,6 +93,20 @@
         return;
       }
       Plane.__super__.update.call(this, event);
+      if (this._nextActionTime <= 0 || (this._nextActionTime -= event.delta) <= 0) {
+        if (this.primaryEnabled) {
+          this._nextActionTime += this._throttleActionTime;
+          if (typeof this.primaryAction === "function") {
+            this.primaryAction();
+          }
+        }
+        if (this.secondaryEnabled) {
+          this._nextActionTime += this._throttleActionTime;
+          if (typeof this.secondaryAction === "function") {
+            this.secondaryAction();
+          }
+        }
+      }
       return this;
     };
 

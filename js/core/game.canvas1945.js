@@ -80,7 +80,9 @@
 
     Canvas1945.prototype._createLayers = function() {
       this.add('background', new Game.Container());
+      this.add('below-level', new Game.Container());
       this.add('level', new Game.Container());
+      this.add('above-level', new Game.Container());
       this.add('foreground', new Game.Container());
       this.add('hud', new Game.Container());
       return this;
@@ -106,7 +108,9 @@
     Canvas1945.prototype._removeLayers = function() {
       this.remove('hud');
       this.remove('foreground');
+      this.remove('above-level');
       this.remove('level');
+      this.remove('below-level');
       this.remove('background');
       return this;
     };

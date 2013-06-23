@@ -5,34 +5,34 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Builder.PlaneGreen = (function(_super) {
-    __extends(PlaneGreen, _super);
+  Builder.GreenEnemyPlane = (function(_super) {
+    __extends(GreenEnemyPlane, _super);
 
-    function PlaneGreen() {
-      _ref = PlaneGreen.__super__.constructor.apply(this, arguments);
+    function GreenEnemyPlane() {
+      _ref = GreenEnemyPlane.__super__.constructor.apply(this, arguments);
       return _ref;
     }
 
-    PlaneGreen.SpriteSheet = null;
+    GreenEnemyPlane.SpriteSheet = null;
 
-    PlaneGreen.create = function() {
+    GreenEnemyPlane.create = function() {
       var builder;
 
-      if (PlaneGreen.SpriteSheet != null) {
-        return (new Game.PlaneEnemy(PlaneGreen.SpriteSheet)).addBehaviour(Game.PlaneEnemy.Behaviour.looper).addBehaviour(Game.PlaneEnemy.Behaviour.spawn.random.x).addBehaviour(Game.PlaneEnemy.Behaviour.spawn.random.y).addBehaviour(Game.PlaneEnemy.Behaviour.spawn.ondeath);
+      if (GreenEnemyPlane.SpriteSheet != null) {
+        return (new Game.EnemyPlane(GreenEnemyPlane.SpriteSheet)).addBehaviour(Game.EnemyPlane.Behaviour.looper).addBehaviour(Game.EnemyPlane.Behaviour.spawn.random.x).addBehaviour(Game.EnemyPlane.Behaviour.spawn.random.y).addBehaviour(Game.EnemyPlane.Behaviour.spawn.ondeath);
       }
-      builder = new Builder.PlaneGreen();
+      builder = new Builder.GreenEnemyPlane();
       builder.animationExtra('idle', 4, 466, 32, 32, 1, 1, 3, 3, true, 1);
       builder.animationExtra('explode', 70, 169, 32, 32, 1, 1, 6, 6, 'hide', 2);
       builder.animationExtra('hide', 268, 202, 32, 32, 1, 1, 1, 1, false, 1);
       builder.animationExtra('loop', 598, 203, 32, 32, 1, 1, 1, 5, 'upside', 2);
       builder.animation('upside', 136, 367, 32, 32, 1, 1, 2, 2);
       builder.data.animations['upside'].frames.push(_(builder.data.animations['loop'].frames).last());
-      PlaneGreen.SpriteSheet = builder.createjs;
-      return (new Game.PlaneEnemy(PlaneGreen.SpriteSheet)).addBehaviour(Game.PlaneEnemy.Behaviour.looper).addBehaviour(Game.PlaneEnemy.Behaviour.spawn.random.x).addBehaviour(Game.PlaneEnemy.Behaviour.spawn.random.y).addBehaviour(Game.PlaneEnemy.Behaviour.spawn.ondeath);
+      GreenEnemyPlane.SpriteSheet = builder.createjs;
+      return (new Game.EnemyPlane(GreenEnemyPlane.SpriteSheet)).addBehaviour(Game.EnemyPlane.Behaviour.looper).addBehaviour(Game.EnemyPlane.Behaviour.spawn.random.x).addBehaviour(Game.EnemyPlane.Behaviour.spawn.random.y).addBehaviour(Game.EnemyPlane.Behaviour.spawn.ondeath);
     };
 
-    return PlaneGreen;
+    return GreenEnemyPlane;
 
   })(Builder.SpriteSheet);
 

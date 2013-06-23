@@ -5,14 +5,24 @@
       this.game = game;
       this.create();
       Game.EventManager.on('plane.destroy', this, this.onPlaneDestroyed);
+      Game.EventManager.on('bullet.create', this, this.onBulletCreated);
+      Game.EventManager.on('bullet.destroy', this, this.onBulletDestroyed);
     }
 
     Level.prototype.onPlaneDestroyed = function(source) {
-      if (source instanceof Game.PlaneEnemy) {
+      if (source instanceof Game.EnemyPlane) {
         return this.game.removeFrom('level', this.game.get('level').findKey(source));
       } else if (source instanceof Game.Player) {
         return this.game.die();
       }
+    };
+
+    Level.prototype.onBulletCreated = function(source, bullet) {
+      return this.game.addTo('below-level', _('bullet').uniqueId(), bullet);
+    };
+
+    Level.prototype.onBulletDestroyed = function(source) {
+      return this.game.removeFrom('below-level', this.game.get('below-level').findKey(source));
     };
 
     Level.prototype.create = function() {
@@ -31,7 +41,7 @@
     };
 
     Level.prototype.createPlayer = function() {
-      return this.game.addTo('level', 'player', this.player = Builder.PlanePlayer.create());
+      return this.game.addTo('level', 'player', this.player = Builder.PlayerPlane.create());
     };
 
     Level.prototype.createEnemies = function() {
@@ -39,7 +49,7 @@
 
       _results = [];
       for (i = _i = 0; _i < 15; i = ++_i) {
-        _results.push(this.game.addTo('level', 'enemy-' + i, enemy = Builder.PlaneGreen.create()));
+        _results.push(this.game.addTo('level', 'enemy-' + i, enemy = Builder.GreenEnemyPlane.create()));
       }
       return _results;
     };
@@ -55,6 +65,13 @@
       this.clearEnemies();
       this.clearHeadsUpDisplay();
       return this;
+    };
+
+    Level.prototype.kill = function() {
+      this.clear();
+      Game.EventManager.off('plane.destroy', this, this.onPlaneDestroyed);
+      Game.EventManager.off('bullet.create', this, this.onBulletCreated);
+      return Game.EventManager.off('bullet.destroy', this, this.onBulletDestroyed);
     };
 
     Level.prototype.clearBackground = function() {
