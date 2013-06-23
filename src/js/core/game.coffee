@@ -5,33 +5,36 @@ class Game.Canvas1945 extends Game.Container
 	
 	# The width of the game
 	#
-	@Width = ( -> return 640 )()
+	@Width = 640
+	
+	#
+	#
+	@LevelWidth = 640
 	
 	# The height of the game
 	#
-	@Height = ( -> return 480 )()
+	@Height = 480
+	
+	#
+	#
+	@LevelHeight = 410
 	
 	# The current scroll speed of the game
 	#
-	@ScrollSpeed = ( -> return 100 )()
+	@ScrollSpeed = 100
 		
 	# Creates a new Game
 	#
 	constructor: ->
 	
 		super
-	
-		# Create the game container
-		canvas = document.createElement 'canvas'
-		canvas.id = 'game'
-		canvas.setAttribute 'width', Canvas1945.Width
-		canvas.setAttribute 'height', Canvas1945.Height
-		container = document.getElementById "container"
-		container.appendChild canvas
-		
+
 		# Create the stage
-		@stage = @container = new createjs.Stage canvas
+		@canvas = @_createCanvas()
+		@stage = @container = new createjs.Stage @canvas
 		@_setTicker()
+		@_setInput @canvas
+		@_createPersistantData()
 		@_createLayers()
 		@_createLevel()
 		@_createDebug()
@@ -52,6 +55,39 @@ class Game.Canvas1945 extends Game.Container
 		createjs.Ticker.setFPS 60
 		return this
 		
+	# Sets the input event
+	#
+	# @param event [Event] the event 
+	# @return [self] the chainable self
+	#
+	_setInput: ( canvas = @canvas ) ->
+		canvas.onkeydown = ( event ) =>
+			@input event, on
+			return false
+		canvas.onkeyup = ( event ) =>
+			@input event, off
+			return false
+		return this
+		
+	# Creates the canvas element
+	#
+	# @return [HTMLElement] the canvas element
+	#
+	_createCanvas: ->
+		canvas = document.createElement 'canvas'
+		canvas.id = 'game'
+		canvas.setAttribute 'width', Canvas1945.Width
+		canvas.setAttribute 'height', Canvas1945.Height
+		canvas.setAttribute 'tabindex', 0
+		container = document.getElementById "container"
+		container.appendChild canvas 
+		
+		canvas.onmousedown = ( event ) -> 
+			canvas.focus() 
+			return false
+		
+		return canvas
+		
 	# Create the layers
 	#
 	# @return [self] the chainable self
@@ -63,13 +99,24 @@ class Game.Canvas1945 extends Game.Container
 		@add 'hud', new Game.Container()
 		return this
 		
+	# Creates the level
 	#
+	# @return [self] the chainable self
 	#
 	_createLevel: ->		
 		@level = new Game.Level @
 		return this
 		
 	#
+	#
+	_createPersistantData: ->
+		@lives = 3
+		@score = 0
+		return this
+		
+	# Creates the DEBUG hud
+	#
+	# @return [self] the chainable self
 	#
 	_createDebug: ->
 		@addTo 'hud', 'fps', new Display.FPS()
@@ -114,13 +161,6 @@ class Game.Canvas1945 extends Game.Container
 	removeFrom: ( layer, key ) ->
 		( @get layer ).remove key
 		return this
-		
-	# Gets the stage
-	#
-	# @return [Stage] the createjs stage
-	#
-	getStage: ->
-		return @stage
 	
 	# Runs every tick and passes down the tick event
 	# 
