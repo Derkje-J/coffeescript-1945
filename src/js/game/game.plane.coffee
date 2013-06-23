@@ -28,6 +28,8 @@ class Game.Plane extends Game.Movable
 		# Action
 		@primaryEnabled = off
 		@secondaryEnabled = off
+		@_nextActionTime = 0
+		@_throttleActionTime = 350
 		
 		# Health
 		@health = @maxhealth = 3
@@ -96,6 +98,15 @@ class Game.Plane extends Game.Movable
 	update: ( event ) ->
 		return if event.paused
 		super event
+		
+		if @_nextActionTime <= 0 or ( @_nextActionTime -= event.delta ) <= 0
+			if @primaryEnabled
+				@_nextActionTime += @_throttleActionTime
+				@primaryAction?()
+			if @secondaryEnabled
+				@_nextActionTime += @_throttleActionTime
+				@secondaryAction?()
+		
 		return this
 		
 	# Destroys this plane

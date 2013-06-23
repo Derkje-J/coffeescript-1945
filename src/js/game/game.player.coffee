@@ -107,3 +107,10 @@ class Game.Player extends Game.Plane
 		@setVelocity()
 			
 		return this
+	
+	#
+	#
+	primaryAction: () ->
+		#weapon = GameWeapon...
+		Game.EventManager.trigger 'bullet.create', @, [ Builder.Bullet.create( Game.PlayerBullet, @x, @y ) ]
+		
