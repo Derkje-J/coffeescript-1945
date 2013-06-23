@@ -1,7 +1,7 @@
 'use strict'
 #
 #
-class Game.PlaneEnemy extends Game.Plane
+class Game.EnemyPlane extends Game.Plane
 		
 	# The direction strings
 	#
@@ -32,9 +32,9 @@ class Game.PlaneEnemy extends Game.Plane
 		@behaviour.push behaviour
 		
 		unless next
-			if @behaves PlaneEnemy.Behaviour.spawn.random.x
+			if @behaves EnemyPlane.Behaviour.spawn.random.x
 				@x = Math.random() * Game.Canvas1945.LevelWidth
-			if @behaves PlaneEnemy.Behaviour.spawn.random.y
+			if @behaves EnemyPlane.Behaviour.spawn.random.y
 				@y -= Math.random() * Game.Canvas1945.LevelHeight * 2
 		
 		return this
@@ -54,16 +54,16 @@ class Game.PlaneEnemy extends Game.Plane
 		super event
 		
 		# Out of bounds
-		if ( @y > Game.Canvas1945.Height and @_facing is Game.Plane.Direction.down ) or 
-		( @y < - 64 and @_facing is Game.Plane.Direction.up )
+		if ( @y > Game.Canvas1945.Height and @_facing is Game.Movable.Direction.down ) or 
+		( @y < - 64 and @_facing is Game.Movable.Direction.up )
 			
 			# If not a looper, kill
-			unless @behaves PlaneEnemy.Behaviour.looper
+			unless @behaves EnemyPlane.Behaviour.looper
 				@destroy() if destroy	
 			
 			# Set new positions
-			@y = if @_facing is Game.Plane.Direction.down then -64 else Game.Canvas1945.Height
-			if @behaves PlaneEnemy.Behaviour.spawn.random.x
+			@y = if @_facing is Game.Movable.Direction.down then -64 else Game.Canvas1945.Height
+			if @behaves EnemyPlane.Behaviour.spawn.random.x
 				@x = Math.random() * Game.Canvas1945.LevelWidth
 				
 		return this
@@ -77,13 +77,13 @@ class Game.PlaneEnemy extends Game.Plane
 	#
 	#
 	destroy: () ->
-		unless @behaves PlaneEnemy.Behaviour.spawn.ondeath
+		unless @behaves EnemyPlane.Behaviour.spawn.ondeath
 			Game.EventManager.trigger 'plane.destroy', @, []
 			return this
 			
 		@health = @maxhealth
 		@play 'idle'
-		@y = if @_facing is Game.Plane.Direction.down then -64 else Game.Canvas1945.Height
-		if @behaves PlaneEnemy.Behaviour.spawn.random.x
+		@y = if @_facing is Game.Movable.Direction.down then -64 else Game.Canvas1945.Height
+		if @behaves EnemyPlane.Behaviour.spawn.random.x
 			@x = Math.random() * Game.Canvas1945.LevelWidth
 		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.Enemy, @ ]
