@@ -38,7 +38,9 @@
 
       animation = arguments[0], s = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
       this.data.animations[animation] = {
-        frames: this.sequence.apply(this, s)
+        frames: this.sequence.apply(this, s),
+        next: true,
+        frequency: 2
       };
       return this;
     };

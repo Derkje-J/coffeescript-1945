@@ -52,6 +52,8 @@ class Builder.SpriteSheet
 	
 		@data.animations[ animation ] = 
 			frames: @sequence.apply( @, s )
+			next: true
+			frequency: 2
 		
 		return this
 		
