@@ -1,7 +1,7 @@
 'use strict'
 #
 #
-class Game.Bullet extends Game.Movable
+class Game.EnemyBullet extends Game.Bullet
 	
 	# Creates a new Game Bullet
 	#
@@ -15,17 +15,4 @@ class Game.Bullet extends Game.Movable
 	# @param args [Object] additional arguments
 	#
 	constructor: ( spritesheet, x, y, vx, vy, type = 'point', damage = 1, args = {} ) ->
-		super spritesheet, x, y, vx, vy
-		# Health
-		@damage = damage
-		@play type
-		
-	# Updates the bullet
-	#
-	# @param event [TickEvent] the event
-	# @return [self] the chainable self
-	#
-	update: ( event ) ->
-		return if event.paused
-		super event
-		return this
+		super spritesheet, x, y, vx, vy, type, damage, args
