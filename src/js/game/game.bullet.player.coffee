@@ -16,9 +16,12 @@ class Game.PlayerBullet extends Game.Bullet
 	#
 	constructor: ( spritesheet, x, y, vx = 0, vy = -150, type = 'up', damage = 3, args = {} ) ->
 		super spritesheet, x, y, vx, vy, type, damage, args
-		
-		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.PlayerBullet, @ ]
-		
+		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.PlayerBullet, @ ]	
+			
+	# Destroys the bullet
+	#
+	# @return [self] the chainable self
+	#
 	destroy: ->
 		super
 		Game.EventManager.trigger 'collidable.destroy', @, [ Game.CollisionManager.Groups.PlayerBullet, @ ]

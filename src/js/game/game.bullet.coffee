@@ -16,7 +16,6 @@ class Game.Bullet extends Game.Movable
 	#
 	constructor: ( spritesheet, x, y, vx, vy, type = 'point', damage = 1, args = {} ) ->
 		super spritesheet, x, y, vx, vy
-		# Health
 		@damage = damage
 		@play type
 		
@@ -35,7 +34,7 @@ class Game.Bullet extends Game.Movable
 	collide: ( group, object ) ->
 		@destroy()
 		
-	# Destroys this plane
+	# Destroys this bullet
 	#
 	destroy: () ->
 		super
