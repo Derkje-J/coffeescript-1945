@@ -23,6 +23,8 @@ class Game.PlaneEnemy extends Game.Plane
 		super spritesheet, x, y, health
 		@behaviour = []
 		
+		Game.EventManager.trigger( 'collidable.create', @, [ Game.CollisionManager.Groups.Enemy, @ ]  )
+		
 	#
 	#
 	addBehaviour: ( behaviour, next = off ) ->
@@ -71,6 +73,12 @@ class Game.PlaneEnemy extends Game.Plane
 			# todo kill	
 			
 		return this
+		
+	#
+	#
+	collide: ( group, object ) ->
+		if @inflict object.damage
+			Game.EventManager.trigger 'collidable.destroy', @, [ Game.CollisionManager.Groups.Enemy, @ ]
 		
 	# Sets the velocity according to the direction
 	#
