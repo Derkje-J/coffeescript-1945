@@ -15,6 +15,7 @@ class Game.Level
 	create: () ->
 		@createBackground()
 		@createPlayer()
+		@createHeadsUpDisplay()
 		return this
 		
 	# Creates the background
@@ -34,6 +35,13 @@ class Game.Level
 	createPlayer: () ->
 		@game.addTo 'level', 'player', @player = Builder.PlanePlayer.create()
 		
+	# Creates the headsup display
+	#
+	# @return [self] the chainable self
+	#
+	createHeadsUpDisplay: () ->
+		@game.addTo 'hud', 'bottom', @hud = new Display.HeadsUpDisplay @game, @
+		
 	# Clears the level
 	#
 	# @return [self] the chainable self
@@ -41,6 +49,7 @@ class Game.Level
 	clear: ( ) ->
 		@clearBackground()
 		@clearPlayer()
+		@clearHeadsUpDisplay()
 		return this
 		
 	# Clears the background
@@ -59,6 +68,14 @@ class Game.Level
 	#
 	clearPlayer: () ->
 		@game.removeFrom 'level', 'player'
+		return this
+		
+	# Clears the heads up display
+	#
+	# @return [self] the chainable self
+	#
+	clearHeadsUpDisplay: () ->
+		@game.removeFrom 'hud', 'hud'
 		return this
 	
 	# Restart the level
