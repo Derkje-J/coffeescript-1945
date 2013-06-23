@@ -38,7 +38,7 @@
       var enemy, i, _i, _results;
 
       _results = [];
-      for (i = _i = 0; _i < 10; i = ++_i) {
+      for (i = _i = 0; _i < 15; i = ++_i) {
         _results.push(this.game.addTo('level', 'enemy-' + i, enemy = Builder.PlaneGreen.create()));
       }
       return _results;
@@ -73,7 +73,7 @@
       var i, _i, _results;
 
       _results = [];
-      for (i = _i = 0; _i < 10; i = ++_i) {
+      for (i = _i = 0; _i < 15; i = ++_i) {
         _results.push(this.game.removeFrom('level', 'enemy-' + i));
       }
       return _results;

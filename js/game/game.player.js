@@ -25,7 +25,8 @@
     function Player(spritesheet) {
       Player.__super__.constructor.call(this, spritesheet, void 0, Game.Canvas1945.LevelHeight);
       this.health = 100;
-      this._facing = Game.Plane.Direction.up;
+      this.face(Game.Plane.Direction.up);
+      this.move();
       Game.EventManager.trigger('collidable.create', this, [Game.CollisionManager.Groups.Player, this]);
     }
 
@@ -59,10 +60,6 @@
       var dir, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
 
       if (this.health <= 0) {
-        if (this.direction.length !== 1 || this.direction[0] !== Game.Plane.Direction.down) {
-          this.direction = [Game.Plane.Direction.down];
-          this.setVelocity();
-        }
         return this;
       }
       dir = null;

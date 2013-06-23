@@ -3,7 +3,8 @@
   'use strict';
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+    __slice = [].slice;
 
   Game.Plane = (function(_super) {
     __extends(Plane, _super);
@@ -12,7 +13,20 @@
       up: 'up',
       down: 'down',
       left: 'left',
-      right: 'right'
+      right: 'right',
+      notup: 'down',
+      notdown: 'up',
+      notleft: 'right',
+      notright: 'left',
+      sideup: ['left', 'right'],
+      sidedown: ['right', 'left'],
+      sideleft: ['down', 'up'],
+      sideright: ['up', 'down']
+    };
+
+    Plane.BaseSpeed = {
+      side: 100,
+      forward: 100
     };
 
     function Plane(spritesheet, x, y, health) {
@@ -26,61 +40,65 @@
         health = 3;
       }
       Plane.__super__.constructor.call(this, spritesheet, x, y);
-      this.play('idle');
-      this._facing = Plane.Direction.down;
       this.direction = [];
       this.speed = {
-        x: 1,
-        y: 1,
-        facing: 1.3
+        side: 1,
+        forward: 1
       };
       this.primaryEnabled = false;
       this.secondaryEnabled = false;
-      this.health = 3;
+      this.health = this.maxhealth = 3;
       this.damage = 30;
+      this.play('idle');
+      this.face(Plane.Direction.down);
+      this.move(Plane.Direction.down);
     }
 
     Plane.prototype.inflict = function(damage) {
-      this.health -= damage;
-      if (this.health <= 0) {
+      if ((this.health -= damage) <= 0) {
         this.health = 0;
         this.after('explode', this.destroy);
         this.play('explode');
+        this._facing = Plane.Direction.down;
+        this.direction = [Game.Plane.Direction.down];
+        this.setVelocity();
         return true;
       }
       return false;
     };
 
     Plane.prototype.getDirectionModifier = function(direction) {
-      var p, result, v;
+      var speed;
 
-      result = (function() {
-        switch (direction) {
-          case Plane.Direction.up:
-            return {
-              y: -Game.Canvas1945.ScrollSpeed
-            };
-          case Plane.Direction.down:
-            return {
-              y: Game.Canvas1945.ScrollSpeed
-            };
-          case Plane.Direction.left:
-            return {
-              x: -Game.Canvas1945.ScrollSpeed
-            };
-          case Plane.Direction.right:
-            return {
-              x: Game.Canvas1945.ScrollSpeed
-            };
-        }
-      })();
-      if (this._facing === direction && direction === Plane.Direction.down) {
-        for (p in result) {
-          v = result[p];
-          result[p] = v * this.speed.facing;
-        }
+      speed = 0;
+      if (this._facing === direction) {
+        speed = Plane.BaseSpeed.forward * this.speed.forward;
+      } else if (__indexOf.call(Plane.Direction["side" + this._facing], direction) >= 0) {
+        speed = Plane.BaseSpeed.side * this.speed.side;
+      } else if (direction === Plane.Direction["not" + this._facing]) {
+        speed = 0;
       }
-      return result;
+      if (direction === Plane.Direction.down) {
+        speed += Game.Canvas1945.ScrollSpeed;
+      }
+      switch (direction) {
+        case Plane.Direction.up:
+          return {
+            y: -speed
+          };
+        case Plane.Direction.left:
+          return {
+            x: -speed
+          };
+        case Plane.Direction.right:
+          return {
+            x: speed
+          };
+        case Plane.Direction.down:
+          return {
+            y: speed
+          };
+      }
     };
 
     Plane.prototype.update = function(event) {
@@ -93,7 +111,8 @@
 
     Plane.prototype.destroy = function() {
       Plane.__super__.destroy.apply(this, arguments);
-      return Game.EventManager.trigger('plane.destroy', this, []);
+      Game.EventManager.trigger('plane.destroy', this, []);
+      return this;
     };
 
     Plane.prototype.setVelocity = function() {
@@ -115,16 +134,29 @@
       });
       for (key in modifiers) {
         value = modifiers[key];
-        this.velocity[key] = value * this.speed[key];
+        this.velocity[key] = value;
       }
       return this;
     };
 
-    Plane.prototype.move = function(direction) {
-      if (__indexOf.call(this.direction, direction) >= 0) {
+    Plane.prototype.move = function() {
+      var direction, directions, _i, _len;
+
+      directions = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      this.direction = [];
+      for (_i = 0, _len = directions.length; _i < _len; _i++) {
+        direction = directions[_i];
+        this.direction.push(direction);
+      }
+      this.setVelocity();
+      return this;
+    };
+
+    Plane.prototype.face = function(direction) {
+      if (this._facing === direction) {
         return this;
       }
-      this.direction.push(direction);
+      this._facing = direction;
       this.setVelocity();
       return this;
     };

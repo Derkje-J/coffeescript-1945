@@ -18,7 +18,8 @@
         random: {
           x: 'spawn-random-x',
           y: 'spawn-random-y'
-        }
+        },
+        ondeath: 'ondeath'
       }
     };
 
@@ -62,17 +63,13 @@
         return;
       }
       PlaneEnemy.__super__.update.call(this, event);
-      if (this._facing === Game.Plane.Direction.down && this.y > Game.Canvas1945.Height) {
-        if (this.behaves(PlaneEnemy.Behaviour.looper)) {
-          this.y = -64;
+      if ((this.y > Game.Canvas1945.Height && this._facing === Game.Plane.Direction.down) || (this.y < -64 && this._facing === Game.Plane.Direction.up)) {
+        if (!this.behaves(PlaneEnemy.Behaviour.looper)) {
+          if (destroy) {
+            this.destroy();
+          }
         }
-        if (this.behaves(PlaneEnemy.Behaviour.spawn.random.x)) {
-          this.x = Math.random() * Game.Canvas1945.LevelWidth;
-        }
-      } else if (this._facing === Game.Plane.Direction.up && this.y < -64) {
-        if (this.behaves(PlaneEnemy.Behaviour.looper)) {
-          this.y = Game.Canvas1945.Height;
-        }
+        this.y = this._facing === Game.Plane.Direction.down ? -64 : Game.Canvas1945.Height;
         if (this.behaves(PlaneEnemy.Behaviour.spawn.random.x)) {
           this.x = Math.random() * Game.Canvas1945.LevelWidth;
         }
@@ -86,37 +83,18 @@
       }
     };
 
-    PlaneEnemy.prototype.setVelocity = function() {
-      var key, modifiers, value,
-        _this = this;
-
-      modifiers = _(this.direction).reduce(function(result, key) {
-        var modifier, value, _ref;
-
-        _ref = _this.getDirectionModifier(key);
-        for (modifier in _ref) {
-          value = _ref[modifier];
-          result[modifier] += value;
-        }
-        return result;
-      }, {
-        x: 0,
-        y: 0
-      });
-      for (key in modifiers) {
-        value = modifiers[key];
-        this.velocity[key] = value * this.speed[key];
-      }
-      return this;
-    };
-
-    PlaneEnemy.prototype.move = function(direction) {
-      if (__indexOf.call(this.direction, direction) >= 0) {
+    PlaneEnemy.prototype.destroy = function() {
+      if (!this.behaves(PlaneEnemy.Behaviour.spawn.ondeath)) {
+        Game.EventManager.trigger('plane.destroy', this, []);
         return this;
       }
-      this.direction.push(direction);
-      this.setVelocity();
-      return this;
+      this.health = this.maxhealth;
+      this.play('idle');
+      this.y = this._facing === Game.Plane.Direction.down ? -64 : Game.Canvas1945.Height;
+      if (this.behaves(PlaneEnemy.Behaviour.spawn.random.x)) {
+        this.x = Math.random() * Game.Canvas1945.LevelWidth;
+      }
+      return Game.EventManager.trigger('collidable.create', this, [Game.CollisionManager.Groups.Enemy, this]);
     };
 
     return PlaneEnemy;
