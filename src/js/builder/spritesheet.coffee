@@ -35,10 +35,10 @@ class Builder.SpriteSheet
 		
 		for i in [0...len]
 			i_x = x + ( ( w + gx ) * ( i % xlen ) )
-			i_y = y + ( ( y + gy ) * Math.floor( i / xlen ) )
+			i_y = y + ( ( y + gy ) * ( ( i / xlen ) | 0 ) )
 
 			sequence.push @data.frames.length
-			@data.frames.push [ i_x, i_y, w, h, 0, Math.floor( w / 2 ), Math.floor( h / 2 ) ]
+			@data.frames.push [ i_x, i_y, w, h, 0, ( w / 2 + .5 ) | 0, ( h / 2 + .5 ) | 0 ]
 			
 		return sequence
 		
@@ -70,5 +70,3 @@ class Builder.SpriteSheet
 			frequency: frequency
 		
 		return this
-		
-		
