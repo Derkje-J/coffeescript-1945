@@ -42,7 +42,22 @@ class Game.Sprite
 		
 		@x = x
 		@y = y
-	
+		
+		@_createCallbackQueue()
+		
+	# Creates a callback queue for animation end
+	#
+	_createCallbackQueue: () ->
+		@_afterQueue = {}
+		@createjs.addEventListener 'animationend', ( event ) =>
+			if @_afterQueue[ event.name ]?
+				actions = @_afterQueue[ event.name ]
+				@_afterQueue[ event.name ] = []
+				
+				# All the callbacks!
+				action.call( @ ) for action in actions
+			return event
+			
 	# Plays an animation
 	#
 	# @param animation [String] the animation string
@@ -60,8 +75,25 @@ class Game.Sprite
 	stop: ( animation ) ->
 		@createjs.gotoAndStop animation
 		return this
-	
+		
+	# Sets a one time callback after animation ends
+	#
+	# @param animation [String] the animation
+	# @param callback [Function] the callback
+	# @return [self] the chainable self
+	#
+	after: ( animation, callback ) ->
+		unless @_afterQueue[ animation ]?
+			 @_afterQueue[ animation ] = []
+		@_afterQueue[ animation ].push callback
+		return this
+		
 	# On tick update
 	#
 	update: ( event ) ->
+	
+	#
+	#
+	destroy: ( ) ->
+		@createjs.removeAllEventListeners 'animationend'
 		
