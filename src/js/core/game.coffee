@@ -104,6 +104,7 @@ class Game.Canvas1945 extends Game.Container
 	# @return [self] the chainable self
 	#
 	_createLevel: ->		
+		@addLogic 'collisions', @collisions = new Game.CollisionManager()
 		@level = new Game.Level @
 		return this
 		
@@ -132,6 +133,16 @@ class Game.Canvas1945 extends Game.Container
 		@remove 'level'
 		@remove 'background'
 		return this
+		
+	#
+	#
+	die: ->
+
+		if ( --@lives ) > 0
+			@level.restart()
+		else
+			createjs.Ticker.setPaused on
+		
 	
 	# Add to layer
 	#
