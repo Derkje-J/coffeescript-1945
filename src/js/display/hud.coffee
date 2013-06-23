@@ -110,6 +110,7 @@ class Display.HeadsUpDisplay extends Game.Container
 	# @return [self] the chainable self
 	#
 	drawHealthBar: ( max = 100 ) ->
+		@healthBar.graphics.clear()
 		@healthBar.graphics.beginLinearGradientFill( 
 			@getHealthColors(), 
 			[ 0.8, 0.85 ], 
@@ -163,8 +164,8 @@ class Display.HeadsUpDisplay extends Game.Container
 		
 		if @level.player.health isnt @_health
 			@_health = @_health + ( @level.player.health - @_health ) * Math.min( 1, dt * 4 ) 
-			if ( @level.player.health - @_health ) < 0.001
-				 @_health = @level.player.health 
+			if Math.abs( @level.player.health - @_health ) < 0.001
+				 @_health = @level.player.health
 			@drawHealthBar()
 		
 		if @game.lives isnt @_lives
