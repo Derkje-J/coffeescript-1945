@@ -24,3 +24,12 @@ body {
 		 -o-box-shadow: 1px 1px 3px rgba( 0, 0, 0, 0.8 );
 			box-shadow: 1px 1px 3px rgba( 0, 0, 0, 0.8 );
 }
+
+.collision-debug {
+	opacity: .9;
+	position: fixed;
+	right: 20px;
+	top: 20px;
+	border: 1px dashed rgba( 255, 255, 255, .5 );
+	padding: 1px;
+}
