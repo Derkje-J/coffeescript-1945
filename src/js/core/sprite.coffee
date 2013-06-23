@@ -12,7 +12,8 @@ class Game.Sprite
 	constructor: ( @spritesheet, x = 0, y = 0 ) ->
 			
 		@animation = new createjs.BitmapAnimation @spritesheet
-		
+		@globalize = _( @animation.localToGlobal ).bind( @animation )
+
 		Object.defineProperties( @, 
 			'createjs':
 				get: -> return @animation
@@ -28,6 +29,15 @@ class Game.Sprite
 				set: ( value ) -> 
 					@_y = value
 					@animation.y = ( value + .5 ) | 0
+					
+			'width':
+				get: -> @animation.getBounds().width
+			
+			'height':
+				get: -> @animation.getBounds().height
+							
+			'bounds':
+				get: ->  @animation.getBounds()
 		)
 		
 		@x = x
