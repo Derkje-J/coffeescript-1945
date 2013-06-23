@@ -1,7 +1,7 @@
 'use strict'
 #
 #
-class Game.Island extends Game.Sprite
+class Game.Island extends Game.Movable
 	
 	# Level Bound padding. Should be at least frame size
 	#
@@ -14,17 +14,17 @@ class Game.Island extends Game.Sprite
 	#
 	constructor: ( spritesheet, type = 'A' ) ->
 	
-		super spritesheet
-		
-		@x = Math.random() * Game.Canvas1945.Width
-		rel = Math.floor( Math.random() * ( Game.Canvas1945.Height / 3 - Island.Padding ) )
-		switch type
+		rel = ( Math.random() * ( Game.Canvas1945.Height / 3 - Island.Padding ) + .5 )  | 0
+		x = Math.random() * Game.Canvas1945.Width
+		y = switch type
 			when 'A'
-				@y = rel
+				rel
 			when 'B'
-				@y = rel + Game.Canvas1945.Height / 3 * 1
+				rel + Game.Canvas1945.Height / 3 * 1
 			when 'C'
-				@y = rel + Game.Canvas1945.Height / 3 * 2
+				rel + Game.Canvas1945.Height / 3 * 2
+		
+		super spritesheet, x, y, 0, Game.Canvas1945.ScrollSpeed
 		
 		@play 'type-' + type
 		
@@ -33,11 +33,7 @@ class Game.Island extends Game.Sprite
 	# @param event [Object] the update event
 	#
 	update: ( event ) ->
-		return if event.paused
-		
-		dt = event.delta / 1000
-		@y += dt * Game.Canvas1945.ScrollSpeed
-		
+		super event
 		if @y > Game.Canvas1945.Height + Island.Padding
 			@y = -Island.Padding
 			@x = Math.random() * Game.Canvas1945.Width
