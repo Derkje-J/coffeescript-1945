@@ -38,7 +38,7 @@ class Game.Player extends Game.Plane
 	constructor: ( spritesheet ) ->
 		super spritesheet, undefined, Game.Canvas1945.LevelHeight
 		@health = 100
-		@face Game.Plane.Direction.up
+		@face Game.Movable.Direction.up
 		@move()		
 		
 		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.Player, @ ]
@@ -82,13 +82,13 @@ class Game.Player extends Game.Plane
 		
 		# Direction keycodes
 		if event.keyCode in Player.KeyDown
-			dir = Game.Plane.Direction.down
+			dir = Game.Movable.Direction.down
 		else if event.keyCode in Player.KeyUp
-			dir = Game.Plane.Direction.up
+			dir = Game.Movable.Direction.up
 		else if event.keyCode in Player.KeyRight
-			dir = Game.Plane.Direction.right
+			dir = Game.Movable.Direction.right
 		else if event.keyCode in Player.KeyLeft
-			dir = Game.Plane.Direction.left
+			dir = Game.Movable.Direction.left
 			
 		# Action keycodes
 		else if event.keyCode in Player.KeyPrimary

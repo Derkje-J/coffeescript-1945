@@ -16,7 +16,7 @@ class Game.Level
 	#
 	#
 	onPlaneDestroyed: ( source ) ->
-		if source instanceof Game.PlaneEnemy
+		if source instanceof Game.EnemyPlane
 			@game.removeFrom 'level', @game.get( 'level' ).findKey source
 		else if source instanceof Game.Player
 			@game.die()
@@ -47,13 +47,13 @@ class Game.Level
 	# @return [self] the chainable self
 	#
 	createPlayer: () ->
-		@game.addTo 'level', 'player', @player = Builder.PlanePlayer.create()
+		@game.addTo 'level', 'player', @player = Builder.PlayerPlane.create()
 		
 	#
 	#
 	createEnemies: () ->
 		for i in [0...15]
-			@game.addTo 'level', 'enemy-' + i, enemy = Builder.PlaneGreen.create()
+			@game.addTo 'level', 'enemy-' + i, enemy = Builder.GreenEnemyPlane.create()
 
 	# Creates the headsup display
 	#
