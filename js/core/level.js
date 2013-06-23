@@ -4,12 +4,21 @@
     function Level(game) {
       this.game = game;
       this.create();
+      Game.EventManager.on('plane.destroy', this, this.onPlaneDestroyed);
     }
 
+    Level.prototype.onPlaneDestroyed = function(source) {
+      if (source instanceof Game.PlaneEnemy) {
+        return this.game.removeFrom('level', this.game.get('level').findKey(source));
+      } else if (source instanceof Game.Player) {
+        return this.game.die();
+      }
+    };
+
     Level.prototype.create = function() {
-      this.game.addLogic('collisions', this.collisions = new Game.CollisionManager());
       this.createBackground();
       this.createPlayer();
+      this.createEnemies();
       this.createHeadsUpDisplay();
       return this;
     };
@@ -22,14 +31,15 @@
     };
 
     Level.prototype.createPlayer = function() {
+      return this.game.addTo('level', 'player', this.player = Builder.PlanePlayer.create());
+    };
+
+    Level.prototype.createEnemies = function() {
       var enemy, i, _i, _results;
 
-      this.game.addTo('level', 'player', this.player = Builder.PlanePlayer.create());
-      this.collisions.add(Game.CollisionManager.Groups.Player, this.player);
       _results = [];
       for (i = _i = 0; _i < 10; i = ++_i) {
-        this.game.addTo('level', 'enemy-' + i, enemy = Builder.PlaneGreen.create());
-        _results.push(this.collisions.add(Game.CollisionManager.Groups.Enemy, enemy));
+        _results.push(this.game.addTo('level', 'enemy-' + i, enemy = Builder.PlaneGreen.create()));
       }
       return _results;
     };
@@ -39,8 +49,10 @@
     };
 
     Level.prototype.clear = function() {
+      this.game.get('collisions').clear();
       this.clearBackground();
       this.clearPlayer();
+      this.clearEnemies();
       this.clearHeadsUpDisplay();
       return this;
     };
@@ -57,8 +69,18 @@
       return this;
     };
 
+    Level.prototype.clearEnemies = function() {
+      var i, _i, _results;
+
+      _results = [];
+      for (i = _i = 0; _i < 10; i = ++_i) {
+        _results.push(this.game.removeFrom('level', 'enemy-' + i));
+      }
+      return _results;
+    };
+
     Level.prototype.clearHeadsUpDisplay = function() {
-      this.game.removeFrom('hud', 'hud');
+      this.game.removeFrom('hud', 'bottom');
       return this;
     };
 

@@ -86,7 +86,7 @@
       var object, _ref;
 
       if ((object = this.get(key)) == null) {
-        throw new Error("There is not an object with that key (" + key + ").");
+        return this;
       }
       this.container.removeChild((_ref = object.createjs) != null ? _ref : object);
       delete this.objects[key];
@@ -95,6 +95,20 @@
 
     Container.prototype.get = function(key) {
       return this.objects[key];
+    };
+
+    Container.prototype.findKey = function(search) {
+      var result;
+
+      result = null;
+      _(this.objects).find(function(object, key) {
+        if (object === search) {
+          result = key;
+          return true;
+        }
+        return false;
+      });
+      return result;
     };
 
     return Container;

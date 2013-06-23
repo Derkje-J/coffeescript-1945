@@ -43,7 +43,8 @@
 
     function CollisionManager() {
       this.update = __bind(this.update, this);
-      var x, y, _i, _j, _ref, _ref1, _ref2, _ref3;
+      var x, y, _i, _j, _ref, _ref1, _ref2, _ref3,
+        _this = this;
 
       this.objects = {};
       this.collisions = {};
@@ -60,6 +61,12 @@
       this._gridWidth = _(this._grid).keys().length;
       this._gridHeight = _(_(this._grid).first()).keys().length;
       this._setupPixelPerfectCollision();
+      Game.EventManager.on('collidable.create', this, function(source, group, object) {
+        return _this.add(group, object);
+      });
+      Game.EventManager.on('collidable.destroy', this, function(source, group, object) {
+        return _this.remove(group, object);
+      });
     }
 
     CollisionManager.prototype.update = function(event) {
@@ -126,12 +133,11 @@
                       collided.push(lefty);
                       collided.push(righty);
                       if (typeof lefty.collide === "function") {
-                        lefty.collide(righty);
+                        lefty.collide(groupb, righty);
                       }
                       if (typeof righty.collide === "function") {
-                        righty.collide(lefty);
+                        righty.collide(groupa, lefty);
                       }
-                      console.log('collision');
                     }
                   }
                 }
@@ -175,6 +181,11 @@
 
     CollisionManager.prototype.remove = function(group, object) {
       this.objects[group] = _(this.objects[group]).without(object);
+      return this;
+    };
+
+    CollisionManager.prototype.clear = function() {
+      this.objects = {};
       return this;
     };
 

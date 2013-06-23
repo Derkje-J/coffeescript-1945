@@ -59,7 +59,27 @@
       });
       this.x = x;
       this.y = y;
+      this._createCallbackQueue();
     }
+
+    Sprite.prototype._createCallbackQueue = function() {
+      var _this = this;
+
+      this._afterQueue = {};
+      return this.createjs.addEventListener('animationend', function(event) {
+        var action, actions, _i, _len;
+
+        if (_this._afterQueue[event.name] != null) {
+          actions = _this._afterQueue[event.name];
+          _this._afterQueue[event.name] = [];
+          for (_i = 0, _len = actions.length; _i < _len; _i++) {
+            action = actions[_i];
+            action.call(_this);
+          }
+        }
+        return event;
+      });
+    };
 
     Sprite.prototype.play = function(animation) {
       this.createjs.gotoAndPlay(animation);
@@ -71,7 +91,19 @@
       return this;
     };
 
+    Sprite.prototype.after = function(animation, callback) {
+      if (this._afterQueue[animation] == null) {
+        this._afterQueue[animation] = [];
+      }
+      this._afterQueue[animation].push(callback);
+      return this;
+    };
+
     Sprite.prototype.update = function(event) {};
+
+    Sprite.prototype.destroy = function() {
+      return this.createjs.removeAllEventListeners('animationend');
+    };
 
     return Sprite;
 

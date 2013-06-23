@@ -87,6 +87,7 @@
     };
 
     Canvas1945.prototype._createLevel = function() {
+      this.addLogic('collisions', this.collisions = new Game.CollisionManager());
       this.level = new Game.Level(this);
       return this;
     };
@@ -108,6 +109,14 @@
       this.remove('level');
       this.remove('background');
       return this;
+    };
+
+    Canvas1945.prototype.die = function() {
+      if ((--this.lives) > 0) {
+        return this.level.restart();
+      } else {
+        return createjs.Ticker.setPaused(true);
+      }
     };
 
     Canvas1945.prototype.addTo = function(layer, key, object) {

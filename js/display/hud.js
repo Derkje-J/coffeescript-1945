@@ -100,6 +100,7 @@
       if (max == null) {
         max = 100;
       }
+      this.healthBar.graphics.clear();
       this.healthBar.graphics.beginLinearGradientFill(this.getHealthColors(), [0.8, 0.85], (HeadsUpDisplay.HealthBar.width / 2 + 0.5) | 0, 0, (HeadsUpDisplay.HealthBar.width / 2 + 0.5) | 0, HeadsUpDisplay.HealthBar.height).drawRect(0, 0, HeadsUpDisplay.HealthBar.width / max * this._health, HeadsUpDisplay.HealthBar.height);
       return this;
     };
@@ -137,7 +138,7 @@
       dt = event.delta / 1000;
       if (this.level.player.health !== this._health) {
         this._health = this._health + (this.level.player.health - this._health) * Math.min(1, dt * 4);
-        if ((this.level.player.health - this._health) < 0.001) {
+        if (Math.abs(this.level.player.health - this._health) < 0.001) {
           this._health = this.level.player.health;
         }
         this.drawHealthBar();

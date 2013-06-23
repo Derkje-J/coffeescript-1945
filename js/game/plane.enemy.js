@@ -34,6 +34,7 @@
       }
       PlaneEnemy.__super__.constructor.call(this, spritesheet, x, y, health);
       this.behaviour = [];
+      Game.EventManager.trigger('collidable.create', this, [Game.CollisionManager.Groups.Enemy, this]);
     }
 
     PlaneEnemy.prototype.addBehaviour = function(behaviour, next) {
@@ -77,6 +78,12 @@
         }
       }
       return this;
+    };
+
+    PlaneEnemy.prototype.collide = function(group, object) {
+      if (this.inflict(object.damage)) {
+        return Game.EventManager.trigger('collidable.destroy', this, [Game.CollisionManager.Groups.Enemy, this]);
+      }
     };
 
     PlaneEnemy.prototype.setVelocity = function() {

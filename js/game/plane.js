@@ -40,6 +40,17 @@
       this.damage = 30;
     }
 
+    Plane.prototype.inflict = function(damage) {
+      this.health -= damage;
+      if (this.health <= 0) {
+        this.health = 0;
+        this.after('explode', this.destroy);
+        this.play('explode');
+        return true;
+      }
+      return false;
+    };
+
     Plane.prototype.getDirectionModifier = function(direction) {
       var p, result, v;
 
@@ -78,6 +89,11 @@
       }
       Plane.__super__.update.call(this, event);
       return this;
+    };
+
+    Plane.prototype.destroy = function() {
+      Plane.__super__.destroy.apply(this, arguments);
+      return Game.EventManager.trigger('plane.destroy', this, []);
     };
 
     Plane.prototype.setVelocity = function() {

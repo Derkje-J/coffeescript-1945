@@ -23,7 +23,7 @@
       }
       builder = new Builder.PlaneGreen();
       builder.animationExtra('idle', 4, 466, 32, 32, 1, 1, 3, 3, true, 1);
-      builder.animationExtra('explode', 69, 169, 32, 32, 1, 1, 6, 6, 'hide', 2);
+      builder.animationExtra('explode', 70, 169, 32, 32, 1, 1, 6, 6, 'hide', 2);
       builder.animationExtra('hide', 268, 202, 32, 32, 1, 1, 1, 1, false, 1);
       builder.animationExtra('loop', 598, 203, 32, 32, 1, 1, 1, 5, 'upside', 2);
       builder.animation('upside', 136, 367, 32, 32, 1, 1, 2, 2);

@@ -26,6 +26,7 @@
       Player.__super__.constructor.call(this, spritesheet, void 0, Game.Canvas1945.LevelHeight);
       this.health = 100;
       this._facing = Game.Plane.Direction.up;
+      Game.EventManager.trigger('collidable.create', this, [Game.CollisionManager.Groups.Player, this]);
     }
 
     Player.prototype.update = function(event) {
@@ -48,9 +49,22 @@
       return this;
     };
 
+    Player.prototype.collide = function(group, object) {
+      if (this.inflict(object.damage)) {
+        return Game.EventManager.trigger('collidable.destroy', this, [Game.CollisionManager.Groups.Player, this]);
+      }
+    };
+
     Player.prototype.input = function(event, state) {
       var dir, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
 
+      if (this.health <= 0) {
+        if (this.direction.length !== 1 || this.direction[0] !== Game.Plane.Direction.down) {
+          this.direction = [Game.Plane.Direction.down];
+          this.setVelocity();
+        }
+        return this;
+      }
       dir = null;
       if (_ref = event.keyCode, __indexOf.call(Player.KeyDown, _ref) >= 0) {
         dir = Game.Plane.Direction.down;
@@ -66,7 +80,7 @@
         this.secondaryEnabled = state;
       }
       if (dir == null) {
-        return;
+        return this;
       }
       if (!state) {
         this.direction = _(this.direction).without(dir);
