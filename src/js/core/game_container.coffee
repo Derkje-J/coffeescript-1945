@@ -69,9 +69,8 @@ class Game.Container
 	# @return [self] the chainable self
 	#
 	remove: ( key ) ->
-		unless ( object = @get( key ) )?
-			throw new Error "There is not an object with that key (#{ key })."
-			
+		return this unless ( object = @get( key ) )?
+
 		@container.removeChild object.createjs ? object
 		delete @objects[ key ]
 		return this
@@ -83,3 +82,17 @@ class Game.Container
 	#
 	get: ( key ) ->
 		return @objects[ key ]
+	
+	#
+	#
+	findKey: ( search ) ->
+		result = null
+		_( @objects ).find( ( object, key ) ->
+			if object is search
+				result = key
+				return true
+			return false
+		)
+		
+		return result
+	
