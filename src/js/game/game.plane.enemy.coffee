@@ -14,6 +14,7 @@ class Game.PlaneEnemy extends Game.Plane
 			random:
 				x: 'spawn-random-x'
 				y: 'spawn-random-y'
+			ondeath: 'ondeath'
 		
 	# Creates a new Game Plane
 	#
@@ -23,7 +24,7 @@ class Game.PlaneEnemy extends Game.Plane
 		super spritesheet, x, y, health
 		@behaviour = []
 		
-		Game.EventManager.trigger( 'collidable.create', @, [ Game.CollisionManager.Groups.Enemy, @ ]  )
+		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.Enemy, @ ] 
 		
 	#
 	#
@@ -52,26 +53,19 @@ class Game.PlaneEnemy extends Game.Plane
 		return if event.paused
 		super event
 		
-		if @_facing is Game.Plane.Direction.down and @y > Game.Canvas1945.Height
+		# Out of bounds
+		if ( @y > Game.Canvas1945.Height and @_facing is Game.Plane.Direction.down ) or 
+		( @y < - 64 and @_facing is Game.Plane.Direction.up )
 			
-			if @behaves PlaneEnemy.Behaviour.looper
-				@y = -64
+			# If not a looper, kill
+			unless @behaves PlaneEnemy.Behaviour.looper
+				@destroy() if destroy	
+			
+			# Set new positions
+			@y = if @_facing is Game.Plane.Direction.down then -64 else Game.Canvas1945.Height
 			if @behaves PlaneEnemy.Behaviour.spawn.random.x
 				@x = Math.random() * Game.Canvas1945.LevelWidth
 				
-			# else
-			# todo kill	
-			
-		else if @_facing is Game.Plane.Direction.up and @y < - 64
-			
-			if @behaves PlaneEnemy.Behaviour.looper
-				@y = Game.Canvas1945.Height
-			if @behaves PlaneEnemy.Behaviour.spawn.random.x
-				@x = Math.random() * Game.Canvas1945.LevelWidth
-			
-			# else
-			# todo kill	
-			
 		return this
 		
 	#
@@ -79,28 +73,17 @@ class Game.PlaneEnemy extends Game.Plane
 	collide: ( group, object ) ->
 		if @inflict object.damage
 			Game.EventManager.trigger 'collidable.destroy', @, [ Game.CollisionManager.Groups.Enemy, @ ]
-		
-	# Sets the velocity according to the direction
-	#
-	# @return [self] the chainable self
-	#
-	setVelocity: () ->
-		
-		# Get the movement data
-		modifiers = _( @direction ).reduce( ( result, key ) => 
-			result[ modifier ] += value for modifier, value of @getDirectionModifier key
-			return result
-		, { x: 0, y: 0 } )
-		
-		# Set the movement data
-		for key, value of modifiers
-			@velocity[ key ] = value * @speed[ key ]
-		return this
-	
+			
 	#
 	#
-	move: ( direction ) ->
-		return this if direction in @direction
-		@direction.push direction
-		@setVelocity()
-		return this
+	destroy: () ->
+		unless @behaves PlaneEnemy.Behaviour.spawn.ondeath
+			Game.EventManager.trigger 'plane.destroy', @, []
+			return this
+			
+		@health = @maxhealth
+		@play 'idle'
+		@y = if @_facing is Game.Plane.Direction.down then -64 else Game.Canvas1945.Height
+		if @behaves PlaneEnemy.Behaviour.spawn.random.x
+			@x = Math.random() * Game.Canvas1945.LevelWidth
+		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.Enemy, @ ]
