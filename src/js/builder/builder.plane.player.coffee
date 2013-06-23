@@ -1,7 +1,7 @@
 'use strict'
 #
 #
-class Builder.PlanePlayer extends Builder.SpriteSheet
+class Builder.PlayerPlane extends Builder.SpriteSheet
 
 	@SpriteSheet = null
 
@@ -11,12 +11,12 @@ class Builder.PlanePlayer extends Builder.SpriteSheet
 	#
 	@create: ( ) ->
 	
-		if PlanePlayer.SpriteSheet?
-			return new Game.Player PlanePlayer.SpriteSheet
+		if PlayerPlane.SpriteSheet?
+			return new Game.Player PlayerPlane.SpriteSheet
 			
-		builder = new Builder.PlanePlayer()
+		builder = new Builder.PlayerPlane()
 		builder.animation( 'idle', 4, 400, 65, 65, 1, 1, 3, 3 )
 		builder.animationExtra( 'explode', 4, 301, 65, 65, 1, 1, 7, 7, false, 3 )
 		
-		PlanePlayer.SpriteSheet = builder.createjs
-		return new Game.Player PlanePlayer.SpriteSheet
+		PlayerPlane.SpriteSheet = builder.createjs
+		return new Game.Player PlayerPlane.SpriteSheet
