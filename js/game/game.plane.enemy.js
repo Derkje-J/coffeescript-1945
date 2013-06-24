@@ -26,7 +26,7 @@
       }
     };
 
-    function EnemyPlane(spritesheet, x, y, health) {
+    function EnemyPlane(spritesheet, x, y, health, score) {
       if (x == null) {
         x = (Game.Canvas1945.LevelWidth / 2 + .5) | 0;
       }
@@ -36,8 +36,12 @@
       if (health == null) {
         health = 3;
       }
+      if (score == null) {
+        score = 100;
+      }
       EnemyPlane.__super__.constructor.call(this, spritesheet, x, y, health);
       this.behaviour = [];
+      this.score = score;
       Game.EventManager.trigger('collidable.create', this, [Game.CollisionManager.Groups.Enemy, this]);
     }
 
@@ -83,7 +87,10 @@
 
     EnemyPlane.prototype.collide = function(group, object) {
       if (this.inflict(object.damage)) {
-        return Game.EventManager.trigger('collidable.destroy', this, [Game.CollisionManager.Groups.Enemy, this]);
+        Game.EventManager.trigger('collidable.destroy', this, [Game.CollisionManager.Groups.Enemy, this]);
+        if (group !== Game.CollisionManager.Groups.Player) {
+          return Game.EventManager.trigger('points.get', this, [this.score]);
+        }
       }
     };
 

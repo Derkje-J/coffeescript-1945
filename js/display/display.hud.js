@@ -28,11 +28,14 @@
       this.add('background', new createjs.Bitmap('img/1945.bottom.gif'));
       this.add('healthbar', this.createHealthBar());
       this.add('lives', this.createLivesBar());
+      this.add('score', this.createScore());
       this.y = Game.Canvas1945.Height - 76;
-      this._health = this.level.player.health;
+      this._health = 0;
       this._lives = this.game.lives;
+      this._score = this.game.score;
       this.drawHealthBar();
       this.drawLivesBar();
+      this.drawScore();
     }
 
     HeadsUpDisplay.prototype.createHealthBar = function() {
@@ -47,6 +50,14 @@
       this.livesBar.x = HeadsUpDisplay.LivesBar.x;
       this.livesBar.y = HeadsUpDisplay.LivesBar.y;
       return this.livesBar;
+    };
+
+    HeadsUpDisplay.prototype.createScore = function() {
+      this.scoreText = new createjs.Text("0", "18px Arial", "white");
+      this.scoreText.shadow = new createjs.Shadow("rgba( 0, 0, 0, .9 )", 2, 2, 2);
+      this.scoreText.x = 232;
+      this.scoreText.y = 8;
+      return this.scoreText;
     };
 
     HeadsUpDisplay.prototype.getHealthColors = function(health, max) {
@@ -131,6 +142,11 @@
       return this;
     };
 
+    HeadsUpDisplay.prototype.drawScore = function() {
+      this.scoreText.text = (this._score + .5) | 0;
+      return this;
+    };
+
     HeadsUpDisplay.prototype.update = function(event) {
       var dt;
 
@@ -142,6 +158,13 @@
           this._health = this.level.player.health;
         }
         this.drawHealthBar();
+      }
+      if (this.game.score !== this._score) {
+        this._score = this._score + (this.game.score - this._score) * Math.min(1, dt * 4);
+        if (Math.abs(this.game.score - this._score) < 0.001) {
+          this._score = this.game.score;
+        }
+        this.drawScore();
       }
       if (this.game.lives !== this._lives) {
         this._lives = this.game.lives;

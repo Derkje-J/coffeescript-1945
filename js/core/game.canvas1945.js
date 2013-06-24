@@ -100,8 +100,25 @@
     };
 
     Canvas1945.prototype._createPersistantData = function() {
-      this.lives = 3;
-      this.score = 0;
+      this.data = new Game.Data();
+      Object.defineProperties(this, {
+        'lives': {
+          get: function() {
+            return this.data.lives;
+          },
+          set: function(value) {
+            return this.data.lives = value;
+          }
+        },
+        'score': {
+          get: function() {
+            return this.data.score;
+          },
+          set: function(value) {
+            return this.data.score = value;
+          }
+        }
+      });
       return this;
     };
 

@@ -13,6 +13,7 @@
       Game.EventManager.on('plane.destroy', this, this.onPlaneDestroyed);
       Game.EventManager.on('bullet.create', this, this.onBulletCreated);
       Game.EventManager.on('bullet.destroy', this, this.onBulletDestroyed);
+      Game.EventManager.on('points.get', this, this.onPointsGained);
     }
 
     Level.prototype.onPlaneDestroyed = function(source) {
@@ -21,6 +22,10 @@
       } else if (source instanceof Game.Player) {
         return this.game.die();
       }
+    };
+
+    Level.prototype.onPointsGained = function(source, score) {
+      return this.game.score += score;
     };
 
     Level.prototype.onBulletCreated = function(source, bullet) {
