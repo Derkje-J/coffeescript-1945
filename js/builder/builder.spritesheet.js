@@ -6,7 +6,7 @@
   Builder.SpriteSheet = (function() {
     function SpriteSheet() {
       this.data = {
-        images: [Game.Sprite.BaseSheet.image],
+        images: [Game.AssetManager.get('basesheet').image],
         frames: [],
         animations: {}
       };

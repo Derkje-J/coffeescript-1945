@@ -8,7 +8,7 @@ class Builder.SpriteSheet
 	constructor: ->
 		
 		@data =
-			images: [ Game.Sprite.BaseSheet.image ]
+			images: [ Game.AssetManager.get( 'basesheet' ).image ]
 			frames: []
 			animations: {}
 			

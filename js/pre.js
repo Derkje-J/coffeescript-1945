@@ -6,4 +6,10 @@
 
   (typeof exports !== "undefined" && exports !== null ? exports : this).Builder = {};
 
+  locache.cachePrefix += '.canvas1945.';
+
+  locache.expirePrefix += '.canvas1945.';
+
+  locache.cleanup();
+
 }).call(this);

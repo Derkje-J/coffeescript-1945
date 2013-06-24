@@ -3,10 +3,6 @@
 #
 class Game.Sprite 
 
-	# The base bitmap for all the sprites
-	#
-	@BaseSheet = new createjs.Bitmap "img/1945.png"
-	
 	# Creates a new sprite from a spritesheet
 	#
 	constructor: ( @spritesheet, x = 0, y = 0 ) ->
