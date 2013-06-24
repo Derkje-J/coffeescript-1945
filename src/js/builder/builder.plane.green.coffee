@@ -19,7 +19,7 @@ class Builder.GreenEnemyPlane extends Builder.SpriteSheet
 				.addBehaviour( Game.EnemyPlane.Behaviour.spawn.ondeath )
 			
 		builder = new Builder.GreenEnemyPlane()
-		builder.animationExtra( 'idle', 4, 466, 32, 32, 1, 1, 3, 3, true, 1 )
+		builder.animationExtra( 'idle', 4, 466, 32, 32, 1, 1, 3, 3, true, 2 )
 		builder.animationExtra( 'explode', 70, 169, 32, 32, 1, 1, 6, 6, 'hide', 2 )
 		builder.animationExtra( 'hide', 268, 202, 32, 32, 1, 1, 1, 1, false, 1 )
 		builder.animationExtra( 'loop', 598, 203, 32, 32, 1, 1, 1, 5, 'upside', 2 )
