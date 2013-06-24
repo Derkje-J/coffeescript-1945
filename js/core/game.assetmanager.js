@@ -16,6 +16,10 @@
         id: 'bottom',
         src: "img/1945.bottom.gif"
       }, false);
+      this.preload.loadFile({
+        id: 'shards',
+        src: "img/1945.shards.png"
+      }, false);
       this.objects = {};
     }
 

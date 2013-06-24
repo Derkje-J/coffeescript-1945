@@ -11,6 +11,7 @@ class Game.AssetManager
 		
 		@preload.loadFile { id: 'basesheet', src: "img/1945.png" }, false
 		@preload.loadFile { id: 'bottom', src: "img/1945.bottom.gif" }, false
+		@preload.loadFile { id: 'shards', src: "img/1945.shards.png" }, false
 		
 		@objects = {}
 		
