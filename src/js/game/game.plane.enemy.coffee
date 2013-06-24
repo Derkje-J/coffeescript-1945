@@ -22,10 +22,10 @@ class Game.EnemyPlane extends Game.Plane
 	#
 	# @param spritesheet [createjs.SpriteSheet] the spritesheet for this sprite
 	#
-	constructor: ( spritesheet, x = ( Game.Canvas1945.LevelWidth / 2 + .5) | 0, y = - 64, health = 3 ) ->
+	constructor: ( spritesheet, x = ( Game.Canvas1945.LevelWidth / 2 + .5) | 0, y = - 64, health = 3, score = 100 ) ->
 		super spritesheet, x, y, health
 		@behaviour = []
-		
+		@score = score
 		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.Enemy, @ ] 
 		
 	#
@@ -79,6 +79,8 @@ class Game.EnemyPlane extends Game.Plane
 	collide: ( group, object ) ->
 		if @inflict object.damage
 			Game.EventManager.trigger 'collidable.destroy', @, [ Game.CollisionManager.Groups.Enemy, @ ]
+			if group isnt Game.CollisionManager.Groups.Player
+				Game.EventManager.trigger 'points.get', @, [ @score ]
 			
 	#
 	#
