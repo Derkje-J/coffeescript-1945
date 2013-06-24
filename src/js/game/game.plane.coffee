@@ -32,7 +32,7 @@ class Game.Plane extends Game.Movable
 		@_throttleActionTime = 350
 		
 		# Health
-		@health = @maxhealth = 3
+		@health = @maxhealth = health
 		@damage = 30
 		
 		@play 'idle'

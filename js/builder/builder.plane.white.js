@@ -19,7 +19,7 @@
       var builder;
 
       if (WhiteEnemyPlane.SpriteSheet != null) {
-        return (new Game.EnemyPlane(WhiteEnemyPlane.SpriteSheet, void 0, void 0, 250)).addBehaviour(Game.EnemyPlane.Behaviour.looper).addBehaviour(Game.EnemyPlane.Behaviour.spawn.random.x).addBehaviour(Game.EnemyPlane.Behaviour.spawn.random.y).addBehaviour(Game.EnemyPlane.Behaviour.spawn.ondeath).addBehaviour(Game.EnemyPlane.Behaviour.fire.point);
+        return (new Game.EnemyPlane(WhiteEnemyPlane.SpriteSheet, void 0, void 0, void 0, 250)).addBehaviour(Game.EnemyPlane.Behaviour.looper).addBehaviour(Game.EnemyPlane.Behaviour.spawn.random.x).addBehaviour(Game.EnemyPlane.Behaviour.spawn.random.y).addBehaviour(Game.EnemyPlane.Behaviour.spawn.ondeath).addBehaviour(Game.EnemyPlane.Behaviour.fire.point);
       }
       builder = new Builder.WhiteEnemyPlane();
       builder.animationExtra('idle', 103, 466, 32, 32, 1, 1, 3, 3, true, 2);
@@ -29,7 +29,7 @@
       builder.animation('upside', 70, 367, 32, 32, 1, 1, 2, 2);
       builder.data.animations['upside'].frames.push(_(builder.data.animations['loop'].frames).last());
       WhiteEnemyPlane.SpriteSheet = builder.createjs;
-      return (new Game.EnemyPlane(WhiteEnemyPlane.SpriteSheet, void 0, void 0, 250)).addBehaviour(Game.EnemyPlane.Behaviour.looper).addBehaviour(Game.EnemyPlane.Behaviour.spawn.random.x).addBehaviour(Game.EnemyPlane.Behaviour.spawn.random.y).addBehaviour(Game.EnemyPlane.Behaviour.spawn.ondeath).addBehaviour(Game.EnemyPlane.Behaviour.fire.point);
+      return (new Game.EnemyPlane(WhiteEnemyPlane.SpriteSheet, void 0, void 0, void 0, 250)).addBehaviour(Game.EnemyPlane.Behaviour.looper).addBehaviour(Game.EnemyPlane.Behaviour.spawn.random.x).addBehaviour(Game.EnemyPlane.Behaviour.spawn.random.y).addBehaviour(Game.EnemyPlane.Behaviour.spawn.ondeath).addBehaviour(Game.EnemyPlane.Behaviour.fire.point);
     };
 
     return WhiteEnemyPlane;

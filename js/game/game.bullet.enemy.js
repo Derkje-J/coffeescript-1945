@@ -9,7 +9,7 @@
 
     function EnemyBullet(spritesheet, x, y, vx, vy, type, damage, args) {
       if (vy == null) {
-        vy = 150 + 100;
+        vy = 150 + Game.Canvas1945.ScrollSpeed;
       }
       if (type == null) {
         type = 'point';

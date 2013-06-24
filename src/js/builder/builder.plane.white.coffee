@@ -12,7 +12,7 @@ class Builder.WhiteEnemyPlane extends Builder.SpriteSheet
 	@create: ( ) ->
 	
 		if WhiteEnemyPlane.SpriteSheet?
-			return ( new Game.EnemyPlane WhiteEnemyPlane.SpriteSheet, undefined, undefined, 250 )
+			return ( new Game.EnemyPlane WhiteEnemyPlane.SpriteSheet, undefined, undefined, undefined, 250 )
 				.addBehaviour( Game.EnemyPlane.Behaviour.looper )
 				.addBehaviour( Game.EnemyPlane.Behaviour.spawn.random.x )
 				.addBehaviour( Game.EnemyPlane.Behaviour.spawn.random.y )
@@ -28,7 +28,7 @@ class Builder.WhiteEnemyPlane extends Builder.SpriteSheet
 		builder.data.animations[ 'upside' ].frames.push _( builder.data.animations[ 'loop' ].frames ).last()
 		
 		WhiteEnemyPlane.SpriteSheet = builder.createjs
-		return ( new Game.EnemyPlane WhiteEnemyPlane.SpriteSheet, undefined, undefined, 250 )
+		return ( new Game.EnemyPlane WhiteEnemyPlane.SpriteSheet, undefined, undefined, undefined, 250 )
 			.addBehaviour( Game.EnemyPlane.Behaviour.looper )
 			.addBehaviour( Game.EnemyPlane.Behaviour.spawn.random.x )
 			.addBehaviour( Game.EnemyPlane.Behaviour.spawn.random.y )

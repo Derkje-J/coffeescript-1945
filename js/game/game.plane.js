@@ -34,7 +34,7 @@
       this.secondaryEnabled = false;
       this._nextActionTime = 0;
       this._throttleActionTime = 350;
-      this.health = this.maxhealth = 3;
+      this.health = this.maxhealth = health;
       this.damage = 30;
       this.play('idle');
       this.face(Game.Movable.Direction.down);
