@@ -116,8 +116,16 @@ class Game.Canvas1945 extends Game.Container
 	#
 	#
 	_createPersistantData: ->
-		@lives = 3
-		@score = 0
+		@data = new Game.Data()
+		
+		Object.defineProperties( @,
+			'lives':
+				get: -> @data.lives
+				set: ( value ) -> @data.lives = value
+			'score':
+				get: -> @data.score
+				set: ( value ) -> @data.score = value
+		)
 		return this
 		
 	# Creates the DEBUG hud
@@ -142,11 +150,11 @@ class Game.Canvas1945 extends Game.Container
 	#
 	#
 	die: ->
-
 		if ( --@lives ) > 0
 			@level.restart()
 		else
 			createjs.Ticker.setPaused on
+	
 	#
 	#
 	addLogic: ( key, object ) ->

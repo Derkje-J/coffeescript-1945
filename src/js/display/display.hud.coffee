@@ -28,13 +28,17 @@ class Display.HeadsUpDisplay extends Game.Container
 		@add 'background', new createjs.Bitmap 'img/1945.bottom.gif'
 		@add 'healthbar', @createHealthBar()
 		@add 'lives', @createLivesBar()
+		@add 'score', @createScore()
 		
 		@y = Game.Canvas1945.Height - 76
-		@_health = @level.player.health
+		
+		@_health = 0
 		@_lives = @game.lives
+		@_score = @game.score
 		
 		@drawHealthBar()
 		@drawLivesBar()
+		@drawScore()
 		
 	# Creates the health bar
 	#
@@ -51,6 +55,15 @@ class Display.HeadsUpDisplay extends Game.Container
 		@livesBar.x = HeadsUpDisplay.LivesBar.x
 		@livesBar.y = HeadsUpDisplay.LivesBar.y
 		return @livesBar
+		
+	#
+	#
+	createScore: ->
+		@scoreText = new createjs.Text( "0", "18px Arial", "white" )
+		@scoreText.shadow = new createjs.Shadow( "rgba( 0, 0, 0, .9 )", 2, 2, 2 )
+		@scoreText.x = 232
+		@scoreText.y = 8
+		return @scoreText
 		
 	# Gets the health bar colours
 	#
@@ -153,6 +166,12 @@ class Display.HeadsUpDisplay extends Game.Container
 		
 		return this
 		
+	#
+	#
+	drawScore: ( ) ->
+		@scoreText.text = ( @_score + .5 ) | 0
+		return this
+		
 	# Updates the HUD
 	#
 	# @param event [TickEvent]
@@ -167,6 +186,13 @@ class Display.HeadsUpDisplay extends Game.Container
 			if Math.abs( @level.player.health - @_health ) < 0.001
 				 @_health = @level.player.health
 			@drawHealthBar()
+		
+		if @game.score isnt @_score
+			
+			@_score = @_score + ( @game.score - @_score ) * Math.min( 1, dt * 4 ) 
+			if Math.abs( @game.score - @_score ) < 0.001
+				 @_score = @game.score
+			@drawScore()
 		
 		if @game.lives isnt @_lives
 			@_lives = @game.lives

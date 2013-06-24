@@ -14,6 +14,7 @@ class Game.Level extends Game.Container
 		Game.EventManager.on 'plane.destroy', @, @onPlaneDestroyed
 		Game.EventManager.on 'bullet.create', @, @onBulletCreated
 		Game.EventManager.on 'bullet.destroy', @, @onBulletDestroyed
+		Game.EventManager.on 'points.get', @, @onPointsGained
 		
 	#
 	#
@@ -24,9 +25,15 @@ class Game.Level extends Game.Container
 	#
 	onPlaneDestroyed: ( source ) ->
 		if source instanceof Game.EnemyPlane
-			@removeFrom 'level', @get( 'level' ).findKey source
+			@removeFrom 'level', @get( 'level' ).findKey source		
+			
 		else if source instanceof Game.Player
 			@game.die()
+			
+	#
+	#
+	onPointsGained: ( source, score ) ->
+		@game.score += score
 			
 	#
 	#
