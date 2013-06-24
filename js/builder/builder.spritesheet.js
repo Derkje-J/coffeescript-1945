@@ -4,9 +4,12 @@
   var __slice = [].slice;
 
   Builder.SpriteSheet = (function() {
-    function SpriteSheet() {
+    function SpriteSheet(image) {
+      if (image == null) {
+        image = Game.AssetManager.get('basesheet').image;
+      }
       this.data = {
-        images: [Game.AssetManager.get('basesheet').image],
+        images: [image],
         frames: [],
         animations: {}
       };
@@ -26,7 +29,7 @@
       sequence = [];
       for (i = _i = 0; 0 <= len ? _i < len : _i > len; i = 0 <= len ? ++_i : --_i) {
         i_x = x + ((w + gx) * (i % xlen));
-        i_y = y + ((y + gy) * ((i / xlen) | 0));
+        i_y = y + ((h + gy) * ((i / xlen) | 0));
         sequence.push(this.data.frames.length);
         this.data.frames.push([i_x, i_y, w, h, 0, (w / 2 + .5) | 0, (h / 2 + .5) | 0]);
       }
