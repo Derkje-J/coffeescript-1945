@@ -66,7 +66,7 @@ class Game.Canvas1945 extends Game.Container
 	_setTicker: ->
 		createjs.Ticker.addEventListener "tick", @update
 		createjs.Ticker.useRAF = on
-		createjs.Ticker.setFPS 60
+		createjs.Ticker.setFPS 120
 		return this
 		
 	# Sets the input event
