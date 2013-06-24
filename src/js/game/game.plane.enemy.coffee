@@ -68,6 +68,10 @@ class Game.EnemyPlane extends Game.Plane
 			if @behaves EnemyPlane.Behaviour.spawn.random.x
 				@x = Math.random() * Game.Canvas1945.LevelWidth
 				
+		# Temp brain
+		@primaryEnabled = on
+			
+				
 		return this
 		
 	#
@@ -89,3 +93,12 @@ class Game.EnemyPlane extends Game.Plane
 		if @behaves EnemyPlane.Behaviour.spawn.random.x
 			@x = Math.random() * Game.Canvas1945.LevelWidth
 		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.Enemy, @ ]
+		
+	
+	#
+	#
+	primaryAction: () ->
+		#weapon = GameWeapon...
+		return this if ( ( Math.random() * 100 ) | 0 ) < 68
+		if @behaves EnemyPlane.Behaviour.fire.point
+			Game.EventManager.trigger 'bullet.create', @, [ Builder.Bullet.create( Game.EnemyBullet, @x, @y, 0, undefined, 'point' ) ]

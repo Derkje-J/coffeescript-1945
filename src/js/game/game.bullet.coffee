@@ -27,6 +27,10 @@ class Game.Bullet extends Game.Movable
 	update: ( event ) ->
 		return if event.paused
 		super event
+		
+		if @y < -64 or @y > Game.Canvas1945.Height or @x < -64 or @x > Game.Canvas1945.Width + 64
+			@destroy()
+		
 		return this
 		
 	#
