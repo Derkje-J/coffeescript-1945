@@ -25,7 +25,7 @@
     };
 
     Level.prototype.onPointsGained = function(source, score) {
-      return this.game.score += score;
+      return this.game.data.score += score;
     };
 
     Level.prototype.onBulletCreated = function(source, bullet) {
@@ -36,7 +36,7 @@
       return this.removeFrom('below', this.get('below').findKey(source));
     };
 
-    Level.prototype.create = function() {
+    Level.prototype.create = function(level) {
       this.createBackground();
       this.createLayers();
       this.createHeadsUpDisplay();

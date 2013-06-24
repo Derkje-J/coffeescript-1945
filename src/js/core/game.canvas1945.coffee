@@ -3,11 +3,15 @@
 #
 class Game.Canvas1945 extends Game.Container
 	
+	# The version
+	#
+	@VERSION = '1.0.0'
+	
 	# The width of the game
 	#
 	@Width = 640
 	
-	#
+	# The width of the level
 	#
 	@LevelWidth = 640
 	
@@ -15,7 +19,7 @@ class Game.Canvas1945 extends Game.Container
 	#
 	@Height = 480
 	
-	#
+	# The height of the level
 	#
 	@LevelHeight = 410
 	
@@ -48,16 +52,11 @@ class Game.Canvas1945 extends Game.Container
 		@_createLayers()
 		@_createDebug()
 
-		# @TODO asset manager and loading bar. For now this will do
-		preload = new createjs.LoadQueue()
-		preload.setMaxConnections 5
-		preload.addEventListener "complete", () => @ready()
-		preload.loadFile Game.Sprite.BaseSheet.image.src
-		
+		Game.AssetManager.load () => @ready()
 	#
 	# @TODO asset manager and loading bar. For now this will do
 	ready: ->
-		@level.create()
+		@level.create @data.level
 		
 	# Sets the ticker
 	#
@@ -113,19 +112,12 @@ class Game.Canvas1945 extends Game.Container
 		@add 'hud', new Game.Container()
 		return this
 		
+	# Creates persistance data
 	#
+	# @return [self] the chainable self
 	#
 	_createPersistantData: ->
 		@data = new Game.Data()
-		
-		Object.defineProperties( @,
-			'lives':
-				get: -> @data.lives
-				set: ( value ) -> @data.lives = value
-			'score':
-				get: -> @data.score
-				set: ( value ) -> @data.score = value
-		)
 		return this
 		
 	# Creates the DEBUG hud
@@ -147,19 +139,24 @@ class Game.Canvas1945 extends Game.Container
 		@remove 'background'
 		return this
 		
-	#
+	# On Player died
 	#
 	die: ->
-		if ( --@lives ) > 0
+		if ( --@data.lives ) > 0
 			@level.restart()
 		else
 			createjs.Ticker.setPaused on
 	
+	# Add Logic Component
 	#
+	# @param key [String] the key
+	# @param object [Object] the object
+	# @return [self] the chainable self
 	#
 	addLogic: ( key, object ) ->
 		@objects[ key ] = object
 		return this
+		
 	# Runs every tick and passes down the tick event
 	# 
 	# @param event [Event] the update event

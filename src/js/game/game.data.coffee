@@ -9,6 +9,7 @@ class Game.Data
 		
 			@lives = 3
 			@score = 0
+			@level = 0
 			
 		#
 		# save

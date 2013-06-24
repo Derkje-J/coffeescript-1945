@@ -17,7 +17,7 @@
     HeadsUpDisplay.LivesBar = {
       x: 6,
       y: 6,
-      image: Builder.PlaneMini.create(),
+      image: Builder.PlaneMini.create,
       animation: 'mini'
     };
 
@@ -25,14 +25,14 @@
       this.game = game;
       this.level = level;
       HeadsUpDisplay.__super__.constructor.apply(this, arguments);
-      this.add('background', new createjs.Bitmap('img/1945.bottom.gif'));
+      this.add('background', Game.AssetManager.get('bottom'));
       this.add('healthbar', this.createHealthBar());
       this.add('lives', this.createLivesBar());
       this.add('score', this.createScore());
       this.y = Game.Canvas1945.Height - 76;
       this._health = 0;
-      this._lives = this.game.lives;
-      this._score = this.game.score;
+      this._lives = this.game.data.lives;
+      this._score = this.game.data.score;
       this.drawHealthBar();
       this.drawLivesBar();
       this.drawScore();
@@ -127,7 +127,7 @@
       }
       while ((max > (_ref = this.livesBar.length) && _ref < this._lives)) {
         if (this.livesBar.length < max - 1) {
-          this.image = new Game.Sprite(HeadsUpDisplay.LivesBar.image.spritesheet).stop(HeadsUpDisplay.LivesBar.animation);
+          this.image = HeadsUpDisplay.LivesBar.image().stop(HeadsUpDisplay.LivesBar.animation);
           this.image.y = 16;
           this.image.x = this.livesBar.length * 28 + 16;
           this.image.createjs.shadow = new createjs.Shadow("rgba( 0, 0, 0, .7 )", 2, 2, 0);
@@ -159,15 +159,15 @@
         }
         this.drawHealthBar();
       }
-      if (this.game.score !== this._score) {
-        this._score = this._score + (this.game.score - this._score) * Math.min(1, dt * 4);
-        if (Math.abs(this.game.score - this._score) < 0.001) {
-          this._score = this.game.score;
+      if (this.game.data.score !== this._score) {
+        this._score = this._score + (this.game.data.score - this._score) * Math.min(1, dt * 4);
+        if (Math.abs(this.game.data.score - this._score) < 0.001) {
+          this._score = this.game.data.score;
         }
         this.drawScore();
       }
-      if (this.game.lives !== this._lives) {
-        this._lives = this.game.lives;
+      if (this.game.data.lives !== this._lives) {
+        this._lives = this.game.data.lives;
         this.drawLivesBar();
       }
       return self;

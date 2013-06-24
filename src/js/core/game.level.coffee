@@ -33,7 +33,7 @@ class Game.Level extends Game.Container
 	#
 	#
 	onPointsGained: ( source, score ) ->
-		@game.score += score
+		@game.data.score += score
 			
 	#
 	#
@@ -47,8 +47,8 @@ class Game.Level extends Game.Container
 		
 	# Creates the level
 	#
-	create: () ->
-	
+	create: ( level ) ->
+		
 		@createBackground()
 		@createLayers()
 		@createHeadsUpDisplay()

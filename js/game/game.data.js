@@ -4,6 +4,7 @@
     function Data() {
       this.lives = 3;
       this.score = 0;
+      this.level = 0;
     }
 
     return Data;

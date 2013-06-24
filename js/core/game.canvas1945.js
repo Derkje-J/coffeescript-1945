@@ -7,6 +7,8 @@
   Game.Canvas1945 = (function(_super) {
     __extends(Canvas1945, _super);
 
+    Canvas1945.VERSION = '1.0.0';
+
     Canvas1945.Width = 640;
 
     Canvas1945.LevelWidth = 640;
@@ -18,8 +20,7 @@
     Canvas1945.ScrollSpeed = 100;
 
     function Canvas1945() {
-      var preload,
-        _this = this;
+      var _this = this;
 
       Canvas1945.__super__.constructor.apply(this, arguments);
       this.canvas = this._createCanvas();
@@ -38,16 +39,13 @@
       this._createPersistantData();
       this._createLayers();
       this._createDebug();
-      preload = new createjs.LoadQueue();
-      preload.setMaxConnections(5);
-      preload.addEventListener("complete", function() {
+      Game.AssetManager.load(function() {
         return _this.ready();
       });
-      preload.loadFile(Game.Sprite.BaseSheet.image.src);
     }
 
     Canvas1945.prototype.ready = function() {
-      return this.level.create();
+      return this.level.create(this.data.level);
     };
 
     Canvas1945.prototype._setTicker = function() {
@@ -101,24 +99,6 @@
 
     Canvas1945.prototype._createPersistantData = function() {
       this.data = new Game.Data();
-      Object.defineProperties(this, {
-        'lives': {
-          get: function() {
-            return this.data.lives;
-          },
-          set: function(value) {
-            return this.data.lives = value;
-          }
-        },
-        'score': {
-          get: function() {
-            return this.data.score;
-          },
-          set: function(value) {
-            return this.data.score = value;
-          }
-        }
-      });
       return this;
     };
 
@@ -136,7 +116,7 @@
     };
 
     Canvas1945.prototype.die = function() {
-      if ((--this.lives) > 0) {
+      if ((--this.data.lives) > 0) {
         return this.level.restart();
       } else {
         return createjs.Ticker.setPaused(true);

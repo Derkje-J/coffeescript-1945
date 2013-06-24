@@ -16,7 +16,7 @@ class Display.HeadsUpDisplay extends Game.Container
 	@LivesBar =
 		x: 6
 		y: 6
-		image: Builder.PlaneMini.create()
+		image: Builder.PlaneMini.create
 		animation: 'mini'
 
 	# Creates a new Heads Up Display
@@ -25,7 +25,7 @@ class Display.HeadsUpDisplay extends Game.Container
 	#
 	constructor: ( @game, @level ) ->
 		super
-		@add 'background', new createjs.Bitmap 'img/1945.bottom.gif'
+		@add 'background', Game.AssetManager.get 'bottom'
 		@add 'healthbar', @createHealthBar()
 		@add 'lives', @createLivesBar()
 		@add 'score', @createScore()
@@ -33,8 +33,8 @@ class Display.HeadsUpDisplay extends Game.Container
 		@y = Game.Canvas1945.Height - 76
 		
 		@_health = 0
-		@_lives = @game.lives
-		@_score = @game.score
+		@_lives = @game.data.lives
+		@_score = @game.data.score
 		
 		@drawHealthBar()
 		@drawLivesBar()
@@ -152,7 +152,7 @@ class Display.HeadsUpDisplay extends Game.Container
 		while max > @livesBar.length < @_lives
 			
 			if @livesBar.length < max - 1
-				@image = new Game.Sprite( HeadsUpDisplay.LivesBar.image.spritesheet ).stop( HeadsUpDisplay.LivesBar.animation )
+				@image = HeadsUpDisplay.LivesBar.image().stop( HeadsUpDisplay.LivesBar.animation )
 				@image.y = 16
 				@image.x = @livesBar.length * 28 + 16
 				@image.createjs.shadow = new createjs.Shadow( "rgba( 0, 0, 0, .7 )", 2, 2, 0 )
@@ -187,15 +187,15 @@ class Display.HeadsUpDisplay extends Game.Container
 				 @_health = @level.player.health
 			@drawHealthBar()
 		
-		if @game.score isnt @_score
+		if @game.data.score isnt @_score
 			
-			@_score = @_score + ( @game.score - @_score ) * Math.min( 1, dt * 4 ) 
-			if Math.abs( @game.score - @_score ) < 0.001
-				 @_score = @game.score
+			@_score = @_score + ( @game.data.score - @_score ) * Math.min( 1, dt * 4 ) 
+			if Math.abs( @game.data.score - @_score ) < 0.001
+				 @_score = @game.data.score
 			@drawScore()
 		
-		if @game.lives isnt @_lives
-			@_lives = @game.lives
+		if @game.data.lives isnt @_lives
+			@_lives = @game.data.lives
 			@drawLivesBar()
 		
 		return self
