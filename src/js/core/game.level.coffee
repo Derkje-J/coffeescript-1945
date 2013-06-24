@@ -10,18 +10,25 @@ class Game.Level extends Game.Container
 	constructor: ( @game ) ->
 		super
 
-		#Game.EventManager.on 'plane.create', @, @onPlaneCreated
+		Game.EventManager.on 'plane.create', @, @onPlaneCreated
 		Game.EventManager.on 'plane.destroy', @, @onPlaneDestroyed
 		Game.EventManager.on 'bullet.create', @, @onBulletCreated
 		Game.EventManager.on 'bullet.destroy', @, @onBulletDestroyed
+		Game.EventManager.on 'shard.create', @, @onShardCreated
+		Game.EventManager.on 'shard.destroy', @, @onShardDestroyed
 		Game.EventManager.on 'points.get', @, @onPointsGained
 		
-	#
-	#
-	#onPlaneCreated: ( source ) ->		
-		#@addTo 'level', _( 'plane' ).uniqueId(), source	
 		
+	# On plane created
 	#
+	# @param source [Game.Plane] the plane
+	#
+	onPlaneCreated: ( source ) ->		
+		@addTo 'level', _( 'plane' ).uniqueId(), source
+		
+	# On plane destroyed
+	#
+	# @param source [Game.Plane] the plane
 	#
 	onPlaneDestroyed: ( source ) ->
 		if source instanceof Game.EnemyPlane
@@ -30,22 +37,46 @@ class Game.Level extends Game.Container
 		else if source instanceof Game.Player
 			@game.die()
 			
+	# On points gained
 	#
+	# @param source [any] the source of the points
+	# @param score [Integer] the number of points
 	#
 	onPointsGained: ( source, score ) ->
 		@game.data.score += score
 			
+	# On bullet created
 	#
+	# @param source [any] the source of the bullet
+	# @param buller [Game.Bullet] the bullet
 	#
 	onBulletCreated: ( source, bullet ) ->
 		@addTo 'below', _( 'bullet' ).uniqueId(), bullet
 		
+	# On bullet destroyed
 	#
+	# @param source [Game.Bullet] the bullet
 	#
 	onBulletDestroyed: ( source ) ->
 		@removeFrom 'below', @get( 'below' ).findKey source
+	
+	# On shard created
+	#
+	# @param source [Game.Shard] the shard
+	#
+	onShardCreated: ( source ) ->
+		@addTo 'below', _( 'shard' ).uniqueId(), source
+	
+	# On shard destroyed
+	#
+	# @param source [Game.Shard] the shard
+	#
+	onShardDestroyed: ( source ) ->
+		@removeFrom 'below',  @get( 'below' ).findKey source
 		
 	# Creates the level
+	#
+	# @param level [] the level id
 	#
 	create: ( level ) ->
 		

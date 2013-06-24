@@ -10,11 +10,18 @@
     function Level(game) {
       this.game = game;
       Level.__super__.constructor.apply(this, arguments);
+      Game.EventManager.on('plane.create', this, this.onPlaneCreated);
       Game.EventManager.on('plane.destroy', this, this.onPlaneDestroyed);
       Game.EventManager.on('bullet.create', this, this.onBulletCreated);
       Game.EventManager.on('bullet.destroy', this, this.onBulletDestroyed);
+      Game.EventManager.on('shard.create', this, this.onShardCreated);
+      Game.EventManager.on('shard.destroy', this, this.onShardDestroyed);
       Game.EventManager.on('points.get', this, this.onPointsGained);
     }
+
+    Level.prototype.onPlaneCreated = function(source) {
+      return this.addTo('level', _('plane').uniqueId(), source);
+    };
 
     Level.prototype.onPlaneDestroyed = function(source) {
       if (source instanceof Game.EnemyPlane) {
@@ -33,6 +40,14 @@
     };
 
     Level.prototype.onBulletDestroyed = function(source) {
+      return this.removeFrom('below', this.get('below').findKey(source));
+    };
+
+    Level.prototype.onShardCreated = function(source) {
+      return this.addTo('below', _('shard').uniqueId(), source);
+    };
+
+    Level.prototype.onShardDestroyed = function(source) {
       return this.removeFrom('below', this.get('below').findKey(source));
     };
 
