@@ -81,6 +81,7 @@ class Game.EnemyPlane extends Game.Plane
 			Game.EventManager.trigger 'collidable.destroy', @, [ Game.CollisionManager.Groups.Enemy, @ ]
 			if group isnt Game.CollisionManager.Groups.Player
 				Game.EventManager.trigger 'points.get', @, [ @score ]
+			Builder.EnemyPlaneShards.create @x, @y, @velocity.x, @velocity.y
 			
 	#
 	#
