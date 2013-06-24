@@ -27,6 +27,9 @@
         return;
       }
       Bullet.__super__.update.call(this, event);
+      if (this.y < -64 || this.y > Game.Canvas1945.Height || this.x < -64 || this.x > Game.Canvas1945.Width + 64) {
+        this.destroy();
+      }
       return this;
     };
 

@@ -53,7 +53,7 @@
     Canvas1945.prototype._setTicker = function() {
       createjs.Ticker.addEventListener("tick", this.update);
       createjs.Ticker.useRAF = true;
-      createjs.Ticker.setFPS(60);
+      createjs.Ticker.setFPS(120);
       return this;
     };
 

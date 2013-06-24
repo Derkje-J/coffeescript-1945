@@ -77,6 +77,7 @@
           this.x = Math.random() * Game.Canvas1945.LevelWidth;
         }
       }
+      this.primaryEnabled = true;
       return this;
     };
 
@@ -98,6 +99,15 @@
         this.x = Math.random() * Game.Canvas1945.LevelWidth;
       }
       return Game.EventManager.trigger('collidable.create', this, [Game.CollisionManager.Groups.Enemy, this]);
+    };
+
+    EnemyPlane.prototype.primaryAction = function() {
+      if (((Math.random() * 100) | 0) < 68) {
+        return this;
+      }
+      if (this.behaves(EnemyPlane.Behaviour.fire.point)) {
+        return Game.EventManager.trigger('bullet.create', this, [Builder.Bullet.create(Game.EnemyBullet, this.x, this.y, 0, void 0, 'point')]);
+      }
     };
 
     return EnemyPlane;

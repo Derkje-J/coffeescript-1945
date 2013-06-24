@@ -8,6 +8,9 @@
     __extends(EnemyBullet, _super);
 
     function EnemyBullet(spritesheet, x, y, vx, vy, type, damage, args) {
+      if (vy == null) {
+        vy = 150 + 100;
+      }
       if (type == null) {
         type = 'point';
       }

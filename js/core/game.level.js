@@ -46,15 +46,27 @@
     };
 
     Level.prototype.createLayers = function() {
-      var enemy, i, _i, _results;
+      var enemy, i, _i, _j, _k, _l, _m, _results;
 
       this.add('below', new Game.Container());
       this.add('level', new Game.Container());
       this.add('above', new Game.Container());
       this.addTo('level', 'player', this.player = Builder.PlayerPlane.create());
+      for (i = _i = 0; _i < 10; i = ++_i) {
+        this.addTo('level', 'enemy-' + i, enemy = Builder.GreenEnemyPlane.create());
+      }
+      for (i = _j = 10; _j < 20; i = ++_j) {
+        this.addTo('level', 'enemy-' + i, enemy = Builder.WhiteEnemyPlane.create());
+      }
+      for (i = _k = 20; _k < 30; i = ++_k) {
+        this.addTo('level', 'enemy-' + i, enemy = Builder.OrangeEnemyPlane.create());
+      }
+      for (i = _l = 30; _l < 40; i = ++_l) {
+        this.addTo('level', 'enemy-' + i, enemy = Builder.BlueEnemyPlane.create());
+      }
       _results = [];
-      for (i = _i = 0; _i < 15; i = ++_i) {
-        _results.push(this.addTo('level', 'enemy-' + i, enemy = Builder.GreenEnemyPlane.create()));
+      for (i = _m = 40; _m < 50; i = ++_m) {
+        _results.push(this.addTo('level', 'enemy-' + i, enemy = Builder.LimeEnemyPlane.create()));
       }
       return _results;
     };
@@ -89,7 +101,7 @@
       var i, _i;
 
       this.removeFrom('level', 'player');
-      for (i = _i = 0; _i < 15; i = ++_i) {
+      for (i = _i = 0; _i < 50; i = ++_i) {
         this.removeFrom('level', 'enemy-' + i);
       }
       this.remove('above');
