@@ -42,6 +42,7 @@ class Game.Movable extends Game.Sprite
 	update: ( event ) ->
 		return this if event.paused
 		dt = event.delta / 1000
-		@x += dt * @velocity.x
-		@y += dt * @velocity.y
+		for prop, value of @velocity
+			@[ prop ] += dt * value
+		@y += Game.Canvas1945.ScrollSpeed * dt
 		return this

@@ -76,9 +76,6 @@ class Game.Plane extends Game.Movable
 			speed = Plane.BaseSpeed.side * @speed.side
 		else if direction is Game.Movable.Direction[ "not#{@_facing}" ]
 			speed = 0
-			
-		if direction is Game.Movable.Direction.down
-			speed += Game.Canvas1945.ScrollSpeed
 		
 		return switch direction
 			when Game.Movable.Direction.up

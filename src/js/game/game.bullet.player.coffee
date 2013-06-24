@@ -14,7 +14,7 @@ class Game.PlayerBullet extends Game.Bullet
 	# @param damage [Integer] the damage
 	# @param args [Object] additional arguments
 	#
-	constructor: ( spritesheet, x, y, vx = 0, vy = -150, type = 'up', damage = 3, args = {} ) ->
+	constructor: ( spritesheet, x, y, vx = 0, vy = -300, type = 'up', damage = 3, args = {} ) ->
 		super spritesheet, x, y, vx, vy, type, damage, args
 		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.PlayerBullet, @ ]	
 			

@@ -41,6 +41,8 @@ class Game.Player extends Game.Plane
 		@face Game.Movable.Direction.up
 		@move()		
 		
+		@speed.forward = 2
+		
 		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.Player, @ ]
 	
 	# Updates the player

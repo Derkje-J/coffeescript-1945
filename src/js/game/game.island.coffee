@@ -24,7 +24,7 @@ class Game.Island extends Game.Movable
 			when 'C'
 				rel + Game.Canvas1945.Height / 3 * 2
 		
-		super spritesheet, x, y, 0, Game.Canvas1945.ScrollSpeed
+		super spritesheet, x, y, 0, 0
 		
 		@play 'type-' + type
 		
