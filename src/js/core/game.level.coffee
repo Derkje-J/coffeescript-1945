@@ -67,8 +67,16 @@ class Game.Level extends Game.Container
 		
 		@addTo 'level', 'player', @player = Builder.PlayerPlane.create()
 		
-		for i in [0...15]
+		for i in [0...10]
 			@addTo 'level', 'enemy-' + i, enemy = Builder.GreenEnemyPlane.create()
+		for i in [10...20]
+			@addTo 'level', 'enemy-' + i, enemy = Builder.WhiteEnemyPlane.create()
+		for i in [20...30]
+			@addTo 'level', 'enemy-' + i, enemy = Builder.OrangeEnemyPlane.create()
+		for i in [30...40]
+			@addTo 'level', 'enemy-' + i, enemy = Builder.BlueEnemyPlane.create()
+		for i in [40...50]
+			@addTo 'level', 'enemy-' + i, enemy = Builder.LimeEnemyPlane.create()
 		
 	# Creates the headsup display
 	#
@@ -114,7 +122,7 @@ class Game.Level extends Game.Container
 	clearLayers: () ->
 		@removeFrom 'level', 'player'
 		
-		for i in [0...15]
+		for i in [0...50]
 			@removeFrom 'level', 'enemy-' + i
 			
 		@remove 'above'
