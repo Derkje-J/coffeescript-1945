@@ -89,8 +89,9 @@
       if (this.inflict(object.damage)) {
         Game.EventManager.trigger('collidable.destroy', this, [Game.CollisionManager.Groups.Enemy, this]);
         if (group !== Game.CollisionManager.Groups.Player) {
-          return Game.EventManager.trigger('points.get', this, [this.score]);
+          Game.EventManager.trigger('points.get', this, [this.score]);
         }
+        return Builder.EnemyPlaneShards.create(this.x, this.y, this.velocity.x, this.velocity.y);
       }
     };
 

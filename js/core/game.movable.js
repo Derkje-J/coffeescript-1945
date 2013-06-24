@@ -37,14 +37,18 @@
     }
 
     Movable.prototype.update = function(event) {
-      var dt;
+      var dt, prop, value, _ref;
 
       if (event.paused) {
         return this;
       }
       dt = event.delta / 1000;
-      this.x += dt * this.velocity.x;
-      this.y += dt * this.velocity.y;
+      _ref = this.velocity;
+      for (prop in _ref) {
+        value = _ref[prop];
+        this[prop] += dt * value;
+      }
+      this.y += Game.Canvas1945.ScrollSpeed * dt;
       return this;
     };
 

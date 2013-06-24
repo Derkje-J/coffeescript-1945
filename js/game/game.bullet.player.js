@@ -12,7 +12,7 @@
         vx = 0;
       }
       if (vy == null) {
-        vy = -150;
+        vy = -300;
       }
       if (type == null) {
         type = 'up';

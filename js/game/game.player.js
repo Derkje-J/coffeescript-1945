@@ -27,6 +27,7 @@
       this.health = 100;
       this.face(Game.Movable.Direction.up);
       this.move();
+      this.speed.forward = 2;
       Game.EventManager.trigger('collidable.create', this, [Game.CollisionManager.Groups.Player, this]);
     }
 

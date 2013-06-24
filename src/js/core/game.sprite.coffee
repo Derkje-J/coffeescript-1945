@@ -18,13 +18,38 @@ class Game.Sprite
 				get: -> return @_x ? 0
 				set: ( value ) -> 
 					@_x = value
-					@animation.x = ( value + .5 )| 0
+					@animation.x = ( value + .5 ) | 0
 			
 			'y':
 				get: -> return @_y ? 0
 				set: ( value ) -> 
 					@_y = value
 					@animation.y = ( value + .5 ) | 0
+					
+			'sx':
+				get: -> return @_sx ? 1
+				set: ( value ) -> 
+					@_sx = value
+					@animation.scaleX = value
+			
+			'sy':
+				get: -> return @_sy ? 1
+				set: ( value ) -> 
+					@_sy = value
+					@animation.scaleY = value
+					
+			'r':
+				get: -> return @_r ? 0
+				set: ( value ) -> 
+					@_r = value
+					@animation.rotation = ( value + .5 ) | 0
+					
+			'a':
+				get: -> return @_a ? 1
+				set: ( value ) -> 
+					@_a = value
+					@animation.alpha = value
+				
 					
 			'width':
 				get: -> @animation.getBounds().width
@@ -38,6 +63,10 @@ class Game.Sprite
 		
 		@x = x
 		@y = y
+		@a = 1
+		@r = 0
+		@sx = 1
+		@sy = 1
 		
 		@_createCallbackQueue()
 		

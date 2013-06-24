@@ -39,6 +39,50 @@
             return this.animation.y = (value + .5) | 0;
           }
         },
+        'sx': {
+          get: function() {
+            var _ref;
+
+            return (_ref = this._sx) != null ? _ref : 1;
+          },
+          set: function(value) {
+            this._sx = value;
+            return this.animation.scaleX = value;
+          }
+        },
+        'sy': {
+          get: function() {
+            var _ref;
+
+            return (_ref = this._sy) != null ? _ref : 1;
+          },
+          set: function(value) {
+            this._sy = value;
+            return this.animation.scaleY = value;
+          }
+        },
+        'r': {
+          get: function() {
+            var _ref;
+
+            return (_ref = this._r) != null ? _ref : 0;
+          },
+          set: function(value) {
+            this._r = value;
+            return this.animation.rotation = (value + .5) | 0;
+          }
+        },
+        'a': {
+          get: function() {
+            var _ref;
+
+            return (_ref = this._a) != null ? _ref : 1;
+          },
+          set: function(value) {
+            this._a = value;
+            return this.animation.alpha = value;
+          }
+        },
         'width': {
           get: function() {
             return this.animation.getBounds().width;
@@ -57,6 +101,10 @@
       });
       this.x = x;
       this.y = y;
+      this.a = 1;
+      this.r = 0;
+      this.sx = 1;
+      this.sy = 1;
       this._createCallbackQueue();
     }
 

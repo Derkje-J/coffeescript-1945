@@ -65,9 +65,6 @@
       } else if (direction === Game.Movable.Direction["not" + this._facing]) {
         speed = 0;
       }
-      if (direction === Game.Movable.Direction.down) {
-        speed += Game.Canvas1945.ScrollSpeed;
-      }
       switch (direction) {
         case Game.Movable.Direction.up:
           return {

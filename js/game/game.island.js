@@ -27,7 +27,7 @@
             return rel + Game.Canvas1945.Height / 3 * 2;
         }
       })();
-      Island.__super__.constructor.call(this, spritesheet, x, y, 0, Game.Canvas1945.ScrollSpeed);
+      Island.__super__.constructor.call(this, spritesheet, x, y, 0, 0);
       this.play('type-' + type);
     }
 
