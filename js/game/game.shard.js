@@ -58,7 +58,6 @@
         this.velocity[prop] += dt * value;
       }
       Shard.__super__.update.call(this, event);
-      console.log(this.animation.alpha);
       if ((this.health -= dt) <= 0) {
         this.destroy();
       }

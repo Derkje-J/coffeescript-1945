@@ -59,7 +59,6 @@ class Game.Shard extends Game.Movable
 			@velocity[ prop ] += dt * value
 		
 		super event
-		console.log @animation.alpha 
 		
 		if ( @health -= dt ) <= 0
 			# TODO turn into splash
