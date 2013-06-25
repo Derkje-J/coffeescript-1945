@@ -4,8 +4,19 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   Display.FPS = (function() {
+    FPS.MaxFPS = 128;
+
+    FPS.DebugWidth = 128;
+
+    FPS.DebugHeight = 32;
+
+    FPS.DebugStep = 4;
+
     function FPS() {
-      this.update = __bind(this.update, this);      this.text = new createjs.Text("?? FPS", "8px Arial", "white");
+      this.update = __bind(this.update, this);
+      var canvas, canvasCopyy;
+
+      this.text = new createjs.Text("?? FPS", "8px Arial", "white");
       this.text.textAlign = 'right';
       this.text.x = Game.Canvas1945.Width - 5;
       this.text.y = 5;
@@ -15,16 +26,38 @@
         }
       });
       this._frameCount = 0;
-      this._frameRate = 0;
+      this._frameRate = Display.FPS.MaxFPS;
       this._time = 0;
+      canvas = document.createElement('canvas');
+      canvas.id = 'fps';
+      canvas.setAttribute('width', Display.FPS.DebugWidth);
+      canvas.setAttribute('height', Display.FPS.DebugHeight);
+      canvas.setAttribute('style', 'position: fixed; left: 20px; top: 20px; border: 1px dashed rgba( 255, 255, 255, .5 ); padding: 1px;');
+      document.body.appendChild(canvas);
+      canvasCopyy = document.createElement('canvas');
+      canvasCopyy.setAttribute('width', Display.FPS.DebugWidth);
+      canvasCopyy.setAttribute('height', Display.FPS.DebugHeight);
+      this.context = canvas.getContext('2d');
+      this.context.strokeStyle = 'lime';
+      this.contextCopy = canvasCopyy.getContext('2d');
+      this._debugTime = 0;
     }
 
     FPS.prototype.update = function(event) {
       if ((this._time += event.delta) >= 1000) {
+        this.contextCopy.drawImage(this.context.canvas, 0, 0, Display.FPS.DebugWidth, Display.FPS.DebugHeight, 0, 0, Display.FPS.DebugWidth, Display.FPS.DebugHeight);
+        this.context.clearRect(0, 0, Display.FPS.DebugWidth, Display.FPS.DebugHeight);
+        this.context.drawImage(this.contextCopy.canvas, Display.FPS.DebugStep, 0, Display.FPS.DebugWidth - Display.FPS.DebugStep, Display.FPS.DebugHeight, 0, 0, Display.FPS.DebugWidth - Display.FPS.DebugStep, Display.FPS.DebugHeight);
+        this.contextCopy.clearRect(0, 0, Display.FPS.DebugWidth, Display.FPS.DebugHeight);
+        this.context.beginPath();
+        this.context.moveTo(Display.FPS.DebugWidth - Display.FPS.DebugStep, ((Display.FPS.MaxFPS - Math.min(Display.FPS.MaxFPS, this._frameRate)) / Display.FPS.MaxFPS * Display.FPS.DebugHeight + 0.5) | 0);
         this._frameRate = this._frameCount;
         this._frameCount = 0;
         this._time -= 1000;
+        this._debugTime += 1;
         this.text.text = "" + this._frameRate + " FPS";
+        this.context.lineTo(Display.FPS.DebugWidth, ((Display.FPS.MaxFPS - Math.min(Display.FPS.MaxFPS, this._frameRate)) / Display.FPS.MaxFPS * Display.FPS.DebugHeight + 0.5) | 0);
+        this.context.stroke();
       }
       return this._frameCount++;
     };
