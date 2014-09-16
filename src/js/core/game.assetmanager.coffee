@@ -12,18 +12,19 @@ class Game.AssetManager
 		@preload.loadFile { id: 'basesheet', src: "img/1945.png" }, false
 		@preload.loadFile { id: 'bottom', src: "img/1945.bottom.gif" }, false
 		@preload.loadFile { id: 'shards', src: "img/1945.shards.png" }, false
-		
+
 		@objects = {}
+		
 		
 	# Starts loading all the assets
 	#
 	# @param callback [Function] the function to run after loading is complete
 	# @return [self] the chainable self
 	#
-	load: ( callback ) ->
+	load: ( callback, onProgress = @_onProgress ) ->
 		@preload.addEventListener "complete", callback
-		@preload.addEventListener "fileload", @_onload
-		@preload.addEventListener "progress", @_onprogress
+		@preload.addEventListener "fileload", @_onLoad
+		@preload.addEventListener "progress", onProgress
 		@preload.load()
 		return this
 		
@@ -31,7 +32,7 @@ class Game.AssetManager
 	#
 	# @param event [FileLoadEvent] the event 
 	#
-	_onload: ( event ) =>
+	_onLoad: ( event ) =>
 		switch event.item.type
 			when createjs.LoadQueue.IMAGE
 				@objects[ event.item.id ] = new createjs.Bitmap event.result
@@ -40,8 +41,8 @@ class Game.AssetManager
 	#
 	# @param event [ProgressEvent] the event
 	#
-	_onprogress: ( event ) =>
-		#console.log event.progress, event.loaded, event.total
+	_onProgress: ( event ) =>
+		console.log event.progress, event.loaded, event.total
 	 
 	# Gets the asset
 	#
