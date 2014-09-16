@@ -101,6 +101,8 @@ class Game.Level extends Game.Container
 		switch @levelName
 			when 0
 				@_injectLevelData new Levels.Level0()
+			when 1
+				@_injectLevelData new Levels.Level1()
 			else
 				@_injectLevelData new Levels.Endless()
 				
