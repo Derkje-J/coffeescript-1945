@@ -37,6 +37,7 @@ class Builder.EnemyPlane extends Builder.SpriteSheet
 	#
 	keepRespawning: ->
 		@_behaviours.push Game.EnemyPlane.Behaviour.spawn.ondeath
+		return this
 		
 	#
 	#
