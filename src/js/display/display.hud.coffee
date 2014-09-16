@@ -71,7 +71,7 @@ class Display.HeadsUpDisplay extends Game.Container
 	# @param max [Integer] max health
 	# @returns [Array<String>] CSS colours that represent the health
 	#
-	getHealthColors: ( health = @_health, max = 100 ) ->
+	getHealthColors: ( health = @_health, max = @level.player.maxHealth ) ->
 	
 		# Green, DarkGreen ( health = 100 )
 		orig = 
@@ -100,7 +100,7 @@ class Display.HeadsUpDisplay extends Game.Container
 		# Interpolation
 		factor = health / max
 		
-		return _( orig ).reduce( ( results, colour, index ) -> 
+		return _.reduce( orig, ( results, colour, index ) -> 
 			result = {}
 			
 			# Interpolate each component of each colour
@@ -122,7 +122,7 @@ class Display.HeadsUpDisplay extends Game.Container
 	# @param max [Integer] the maximum health on the livebar
 	# @return [self] the chainable self
 	#
-	drawHealthBar: ( max = 100 ) ->
+	drawHealthBar: ( max = @level.player.maxHealth ) ->
 		@healthBar.graphics.clear()
 		@healthBar.graphics.beginLinearGradientFill( 
 			@getHealthColors(), 
@@ -198,6 +198,6 @@ class Display.HeadsUpDisplay extends Game.Container
 			@_lives = @game.data.lives
 			@drawLivesBar()
 		
-		return self
+		return this
 		
 		
