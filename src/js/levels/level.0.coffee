@@ -20,9 +20,12 @@ class Levels.Level0 extends Levels.Base
 		for i in [40...50]
 			limeEnemy.create()
 		
-		
+	#
+	#
+	#		
 	planeDestroyed: () ->
 		super
 		if @enemyCount is 0
-			console.log 'done'
+			# Make sure this event chain is traversed
+			_.defer @gameLevel.finish, 1
 		
