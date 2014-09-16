@@ -51,11 +51,11 @@ class Game.Canvas1945 extends Game.Container
 		@_createPersistantData()
 		@_createLayers()
 		@_createDebug()
-
-		Game.AssetManager.load () => @ready()
+		
+		Game.AssetManager.load @ready, @get( 'menu' ).onProgress
 	#
 	# @TODO asset manager and loading bar. For now this will do
-	ready: ->
+	ready: =>
 		@level.create @data.level
 		
 	# Sets the ticker
@@ -95,6 +95,8 @@ class Game.Canvas1945 extends Game.Container
 		container = document.getElementById "container"
 		container.appendChild canvas 
 		
+		canvas.focus()
+		
 		canvas.onmousedown = ( event ) -> 
 			canvas.focus() 
 			return false
@@ -110,6 +112,7 @@ class Game.Canvas1945 extends Game.Container
 		@add 'level', @level = new Game.Level @
 		@add 'foreground', new Game.Container()
 		@add 'hud', new Game.Container()
+		@add 'menu', new Game.Menu @
 		return this
 		
 	# Creates persistance data
@@ -133,6 +136,7 @@ class Game.Canvas1945 extends Game.Container
 	# @return [self] the chainable self
 	#
 	_removeLayers: ->
+		@remove 'menu'
 		@remove 'hud'
 		@remove 'foreground'
 		@remove 'level'
@@ -145,7 +149,19 @@ class Game.Canvas1945 extends Game.Container
 		if ( --@data.lives ) > 0
 			@level.restart()
 		else
-			createjs.Ticker.setPaused on
+			@pause()
+		
+	#
+	#
+	#
+	pause: ->
+		createjs.Ticker.setPaused on
+		
+	#
+	#
+	#
+	resume: ->
+		createjs.Ticker.setPaused off
 	
 	# Add Logic Component
 	#
