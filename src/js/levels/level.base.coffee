@@ -44,4 +44,5 @@ class Levels.Base
 	#
 	#
 	update: ( event ) ->
+		return this if event.paused
 		
