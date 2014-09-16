@@ -42,6 +42,7 @@
       EnemyPlane.__super__.constructor.call(this, spritesheet, x, y, health);
       this.behaviour = [];
       this.score = score;
+      Game.EventManager.trigger('plane.create', this, []);
       Game.EventManager.trigger('collidable.create', this, [Game.CollisionManager.Groups.Enemy, this]);
     }
 
@@ -52,7 +53,6 @@
       }
       for (_i = 0, _len = behaviours.length; _i < _len; _i++) {
         behaviour = behaviours[_i];
-        console.log(behaviour);
         this.addBehaviour(behaviour, next);
       }
       return this;
@@ -104,14 +104,14 @@
         if (group !== Game.CollisionManager.Groups.Player) {
           Game.EventManager.trigger('points.get', this, [this.score]);
         }
-        return Builder.EnemyPlaneShards.create(this.x, this.y, this.velocity.x, this.velocity.y);
+        Builder.EnemyPlaneShards.create(this.x, this.y, this.velocity.x, this.velocity.y);
+        return this.destroy();
       }
     };
 
     EnemyPlane.prototype.destroy = function() {
       if (!this.behaves(EnemyPlane.Behaviour.spawn.ondeath)) {
-        Game.EventManager.trigger('plane.destroy', this, []);
-        return this;
+        return EnemyPlane.__super__.destroy.apply(this, arguments);
       }
       this.health = this.maxHealth;
       this.play('idle');

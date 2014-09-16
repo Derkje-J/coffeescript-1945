@@ -3,6 +3,8 @@
   'use strict';
   (typeof exports !== "undefined" && exports !== null ? exports : this).Game = {};
 
+  (typeof exports !== "undefined" && exports !== null ? exports : this).Levels = {};
+
   (typeof exports !== "undefined" && exports !== null ? exports : this).Display = {};
 
   (typeof exports !== "undefined" && exports !== null ? exports : this).Builder = {};

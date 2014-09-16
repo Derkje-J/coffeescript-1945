@@ -20,11 +20,13 @@
     }
 
     Level.prototype.onPlaneCreated = function(source) {
-      return this.addTo('level', _.uniqueId('plane'), source);
+      this.addTo('level', _.uniqueId('plane'), source);
+      return this.level.planeCreated(source);
     };
 
     Level.prototype.onPlaneDestroyed = function(source) {
       if (source instanceof Game.EnemyPlane) {
+        this.level.planeDestroyed(source);
         return this.removeFrom('level', this.get('level').findKey(source));
       } else if (source instanceof Game.Player) {
         return this.game.die();
@@ -55,7 +57,22 @@
       this.createBackground();
       this.createLayers();
       this.createHeadsUpDisplay();
+      this._load(level);
       return this;
+    };
+
+    Level.prototype._load = function(level) {
+      switch (level) {
+        case 0:
+          return this._injectLevelData(new Levels.Level0());
+        default:
+          return this._injectLevelData(new Levels.Endless());
+      }
+    };
+
+    Level.prototype._injectLevelData = function(level) {
+      this.level = level;
+      return this.level.injectInto(this);
     };
 
     Level.prototype.createBackground = function() {
@@ -66,40 +83,19 @@
     };
 
     Level.prototype.createLayers = function() {
-      var blueEnemy, enemy, greenEnemy, i, limeEnemy, orangeEnemy, whiteEnemy, _i, _j, _k, _l, _m, _results;
       this.add('below', new Game.Container());
       this.add('level', new Game.Container());
       this.add('above', new Game.Container());
-      this.addTo('level', 'player', this.player = Builder.PlayerPlane.create());
-      greenEnemy = new Builder.GreenEnemyPlane().randomPosition().keepLooping();
-      whiteEnemy = new Builder.WhiteEnemyPlane().randomPosition().keepLooping();
-      orangeEnemy = new Builder.OrangeEnemyPlane().randomPosition().keepLooping();
-      blueEnemy = new Builder.BlueEnemyPlane().randomPosition().keepLooping();
-      limeEnemy = new Builder.LimeEnemyPlane().randomPosition().keepLooping();
-      for (i = _i = 0; _i < 10; i = ++_i) {
-        this.addTo('level', 'enemy-' + i, enemy = greenEnemy.create());
-      }
-      for (i = _j = 10; _j < 20; i = ++_j) {
-        this.addTo('level', 'enemy-' + i, enemy = whiteEnemy.create());
-      }
-      for (i = _k = 20; _k < 30; i = ++_k) {
-        this.addTo('level', 'enemy-' + i, enemy = orangeEnemy.create());
-      }
-      for (i = _l = 30; _l < 40; i = ++_l) {
-        this.addTo('level', 'enemy-' + i, enemy = blueEnemy.create());
-      }
-      _results = [];
-      for (i = _m = 40; _m < 50; i = ++_m) {
-        _results.push(this.addTo('level', 'enemy-' + i, enemy = limeEnemy.create()));
-      }
-      return _results;
+      return this.addTo('level', 'player', this.player = Builder.PlayerPlane.create());
     };
 
     Level.prototype.pause = function() {
+      this.level.pause();
       return Game.EventManager.trigger('level.paused', this, [true]);
     };
 
     Level.prototype.resume = function() {
+      this.level.resume();
       return Game.EventManager.trigger('level.paused', this, [false]);
     };
 
@@ -130,10 +126,12 @@
     };
 
     Level.prototype.clearLayers = function() {
-      var i, _i;
+      var key, object, _ref;
       this.removeFrom('level', 'player');
-      for (i = _i = 0; _i < 50; i = ++_i) {
-        this.removeFrom('level', 'enemy-' + i);
+      _ref = this.get('level').objects;
+      for (key in _ref) {
+        object = _ref[key];
+        this.removeFrom('level', key);
       }
       this.remove('above');
       this.remove('level');
@@ -148,6 +146,15 @@
     Level.prototype.restart = function() {
       this.clear();
       this.create();
+      return this;
+    };
+
+    Level.prototype.update = function(event) {
+      if (event.paused || this.level === void 0 || this.level.isPaused === true) {
+        return this;
+      }
+      Level.__super__.update.apply(this, arguments);
+      this.level.update(event);
       return this;
     };
 
