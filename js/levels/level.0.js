@@ -40,7 +40,7 @@
     Level0.prototype.planeDestroyed = function() {
       Level0.__super__.planeDestroyed.apply(this, arguments);
       if (this.enemyCount === 0) {
-        return console.log('done');
+        return _.defer(this.gameLevel.finish, 1);
       }
     };
 

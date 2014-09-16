@@ -25,7 +25,6 @@ class Levels.Base
 	#
 	#
 	injectInto: ( @gameLevel ) ->
-		console.log 'injecting'
 	
 	#
 	#

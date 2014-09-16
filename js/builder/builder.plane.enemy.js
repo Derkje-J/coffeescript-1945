@@ -34,7 +34,8 @@
     };
 
     EnemyPlane.prototype.keepRespawning = function() {
-      return this._behaviours.push(Game.EnemyPlane.Behaviour.spawn.ondeath);
+      this._behaviours.push(Game.EnemyPlane.Behaviour.spawn.ondeath);
+      return this;
     };
 
     EnemyPlane.prototype.position = function(x, y) {

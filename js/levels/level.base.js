@@ -21,7 +21,6 @@
 
     Base.prototype.injectInto = function(gameLevel) {
       this.gameLevel = gameLevel;
-      return console.log('injecting');
     };
 
     Base.prototype.planeCreated = function(source) {

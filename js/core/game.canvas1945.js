@@ -123,6 +123,12 @@
       return this.remove('menu');
     };
 
+    Canvas1945.prototype.finishLevel = function(nextLevel) {
+      this.data.level = nextLevel || -1;
+      this.data.save();
+      return this.createLevel(this.data.level);
+    };
+
     Canvas1945.prototype.die = function() {
       if ((--this.data.lives) > 0) {
         this.data.save();

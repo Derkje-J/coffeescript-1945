@@ -10,6 +10,33 @@
       return Endless.__super__.constructor.apply(this, arguments);
     }
 
+    Endless.prototype.injectInto = function(gameLevel) {
+      var blueEnemy, greenEnemy, i, limeEnemy, orangeEnemy, whiteEnemy, _i, _j, _k, _l, _m, _results;
+      Endless.__super__.injectInto.call(this, gameLevel);
+      greenEnemy = new Builder.GreenEnemyPlane().randomPosition().keepLooping().keepRespawning();
+      whiteEnemy = new Builder.WhiteEnemyPlane().randomPosition().keepLooping().keepRespawning();
+      orangeEnemy = new Builder.OrangeEnemyPlane().randomPosition().keepLooping().keepRespawning();
+      blueEnemy = new Builder.BlueEnemyPlane().randomPosition().keepLooping().keepRespawning();
+      limeEnemy = new Builder.LimeEnemyPlane().randomPosition().keepLooping().keepRespawning();
+      for (i = _i = 0; _i < 10; i = ++_i) {
+        greenEnemy.create();
+      }
+      for (i = _j = 10; _j < 20; i = ++_j) {
+        whiteEnemy.create();
+      }
+      for (i = _k = 20; _k < 30; i = ++_k) {
+        orangeEnemy.create();
+      }
+      for (i = _l = 30; _l < 40; i = ++_l) {
+        blueEnemy.create();
+      }
+      _results = [];
+      for (i = _m = 40; _m < 50; i = ++_m) {
+        _results.push(limeEnemy.create());
+      }
+      return _results;
+    };
+
     return Endless;
 
   })(Levels.Base);
