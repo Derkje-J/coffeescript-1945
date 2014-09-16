@@ -36,15 +36,14 @@ class Game.Player extends Game.Plane
 	# @param spritesheet [createjs.SpriteSheet] the spritesheet for this sprite
 	#
 	constructor: ( spritesheet ) ->
-		super spritesheet, undefined, Game.Canvas1945.LevelHeight - Player.Padding
-		@health = 100
+		super spritesheet, undefined, Game.Canvas1945.LevelHeight - Player.Padding, 100
 		@face Game.Movable.Direction.up
 		@move()		
 		
 		@speed.forward = 2
 
 		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.Player, @ ]
-	
+
 	# Updates the player
 	#
 	# @param event [TickEvent] the event
@@ -78,11 +77,11 @@ class Game.Player extends Game.Plane
 	input: ( event, state ) ->
 		
 		if @isLevelPaused is on
-			return this
+			return false
 			
 		# Not movable if dead
 		unless @isAlive
-			return this
+			return false
 		
 		dir = null
 		
@@ -102,7 +101,7 @@ class Game.Player extends Game.Plane
 		else if event.keyCode in Player.KeySecondary
 			@secondaryEnabled = state
 			
-		return this unless dir?
+		return false unless dir?
 		
 		# Update the direction array
 		unless state
@@ -112,7 +111,7 @@ class Game.Player extends Game.Plane
 		
 		@setVelocity()
 			
-		return this
+		return true
 	
 	#
 	#
