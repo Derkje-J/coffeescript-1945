@@ -55,7 +55,6 @@
       this.createBackground();
       this.createLayers();
       this.createHeadsUpDisplay();
-      this.pause();
       return this;
     };
 
@@ -67,26 +66,31 @@
     };
 
     Level.prototype.createLayers = function() {
-      var enemy, i, _i, _j, _k, _l, _m, _results;
+      var blueEnemy, enemy, greenEnemy, i, limeEnemy, orangeEnemy, whiteEnemy, _i, _j, _k, _l, _m, _results;
       this.add('below', new Game.Container());
       this.add('level', new Game.Container());
       this.add('above', new Game.Container());
       this.addTo('level', 'player', this.player = Builder.PlayerPlane.create());
+      greenEnemy = new Builder.GreenEnemyPlane().randomPosition().keepLooping();
+      whiteEnemy = new Builder.WhiteEnemyPlane().randomPosition().keepLooping();
+      orangeEnemy = new Builder.OrangeEnemyPlane().randomPosition().keepLooping();
+      blueEnemy = new Builder.BlueEnemyPlane().randomPosition().keepLooping();
+      limeEnemy = new Builder.LimeEnemyPlane().randomPosition().keepLooping();
       for (i = _i = 0; _i < 10; i = ++_i) {
-        this.addTo('level', 'enemy-' + i, enemy = Builder.GreenEnemyPlane.create());
+        this.addTo('level', 'enemy-' + i, enemy = greenEnemy.create());
       }
       for (i = _j = 10; _j < 20; i = ++_j) {
-        this.addTo('level', 'enemy-' + i, enemy = Builder.WhiteEnemyPlane.create());
+        this.addTo('level', 'enemy-' + i, enemy = whiteEnemy.create());
       }
       for (i = _k = 20; _k < 30; i = ++_k) {
-        this.addTo('level', 'enemy-' + i, enemy = Builder.OrangeEnemyPlane.create());
+        this.addTo('level', 'enemy-' + i, enemy = orangeEnemy.create());
       }
       for (i = _l = 30; _l < 40; i = ++_l) {
-        this.addTo('level', 'enemy-' + i, enemy = Builder.BlueEnemyPlane.create());
+        this.addTo('level', 'enemy-' + i, enemy = blueEnemy.create());
       }
       _results = [];
       for (i = _m = 40; _m < 50; i = ++_m) {
-        _results.push(this.addTo('level', 'enemy-' + i, enemy = Builder.LimeEnemyPlane.create()));
+        _results.push(this.addTo('level', 'enemy-' + i, enemy = limeEnemy.create()));
       }
       return _results;
     };

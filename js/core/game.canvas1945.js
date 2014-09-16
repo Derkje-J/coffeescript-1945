@@ -43,7 +43,7 @@
     }
 
     Canvas1945.prototype.ready = function() {
-      return this.level.create(this.data.level);
+      return this.get('menu').ready();
     };
 
     Canvas1945.prototype._setTicker = function() {
@@ -117,11 +117,19 @@
       return this;
     };
 
+    Canvas1945.prototype.createLevel = function(level) {
+      console.log("Starting level " + level);
+      this.level.create(level);
+      return this.remove('menu');
+    };
+
     Canvas1945.prototype.die = function() {
       if ((--this.data.lives) > 0) {
+        this.data.save();
         return this.level.restart();
       } else {
-        return this.pause();
+        this.pause();
+        return this.data.truncate();
       }
     };
 

@@ -3,10 +3,41 @@
   'use strict';
   Game.Data = (function() {
     function Data() {
+      this.load();
+      Object.defineProperty(this, 'canResume', {
+        get: function() {
+          return this._saved;
+        }
+      });
+    }
+
+    Data.prototype.save = function() {
+      this._saved = true;
+      return this._save();
+    };
+
+    Data.prototype._save = function() {
+      locache.set("game.data", JSON.stringify(this));
+      return this;
+    };
+
+    Data.prototype.load = function() {
+      var key, value, _ref;
+      _ref = JSON.parse(locache.get("game.data") || JSON.stringify(this.truncate()));
+      for (key in _ref) {
+        value = _ref[key];
+        this[key] = value;
+      }
+      return this;
+    };
+
+    Data.prototype.truncate = function() {
       this.lives = 3;
       this.score = 0;
       this.level = 0;
-    }
+      this._saved = false;
+      return this._save();
+    };
 
     return Data;
 

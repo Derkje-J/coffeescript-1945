@@ -23,8 +23,7 @@
     Player.Padding = 45;
 
     function Player(spritesheet) {
-      Player.__super__.constructor.call(this, spritesheet, void 0, Game.Canvas1945.LevelHeight - Player.Padding);
-      this.health = 100;
+      Player.__super__.constructor.call(this, spritesheet, void 0, Game.Canvas1945.LevelHeight - Player.Padding, 100);
       this.face(Game.Movable.Direction.up);
       this.move();
       this.speed.forward = 2;
@@ -60,10 +59,10 @@
     Player.prototype.input = function(event, state) {
       var dir, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
       if (this.isLevelPaused === true) {
-        return this;
+        return false;
       }
       if (!this.isAlive) {
-        return this;
+        return false;
       }
       dir = null;
       if (_ref = event.keyCode, __indexOf.call(Player.KeyDown, _ref) >= 0) {
@@ -80,7 +79,7 @@
         this.secondaryEnabled = state;
       }
       if (dir == null) {
-        return this;
+        return false;
       }
       if (!state) {
         this.direction = _.without(this.direction, dir);
@@ -88,7 +87,7 @@
         this.direction.push(dir);
       }
       this.setVelocity();
-      return this;
+      return true;
     };
 
     Player.prototype.primaryAction = function() {

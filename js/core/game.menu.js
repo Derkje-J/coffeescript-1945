@@ -10,16 +10,68 @@
 
     function Menu(game) {
       this.game = game;
+      this.ready = __bind(this.ready, this);
       this.onProgress = __bind(this.onProgress, this);
       Menu.__super__.constructor.apply(this, arguments);
       this.add('bar', this.bar = new Display.Progress());
       this.bar.x = (Game.Canvas1945.Width - this.bar.width) / 2;
       this.bar.y = (Game.Canvas1945.Height - this.bar.height) / 2;
+      this._optionsCount = 2;
+      this._selectedOption = this.game.data.canResume ? 1 : 0;
+      Object.defineProperty(this, 'selectedOption', {
+        get: function() {
+          return this._selectedOption;
+        }
+      });
     }
 
     Menu.prototype.onProgress = function(event) {
       this.bar.total = event.total;
       return this.bar.current = event.progress;
+    };
+
+    Menu.prototype.ready = function() {
+      this.remove('bar');
+      return this.add('menu', this.menu = new Display.Menu(this));
+    };
+
+    Menu.prototype._pickOptions = function() {
+      switch (this._selectedOption) {
+        case 0:
+          return this.optionNew();
+        case 1:
+          return this.optionResume();
+      }
+    };
+
+    Menu.prototype.optionNew = function() {
+      this.game.data.truncate();
+      return this._createLevel();
+    };
+
+    Menu.prototype.optionResume = function() {
+      return this._createLevel();
+    };
+
+    Menu.prototype._createLevel = function() {
+      return this.game.createLevel(this.game.data.level);
+    };
+
+    Menu.prototype.input = function(event, state) {
+      if (!state) {
+        return;
+      }
+      if (event.keyCode === 38) {
+        this._selectedOption = this._selectedOption > 0 ? this._selectedOption - 1 : this._optionsCount - 1;
+        return true;
+      } else if (event.keyCode === 40) {
+        this._selectedOption = (this._selectedOption + 1) % this._optionsCount;
+        return true;
+      } else if (event.keyCode === 13) {
+        this._pickOptions();
+        return true;
+      }
+      return false;
     };
 
     return Menu;

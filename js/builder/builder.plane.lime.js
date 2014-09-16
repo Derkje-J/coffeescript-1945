@@ -13,10 +13,10 @@
 
     LimeEnemyPlane.SpriteSheet = null;
 
-    LimeEnemyPlane.create = function() {
+    LimeEnemyPlane.prototype.create = function() {
       var builder;
       if (LimeEnemyPlane.SpriteSheet != null) {
-        return (new Game.EnemyPlane(LimeEnemyPlane.SpriteSheet)).addBehaviour(Game.EnemyPlane.Behaviour.looper).addBehaviour(Game.EnemyPlane.Behaviour.spawn.random.x).addBehaviour(Game.EnemyPlane.Behaviour.spawn.random.y).addBehaviour(Game.EnemyPlane.Behaviour.spawn.ondeath);
+        return (new Game.EnemyPlane(LimeEnemyPlane.SpriteSheet)).addBehaviours(this.getBehaviours());
       }
       builder = new Builder.LimeEnemyPlane();
       builder.animationExtra('idle', 202, 466, 32, 32, 1, 1, 3, 3, true, 2);
@@ -26,11 +26,11 @@
       builder.animation('upside', 4, 367, 32, 32, 1, 1, 2, 2);
       builder.data.animations['upside'].frames.push(_.last(builder.data.animations['loop'].frames));
       LimeEnemyPlane.SpriteSheet = builder.createjs;
-      return (new Game.EnemyPlane(LimeEnemyPlane.SpriteSheet)).addBehaviour(Game.EnemyPlane.Behaviour.looper).addBehaviour(Game.EnemyPlane.Behaviour.spawn.random.x).addBehaviour(Game.EnemyPlane.Behaviour.spawn.random.y).addBehaviour(Game.EnemyPlane.Behaviour.spawn.ondeath);
+      return (new Game.EnemyPlane(LimeEnemyPlane.SpriteSheet)).addBehaviours(this.getBehaviours());
     };
 
     return LimeEnemyPlane;
 
-  })(Builder.SpriteSheet);
+  })(Builder.EnemyPlane);
 
 }).call(this);

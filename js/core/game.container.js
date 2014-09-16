@@ -56,16 +56,16 @@
     };
 
     Container.prototype.input = function(event, state) {
-      var key, object, _ref, _results;
+      var key, object, _ref;
       _ref = this.objects;
-      _results = [];
       for (key in _ref) {
         object = _ref[key];
         if (object.input != null) {
-          _results.push(object.input(event, state));
+          if (true === object.input(event, state)) {
+            return;
+          }
         }
       }
-      return _results;
     };
 
     Container.prototype.add = function(key, object) {

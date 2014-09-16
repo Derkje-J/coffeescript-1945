@@ -45,6 +45,19 @@
       Game.EventManager.trigger('collidable.create', this, [Game.CollisionManager.Groups.Enemy, this]);
     }
 
+    EnemyPlane.prototype.addBehaviours = function(behaviours, next) {
+      var behaviour, _i, _len;
+      if (next == null) {
+        next = false;
+      }
+      for (_i = 0, _len = behaviours.length; _i < _len; _i++) {
+        behaviour = behaviours[_i];
+        console.log(behaviour);
+        this.addBehaviour(behaviour, next);
+      }
+      return this;
+    };
+
     EnemyPlane.prototype.addBehaviour = function(behaviour, next) {
       if (next == null) {
         next = false;
@@ -72,8 +85,8 @@
       EnemyPlane.__super__.update.call(this, event);
       if ((this.y > Game.Canvas1945.Height && this._facing === Game.Movable.Direction.down) || (this.y < -64 && this._facing === Game.Movable.Direction.up)) {
         if (!this.behaves(EnemyPlane.Behaviour.looper)) {
-          if (destroy) {
-            this.destroy();
+          if (this.destroy != null) {
+            return this.destroy();
           }
         }
         this.y = this._facing === Game.Movable.Direction.down ? -64 : Game.Canvas1945.Height;
@@ -100,7 +113,7 @@
         Game.EventManager.trigger('plane.destroy', this, []);
         return this;
       }
-      this.health = this.maxhealth;
+      this.health = this.maxHealth;
       this.play('idle');
       this.y = this._facing === Game.Movable.Direction.down ? -64 : Game.Canvas1945.Height;
       if (this.behaves(EnemyPlane.Behaviour.spawn.random.x)) {
