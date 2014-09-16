@@ -84,8 +84,9 @@ class Game.Level extends Game.Container
 		@createLayers()
 		@createHeadsUpDisplay()
 		
-		@pause()
-			
+		#@pause()
+		# @TODO show mission
+		
 		return this
 		
 	# Creates the background
@@ -107,16 +108,22 @@ class Game.Level extends Game.Container
 		
 		@addTo 'level', 'player', @player = Builder.PlayerPlane.create()
 		
+		greenEnemy = new Builder.GreenEnemyPlane().randomPosition().keepLooping()
+		whiteEnemy = new Builder.WhiteEnemyPlane().randomPosition().keepLooping()
+		orangeEnemy = new Builder.OrangeEnemyPlane().randomPosition().keepLooping()
+		blueEnemy = new Builder.BlueEnemyPlane().randomPosition().keepLooping()
+		limeEnemy = new Builder.LimeEnemyPlane().randomPosition().keepLooping()
+		
 		for i in [0...10]
-			@addTo 'level', 'enemy-' + i, enemy = Builder.GreenEnemyPlane.create()
+			@addTo 'level', 'enemy-' + i, enemy = greenEnemy.create()
 		for i in [10...20]
-			@addTo 'level', 'enemy-' + i, enemy = Builder.WhiteEnemyPlane.create()
+			@addTo 'level', 'enemy-' + i, enemy = whiteEnemy.create()
 		for i in [20...30]
-			@addTo 'level', 'enemy-' + i, enemy = Builder.OrangeEnemyPlane.create()
+			@addTo 'level', 'enemy-' + i, enemy = orangeEnemy.create()
 		for i in [30...40]
-			@addTo 'level', 'enemy-' + i, enemy = Builder.BlueEnemyPlane.create()
+			@addTo 'level', 'enemy-' + i, enemy = blueEnemy.create()
 		for i in [40...50]
-			@addTo 'level', 'enemy-' + i, enemy = Builder.LimeEnemyPlane.create()
+			@addTo 'level', 'enemy-' + i, enemy = limeEnemy.create()
 			
 	#
 	#

@@ -30,6 +30,18 @@ class Game.EnemyPlane extends Game.Plane
 		
 	#
 	#
+	#
+	addBehaviours: ( behaviours, next = off ) ->
+	
+		#@TODO next always off unless last item
+		for behaviour in behaviours
+			console.log behaviour
+			@addBehaviour behaviour, next
+			
+		return this
+		
+	#
+	#
 	addBehaviour: ( behaviour, next = off ) ->
 		@behaviour.push behaviour
 		
@@ -61,7 +73,7 @@ class Game.EnemyPlane extends Game.Plane
 			
 			# If not a looper, kill
 			unless @behaves EnemyPlane.Behaviour.looper
-				@destroy() if destroy	
+				return @destroy() if @destroy?	
 			
 			# Set new positions
 			@y = if @_facing is Game.Movable.Direction.down then -64 else Game.Canvas1945.Height
@@ -90,7 +102,7 @@ class Game.EnemyPlane extends Game.Plane
 			Game.EventManager.trigger 'plane.destroy', @, []
 			return this
 			
-		@health = @maxhealth
+		@health = @maxHealth
 		@play 'idle'
 		@y = if @_facing is Game.Movable.Direction.down then -64 else Game.Canvas1945.Height
 		if @behaves EnemyPlane.Behaviour.spawn.random.x

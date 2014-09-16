@@ -1,7 +1,7 @@
 'use strict'
 #
 #
-class Builder.LimeEnemyPlane extends Builder.SpriteSheet
+class Builder.LimeEnemyPlane extends Builder.EnemyPlane
 
 	@SpriteSheet = null
 
@@ -9,14 +9,11 @@ class Builder.LimeEnemyPlane extends Builder.SpriteSheet
 	#
 	# @return
 	#
-	@create: ( ) ->
+	create: ( ) ->
 	
 		if LimeEnemyPlane.SpriteSheet?
 			return ( new Game.EnemyPlane LimeEnemyPlane.SpriteSheet )
-				.addBehaviour( Game.EnemyPlane.Behaviour.looper )
-				.addBehaviour( Game.EnemyPlane.Behaviour.spawn.random.x )
-				.addBehaviour( Game.EnemyPlane.Behaviour.spawn.random.y )
-				.addBehaviour( Game.EnemyPlane.Behaviour.spawn.ondeath )
+				.addBehaviours( @getBehaviours() )
 			
 		builder = new Builder.LimeEnemyPlane()
 		builder.animationExtra( 'idle', 202, 466, 32, 32, 1, 1, 3, 3, true, 2 )
@@ -28,7 +25,4 @@ class Builder.LimeEnemyPlane extends Builder.SpriteSheet
 		
 		LimeEnemyPlane.SpriteSheet = builder.createjs
 		return ( new Game.EnemyPlane LimeEnemyPlane.SpriteSheet )
-			.addBehaviour( Game.EnemyPlane.Behaviour.looper )
-			.addBehaviour( Game.EnemyPlane.Behaviour.spawn.random.x )
-			.addBehaviour( Game.EnemyPlane.Behaviour.spawn.random.y )
-			.addBehaviour( Game.EnemyPlane.Behaviour.spawn.ondeath )
+			.addBehaviours( @getBehaviours() )

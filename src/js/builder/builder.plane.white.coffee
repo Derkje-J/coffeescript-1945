@@ -1,7 +1,7 @@
 'use strict'
 #
 #
-class Builder.WhiteEnemyPlane extends Builder.SpriteSheet
+class Builder.WhiteEnemyPlane extends Builder.EnemyPlane
 
 	@SpriteSheet = null
 
@@ -9,14 +9,11 @@ class Builder.WhiteEnemyPlane extends Builder.SpriteSheet
 	#
 	# @return
 	#
-	@create: ( ) ->
+	create: ( ) ->
 	
 		if WhiteEnemyPlane.SpriteSheet?
 			return ( new Game.EnemyPlane WhiteEnemyPlane.SpriteSheet, undefined, undefined, undefined, 250 )
-				.addBehaviour( Game.EnemyPlane.Behaviour.looper )
-				.addBehaviour( Game.EnemyPlane.Behaviour.spawn.random.x )
-				.addBehaviour( Game.EnemyPlane.Behaviour.spawn.random.y )
-				.addBehaviour( Game.EnemyPlane.Behaviour.spawn.ondeath )
+				.addBehaviours( @getBehaviours() )
 				.addBehaviour( Game.EnemyPlane.Behaviour.fire.point )
 			
 		builder = new Builder.WhiteEnemyPlane()
@@ -29,8 +26,5 @@ class Builder.WhiteEnemyPlane extends Builder.SpriteSheet
 		
 		WhiteEnemyPlane.SpriteSheet = builder.createjs
 		return ( new Game.EnemyPlane WhiteEnemyPlane.SpriteSheet, undefined, undefined, undefined, 250 )
-			.addBehaviour( Game.EnemyPlane.Behaviour.looper )
-			.addBehaviour( Game.EnemyPlane.Behaviour.spawn.random.x )
-			.addBehaviour( Game.EnemyPlane.Behaviour.spawn.random.y )
-			.addBehaviour( Game.EnemyPlane.Behaviour.spawn.ondeath )
+			.addBehaviours( @getBehaviours() )
 			.addBehaviour( Game.EnemyPlane.Behaviour.fire.point )
