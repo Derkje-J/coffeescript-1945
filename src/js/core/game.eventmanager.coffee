@@ -23,11 +23,10 @@ class Game.EventManager
 	# @return [self] chaining self
 	#
 	trigger : ( event, caller, args ) ->
-		
 		if @_events[ event ]?
 			trigger = ( element, index, list ) ->
-				element[ 1 ].apply( element[ 0 ], _( [ caller ] ).concat args )
-			_( @_events[ event ] ).each trigger
+				element[ 1 ].apply( element[ 0 ], _( [ caller ] ).concat( args ).value() )
+			_.each @_events[ event ], trigger
 			
 		return this
 		

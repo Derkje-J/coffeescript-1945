@@ -25,7 +25,7 @@ class Builder.WhiteEnemyPlane extends Builder.SpriteSheet
 		builder.animationExtra( 'hide', 268, 202, 32, 32, 1, 1, 1, 1, false, 1 )
 		builder.animationExtra( 'loop', 565, 203, 32, 32, 1, 1, 1, 5, 'upside', 2 )
 		builder.animation( 'upside', 70, 367, 32, 32, 1, 1, 2, 2 )
-		builder.data.animations[ 'upside' ].frames.push _( builder.data.animations[ 'loop' ].frames ).last()
+		builder.data.animations[ 'upside' ].frames.push _.last  builder.data.animations[ 'loop' ].frames
 		
 		WhiteEnemyPlane.SpriteSheet = builder.createjs
 		return ( new Game.EnemyPlane WhiteEnemyPlane.SpriteSheet, undefined, undefined, undefined, 250 )

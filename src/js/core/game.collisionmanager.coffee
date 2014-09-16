@@ -60,12 +60,14 @@ class Game.CollisionManager
 			for y in [0..Game.Canvas1945.Height] by CollisionManager.GridSize
 				@_grid[ x ][ y ] = {}
 				
-		@_gridWidth = _( @_grid ).keys().length
-		@_gridHeight = _( _( @_grid ).first() ).keys().length
+		@_gridWidth = _.keys( @_grid ).length
+		@_gridHeight = _.keys( _.first( @_grid) ).length
 		
 		@_setupPixelPerfectCollision()
 		
-		Game.EventManager.on 'collidable.create', @, ( source, group, object ) => @add group, object
+		Game.EventManager.on 'collidable.create', @, 
+			( source, group, object ) => 
+				@add group, object
 		Game.EventManager.on 'collidable.destroy', @, ( source, group, object ) => @remove group, object
 
 	# Runs every tick and passes down the tick event
@@ -100,10 +102,10 @@ class Game.CollisionManager
 			for y, sections of rows
 			
 				# Ah, a grid section with more than one group
-				if _( sections ).keys().length > 1
-					groups = _( sections ).keys()
+				if _.keys( sections ).length > 1
+					groups = _.keys sections
 					for groupa, collisions of @collisions
-						if groupa in groups and ( groupb = _( collisions ).find( ( c ) -> c isnt groupa and c in groups ) )?
+						if groupa in groups and ( groupb = _.find( collisions, ( c ) -> c isnt groupa and c in groups ) )?
 							
 							# Test for collisions!
 							left = sections[ groupa ]
@@ -139,9 +141,9 @@ class Game.CollisionManager
 	#
 	removeCollision: ( groupa, groupb ) ->
 		if @collisions[ groupa ]?
-			@collisions[ groupa ] = _( @collisions[ groupa ] ).without groupb
+			@collisions[ groupa ] = _.without @collisions[ groupa ], groupb
 		if @collisions[ groupb ]?
-			@collisions[ groupb ] = _( @collisions[ groupb ] ).without groupa
+			@collisions[ groupb ] = _.without @collisions[ groupb ], groupa
 		return this
 		
 	# Adds an object
@@ -151,6 +153,7 @@ class Game.CollisionManager
 	# @return [self] the chainable self
 	#
 	add: ( group, object ) ->
+		
 		@objects[ group ] = [] unless @objects[ group ]?
 		@objects[ group ].push object
 		return this
@@ -162,7 +165,7 @@ class Game.CollisionManager
 	# @return [self] the chainable self
 	#
 	remove: ( group, object ) ->
-		@objects[ group ] = _( @objects[ group ] ).without object
+		@objects[ group ] = _.without @objects[ group ], object
 		return this
 	
 	# Clears the collision manager from collidable objects
@@ -197,8 +200,8 @@ class Game.CollisionManager
 		
 	# Checks if the bounding boxes collide of left and right
 	#
-	# @param left [createjs.Bitmap, createjs.BitmapAnimation] the left part of the collision check
-	# @param right [createjs.Bitmap, createjs.BitmapAnimation] the right part of the collision check
+	# @param left [createjs.Bitmap, createjs.Sprite] the left part of the collision check
+	# @param right [createjs.Bitmap, createjs.Sprite] the right part of the collision check
 	#
 	# @return [Rectangle] the collision rectangle
 	#
@@ -207,8 +210,8 @@ class Game.CollisionManager
 
 	# Checks if pixels collide
 	#
-	# @param left [createjs.Bitmap, createjs.BitmapAnimation] the left part of the collision check
-	# @param right [createjs.Bitmap, createjs.BitmapAnimation] the right part of the collision check
+	# @param left [createjs.Bitmap, createjs.Sprite] the left part of the collision check
+	# @param right [createjs.Bitmap, createjs.Sprite] the right part of the collision check
 	# @param alphaThreshold [Float] the minumum alpha of a pixel to be collidable
 	# @param getRect [Boolean] if true, gets a collision rectangle
 	# @param precheck [Boolean] if true, does a distance precheck
@@ -237,7 +240,7 @@ class Game.CollisionManager
 		# Compare the alpha values to the threshold and return the result
 		# True if pixels are both > alphaThreshold at one coordinate
 		pixelIntersection = @_compareAlphaValues imageDataLeft, imageDataRight, intersection.width, intersection.height, alphaThreshold, getRect
-    
+	
 		return false unless pixelIntersection
 		return true if returnflag
 		
@@ -249,13 +252,13 @@ class Game.CollisionManager
 
 	# Does a collision distance precheck
 	#
-	# @param left [createjs.Bitmap, createjs.BitmapAnimation] the left part of the collision check
-	# @param right [createjs.Bitmap, createjs.BitmapAnimation] the right part of the collision check
+	# @param left [createjs.Bitmap, createjs.Sprite] the left part of the collision check
+	# @param right [createjs.Bitmap, createjs.Sprite] the right part of the collision check
 	#
 	# @returns [Boolean] false if not even remotely overlapping
 	#
 	_collisionDistancePrecheck: ( left, right ) ->
-    
+	
 		left_topleft = left.localToGlobal 0, 0
 		right_topleft = right.localToGlobal 0, 0
 
@@ -272,7 +275,7 @@ class Game.CollisionManager
 				height: right.image.height
 		else 
 			right_rect = right.spriteSheet.getFrame( right.currentFrame ).rect
-    
+	
 		return ( Math.abs( right_topleft.x - left_topleft.x ) < right_rect.width * right.scaleX + left_rect.width * left.scaleX and 
 			Math.abs( right_topleft.y - left_topleft.y ) < right_rect.height * right.scaleY + left_rect.height * left.scaleY )
 
@@ -280,7 +283,7 @@ class Game.CollisionManager
 	# Finds the image part that is intersecting
 	#
 	# @param intersection [Rectangle] the rectangle that is the intersection
-	# @param bitmap [createjs.Bitmap, createjs.BitmapAnimation] the bitmap
+	# @param bitmap [createjs.Bitmap, createjs.Sprite] the bitmap
 	# @param ctx [Canvas.Context] the context to draw to
 	# @param i [Integer] 0 for lefty, 1 for righty
 	# @return [Array<Color>] the image data for the intersection
@@ -291,7 +294,7 @@ class Game.CollisionManager
 		
 			image = bitmap.image
 			
-		else if bitmap instanceof createjs.BitmapAnimation
+		else if bitmap instanceof createjs.Sprite
 		
 			frame = bitmap.spriteSheet.getFrame( bitmap.currentFrame )
 			frameName = "#{ frame.image.src }:#{ bitmap.currentFrame }:#{ frame.rect.x }:#{ frame.rect.y }:#{ frame.rect.width }:#{ frame.rect.height }"
@@ -392,7 +395,7 @@ class Game.CollisionManager
 		# first we have to calculate the
 		# center of each rectangle and half of
 		# width and height
-    
+	
 		r1 = {}
 		r2 = {}
 		
@@ -444,7 +447,7 @@ class Game.CollisionManager
 				bounds.x2 = 0
 			if bounds.y2 is -Infinity
 				bounds.y2 = 0
-      
+	  
 		  bounds.width = bounds.x2 - bounds.x
 		  bounds.height = bounds.y2 - bounds.y
 		  delete bounds.x2
@@ -453,7 +456,7 @@ class Game.CollisionManager
 		  
 		if obj instanceof createjs.Bitmap 
 			imgr = obj.image
-		else if obj instanceof createjs.BitmapAnimation 
+		else if obj instanceof createjs.Sprite 
 			if obj.spriteSheet._frames and obj.spriteSheet._frames[ obj.currentFrame ] and obj.spriteSheet._frames[ obj.currentFrame ].image
 			  cframe = obj.spriteSheet.getFrame obj.currentFrame 
 			  imgr = cframe.rect
@@ -475,7 +478,7 @@ class Game.CollisionManager
 		imgr.height = imgr.height ? 0
 		bounds.regX = imgr.regX
 		bounds.regY = imgr.regY
-      
+	  
 		gp  = obj.localToGlobal 0 - imgr.regX, 0 - imgr.regY
 		gp2 = obj.localToGlobal imgr.width - imgr.regX, imgr.height - imgr.regY
 		gp3 = obj.localToGlobal imgr.width - imgr.regX, 0 - imgr.regY

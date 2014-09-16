@@ -42,7 +42,7 @@ class Builder.EnemyPlaneShards extends Builder.SpriteSheet
 		pick = [ 0...EnemyPlaneShards.ShardsOfType.back ]
 		for i in [ 0...5 ]
 			picked = pick[ ( Math.random() * pick.length + 0.5 ) | 0 ]
-			pick = _( pick ).without picked
+			pick = _.without pick, picked
 			results.push new Game.Shard EnemyPlaneShards.SpriteSheet, x, y, vx, vy, picked, 'back'
 		return results
 	

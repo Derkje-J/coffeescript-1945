@@ -24,7 +24,7 @@ class Builder.LimeEnemyPlane extends Builder.SpriteSheet
 		builder.animationExtra( 'hide', 268, 202, 32, 32, 1, 1, 1, 1, false, 1 )
 		builder.animationExtra( 'loop', 664, 203, 32, 32, 1, 1, 1, 5, 'upside', 2 )
 		builder.animation( 'upside', 4, 367, 32, 32, 1, 1, 2, 2 )
-		builder.data.animations[ 'upside' ].frames.push _( builder.data.animations[ 'loop' ].frames ).last()
+		builder.data.animations[ 'upside' ].frames.push _.last builder.data.animations[ 'loop' ].frames 
 		
 		LimeEnemyPlane.SpriteSheet = builder.createjs
 		return ( new Game.EnemyPlane LimeEnemyPlane.SpriteSheet )

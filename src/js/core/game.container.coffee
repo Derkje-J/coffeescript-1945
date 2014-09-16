@@ -27,7 +27,7 @@ class Game.Container
 					@container.y = ( value + .5 ) | 0
 					
 			'length':
-				get: -> return _( @objects ).keys().length
+				get: -> return _.keys( @objects ).length
 		)
 		
 	# Runs every tick and passes down the tick event
@@ -117,7 +117,7 @@ class Game.Container
 	#
 	findKey: ( search ) ->
 		result = null
-		_( @objects ).find( ( object, key ) ->
+		_.find( @objects, ( object, key ) ->
 			if object is search
 				result = key
 				return true

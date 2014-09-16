@@ -32,8 +32,24 @@ class Game.Plane extends Game.Movable
 		@_throttleActionTime = 350
 		
 		# Health
-		@health = @maxhealth = health
+		@_health = @_maxHealth = health
 		@damage = 30
+		
+		Object.defineProperty( @, 'isAlive',
+			get: -> return @health > 0
+		)
+		
+		Object.defineProperty( @, 'health',
+			get: -> return @_health
+			set: ( value ) -> @_health = Math.max( 0, Math.min( @maxHealth, value ) )
+		)
+		
+		Object.defineProperty( @, 'maxHealth',
+			get: -> return @_maxHealth
+			set: ( value ) -> 
+				@_maxHealth = Math.max( 0, value )
+				@health = @health
+		)
 		
 		@play 'idle'
 		@face Game.Movable.Direction.down
@@ -47,7 +63,6 @@ class Game.Plane extends Game.Movable
 	inflict: ( damage ) ->
 		
 		if ( @health -= damage ) <= 0
-			@health = 0
 			
 			# Explode animation
 			@after 'explode', @destroy
@@ -59,6 +74,7 @@ class Game.Plane extends Game.Movable
 			@setVelocity()
 			
 			return true
+			
 		return false
 		
 	# Get direction modifier for a direction
@@ -93,7 +109,7 @@ class Game.Plane extends Game.Movable
 	# @return [self] the chainable self
 	#
 	update: ( event ) ->
-		return if event.paused
+		return this if event.paused or @isLevelPaused is on
 		super event
 		
 		if @_nextActionTime <= 0 or ( @_nextActionTime -= event.delta ) <= 0
@@ -120,7 +136,7 @@ class Game.Plane extends Game.Movable
 	setVelocity: () ->
 		
 		# Get the movement data
-		modifiers = _( @direction ).reduce( ( result, key ) => 
+		modifiers = _.reduce( @direction, ( result, key ) => 
 			result[ modifier ] += value for modifier, value of @getDirectionModifier key
 			return result
 		, { x: 0, y: 0 } )

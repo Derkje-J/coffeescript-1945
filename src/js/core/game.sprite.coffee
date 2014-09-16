@@ -7,8 +7,8 @@ class Game.Sprite
 	#
 	constructor: ( @spritesheet, x = 0, y = 0 ) ->
 			
-		@animation = new createjs.BitmapAnimation @spritesheet
-		@globalize = _( @animation.localToGlobal ).bind( @animation )
+		@animation = new createjs.Sprite @spritesheet
+		@globalize = _.bind( @animation.localToGlobal, @animation )
 
 		Object.defineProperties( @, 
 			'createjs':
