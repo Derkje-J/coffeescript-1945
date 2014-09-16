@@ -26,6 +26,8 @@ class Game.EnemyPlane extends Game.Plane
 		super spritesheet, x, y, health
 		@behaviour = []
 		@score = score
+		
+		Game.EventManager.trigger 'plane.create', @, []
 		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.Enemy, @ ] 
 		
 	#
@@ -35,7 +37,6 @@ class Game.EnemyPlane extends Game.Plane
 	
 		#@TODO next always off unless last item
 		for behaviour in behaviours
-			console.log behaviour
 			@addBehaviour behaviour, next
 			
 		return this
@@ -94,14 +95,14 @@ class Game.EnemyPlane extends Game.Plane
 			if group isnt Game.CollisionManager.Groups.Player
 				Game.EventManager.trigger 'points.get', @, [ @score ]
 			Builder.EnemyPlaneShards.create @x, @y, @velocity.x, @velocity.y
+			@destroy()
 			
 	#
 	#
-	destroy: () ->
+	destroy: ( ) ->
 		unless @behaves EnemyPlane.Behaviour.spawn.ondeath
-			Game.EventManager.trigger 'plane.destroy', @, []
-			return this
-			
+			return super
+
 		@health = @maxHealth
 		@play 'idle'
 		@y = if @_facing is Game.Movable.Direction.down then -64 else Game.Canvas1945.Height
