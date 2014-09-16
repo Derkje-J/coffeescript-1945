@@ -10,15 +10,15 @@ class Levels.Level0 extends Levels.Base
 		limeEnemy = new Builder.LimeEnemyPlane().randomPosition().keepLooping()
 		
 		for i in [0...10]
-			greenEnemy.create()
+			greenEnemy.create().spawn()
 		for i in [10...20]
-			whiteEnemy.create()
+			whiteEnemy.create().spawn()
 		for i in [20...30]
-			orangeEnemy.create()
+			orangeEnemy.create().spawn()
 		for i in [30...40]
-			blueEnemy.create()
+			blueEnemy.create().spawn()
 		for i in [40...50]
-			limeEnemy.create()
+			limeEnemy.create().spawn()
 		
 	#
 	#

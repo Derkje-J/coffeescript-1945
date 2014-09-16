@@ -27,7 +27,6 @@ class Game.EnemyPlane extends Game.Plane
 		@behaviour = []
 		@score = score
 		
-		Game.EventManager.trigger 'plane.create', @, []
 		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.Enemy, @ ] 
 		
 	#
@@ -35,9 +34,8 @@ class Game.EnemyPlane extends Game.Plane
 	#
 	addBehaviours: ( behaviours, next = off ) ->
 	
-		#@TODO next always off unless last item
-		for behaviour in behaviours
-			@addBehaviour behaviour, next
+		for behaviour, index in behaviours
+			@addBehaviour behaviour, index < behaviours.length - 1 or next
 			
 		return this
 		
@@ -58,6 +56,12 @@ class Game.EnemyPlane extends Game.Plane
 	#
 	behaves: ( behaviour ) ->
 		return behaviour in @behaviour
+		
+	#
+	#
+	#
+	spawn: () ->
+		Game.EventManager.trigger 'plane.create', @, []
 	
 	# Updates the enemy
 	#
