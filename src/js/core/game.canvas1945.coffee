@@ -152,6 +152,14 @@ class Game.Canvas1945 extends Game.Container
 		@level.create level
 		@remove 'menu'
 		
+	#
+	#
+	#
+	finishLevel: ( nextLevel ) ->
+		@data.level = nextLevel || -1
+		@data.save()
+		@createLevel @data.level
+		
 	# On Player died
 	#
 	die: ->
