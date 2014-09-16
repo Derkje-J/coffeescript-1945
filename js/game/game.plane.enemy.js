@@ -42,18 +42,17 @@
       EnemyPlane.__super__.constructor.call(this, spritesheet, x, y, health);
       this.behaviour = [];
       this.score = score;
-      Game.EventManager.trigger('plane.create', this, []);
       Game.EventManager.trigger('collidable.create', this, [Game.CollisionManager.Groups.Enemy, this]);
     }
 
     EnemyPlane.prototype.addBehaviours = function(behaviours, next) {
-      var behaviour, _i, _len;
+      var behaviour, index, _i, _len;
       if (next == null) {
         next = false;
       }
-      for (_i = 0, _len = behaviours.length; _i < _len; _i++) {
-        behaviour = behaviours[_i];
-        this.addBehaviour(behaviour, next);
+      for (index = _i = 0, _len = behaviours.length; _i < _len; index = ++_i) {
+        behaviour = behaviours[index];
+        this.addBehaviour(behaviour, index < behaviours.length - 1 || next);
       }
       return this;
     };
@@ -76,6 +75,10 @@
 
     EnemyPlane.prototype.behaves = function(behaviour) {
       return __indexOf.call(this.behaviour, behaviour) >= 0;
+    };
+
+    EnemyPlane.prototype.spawn = function() {
+      return Game.EventManager.trigger('plane.create', this, []);
     };
 
     EnemyPlane.prototype.update = function(event) {

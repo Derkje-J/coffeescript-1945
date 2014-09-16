@@ -16,7 +16,7 @@
     GreenEnemyPlane.prototype.create = function() {
       var builder;
       if (GreenEnemyPlane.SpriteSheet != null) {
-        return (new Game.EnemyPlane(GreenEnemyPlane.SpriteSheet)).addBehaviours(this.getBehaviours());
+        return GreenEnemyPlane.__super__.create.call(this, new Game.EnemyPlane(GreenEnemyPlane.SpriteSheet)).addBehaviours(this.getBehaviours());
       }
       builder = new Builder.GreenEnemyPlane();
       builder.animationExtra('idle', 4, 466, 32, 32, 1, 1, 3, 3, true, 2);
@@ -26,7 +26,7 @@
       builder.animation('upside', 136, 367, 32, 32, 1, 1, 2, 2);
       builder.data.animations['upside'].frames.push(_.last(builder.data.animations['loop'].frames));
       GreenEnemyPlane.SpriteSheet = builder.createjs;
-      return (new Game.EnemyPlane(GreenEnemyPlane.SpriteSheet)).addBehaviours(this.getBehaviours());
+      return GreenEnemyPlane.__super__.create.call(this, new Game.EnemyPlane(GreenEnemyPlane.SpriteSheet)).addBehaviours(this.getBehaviours());
     };
 
     return GreenEnemyPlane;

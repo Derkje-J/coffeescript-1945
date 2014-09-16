@@ -19,20 +19,20 @@
       blueEnemy = new Builder.BlueEnemyPlane().randomPosition().keepLooping().keepRespawning();
       limeEnemy = new Builder.LimeEnemyPlane().randomPosition().keepLooping().keepRespawning();
       for (i = _i = 0; _i < 10; i = ++_i) {
-        greenEnemy.create();
+        greenEnemy.create().spawn();
       }
       for (i = _j = 10; _j < 20; i = ++_j) {
-        whiteEnemy.create();
+        whiteEnemy.create().spawn();
       }
       for (i = _k = 20; _k < 30; i = ++_k) {
-        orangeEnemy.create();
+        orangeEnemy.create().spawn();
       }
       for (i = _l = 30; _l < 40; i = ++_l) {
-        blueEnemy.create();
+        blueEnemy.create().spawn();
       }
       _results = [];
       for (i = _m = 40; _m < 50; i = ++_m) {
-        _results.push(limeEnemy.create());
+        _results.push(limeEnemy.create().spawn());
       }
       return _results;
     };

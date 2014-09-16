@@ -58,6 +58,19 @@
       return this._behaviours;
     };
 
+    EnemyPlane.prototype.create = function(plane) {
+      if (!(plane instanceof Game.EnemyPlane)) {
+        return plane;
+      }
+      if (this._spawnPositionX !== void 0) {
+        plane.x = this._spawnPositionX;
+      }
+      if (this._spawnPositionY !== void 0) {
+        plane.y = this._spawnPositionY;
+      }
+      return plane;
+    };
+
     return EnemyPlane;
 
   })(Builder.SpriteSheet);

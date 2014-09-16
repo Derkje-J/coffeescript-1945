@@ -16,7 +16,7 @@
     BlueEnemyPlane.prototype.create = function() {
       var builder;
       if (BlueEnemyPlane.SpriteSheet != null) {
-        return (new Game.EnemyPlane(BlueEnemyPlane.SpriteSheet)).addBehaviours(this.getBehaviours());
+        return BlueEnemyPlane.__super__.create.call(this, new Game.EnemyPlane(BlueEnemyPlane.SpriteSheet)).addBehaviours(this.getBehaviours());
       }
       builder = new Builder.BlueEnemyPlane();
       builder.animationExtra('idle', 301, 466, 32, 32, 1, 1, 3, 3, true, 2);
@@ -26,7 +26,7 @@
       builder.animation('upside', 202, 367, 32, 32, 1, 1, 2, 2);
       builder.data.animations['upside'].frames.push(_.last(builder.data.animations['loop'].frames));
       BlueEnemyPlane.SpriteSheet = builder.createjs;
-      return (new Game.EnemyPlane(BlueEnemyPlane.SpriteSheet)).addBehaviours(this.getBehaviours());
+      return BlueEnemyPlane.__super__.create.call(this, new Game.EnemyPlane(BlueEnemyPlane.SpriteSheet)).addBehaviours(this.getBehaviours());
     };
 
     return BlueEnemyPlane;

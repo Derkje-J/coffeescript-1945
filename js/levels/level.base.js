@@ -35,7 +35,11 @@
       }
     };
 
-    Base.prototype.update = function(event) {};
+    Base.prototype.update = function(event) {
+      if (event.paused) {
+        return this;
+      }
+    };
 
     return Base;
 

@@ -69,6 +69,8 @@
       switch (this.levelName) {
         case 0:
           return this._injectLevelData(new Levels.Level0());
+        case 1:
+          return this._injectLevelData(new Levels.Level1());
         default:
           return this._injectLevelData(new Levels.Endless());
       }
