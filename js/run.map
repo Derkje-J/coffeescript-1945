@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "run.js",
+  "sourceRoot": "..",
+  "sources": [
+    "src\\js\\run.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;AAAA,EAAA,YAAA,CAAA;AAAA,EAGA,MAAM,CAAC,MAAP,GAAgB,CAAE,CAAA,SAAA,KAAA,GAAA;WAAA,SAAA,GAAA;aACjB,sDAAE,UAAU,KAAZ,CAAkB,CAAC,UAAnB,GAAoC,IAAA,IAAI,CAAC,UAAL,CAAA,EADnB;IAAA,EAAA;EAAA,CAAA,CAAA,CAAA,IAAA,CAAF,CAHhB,CAAA;AAAA"
+}
