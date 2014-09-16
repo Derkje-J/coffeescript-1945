@@ -45,7 +45,8 @@ class Game.Container
 	#
 	input: ( event, state ) =>
 		for key, object of @objects when object.input?
-			object.input event, state
+			if true is object.input event, state
+				return
 	
 	# Adds an object
 	#
