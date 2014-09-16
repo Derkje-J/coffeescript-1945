@@ -12,7 +12,7 @@ class Builder.OrangeEnemyPlane extends Builder.EnemyPlane
 	create: ( ) ->
 	
 		if OrangeEnemyPlane.SpriteSheet?
-			return ( new Game.EnemyPlane OrangeEnemyPlane.SpriteSheet )
+			return super ( new Game.EnemyPlane OrangeEnemyPlane.SpriteSheet )
 				.addBehaviours( @getBehaviours() )
 			
 		builder = new Builder.OrangeEnemyPlane()
@@ -21,5 +21,5 @@ class Builder.OrangeEnemyPlane extends Builder.EnemyPlane
 		builder.animationExtra( 'hide', 268, 202, 32, 32, 1, 1, 1, 1, false, 1 )
 		
 		OrangeEnemyPlane.SpriteSheet = builder.createjs
-		return ( new Game.EnemyPlane OrangeEnemyPlane.SpriteSheet )
+		return super ( new Game.EnemyPlane OrangeEnemyPlane.SpriteSheet )
 			.addBehaviours( @getBehaviours() )

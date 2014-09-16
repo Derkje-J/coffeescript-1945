@@ -66,3 +66,18 @@ class Builder.EnemyPlane extends Builder.SpriteSheet
 	#
 	getBehaviours: () ->
 		@_behaviours
+		
+	#
+	#
+	#
+	create: ( plane ) ->
+		unless plane instanceof Game.EnemyPlane
+			return plane
+		
+		if @_spawnPositionX isnt undefined
+			plane.x = @_spawnPositionX
+		
+		if @_spawnPositionY isnt undefined
+			plane.y = @_spawnPositionY
+			
+		return plane

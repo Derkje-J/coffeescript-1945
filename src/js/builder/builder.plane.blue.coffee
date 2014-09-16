@@ -12,7 +12,7 @@ class Builder.BlueEnemyPlane extends Builder.EnemyPlane
 	create: ( ) ->
 	
 		if BlueEnemyPlane.SpriteSheet?
-			return ( new Game.EnemyPlane BlueEnemyPlane.SpriteSheet )
+			return super ( new Game.EnemyPlane BlueEnemyPlane.SpriteSheet )
 				.addBehaviours( @getBehaviours() )
 			
 		builder = new Builder.BlueEnemyPlane()
@@ -24,5 +24,5 @@ class Builder.BlueEnemyPlane extends Builder.EnemyPlane
 		builder.data.animations[ 'upside' ].frames.push _.last builder.data.animations[ 'loop' ].frames 
 		
 		BlueEnemyPlane.SpriteSheet = builder.createjs
-		return ( new Game.EnemyPlane BlueEnemyPlane.SpriteSheet )
+		return super ( new Game.EnemyPlane BlueEnemyPlane.SpriteSheet )
 			.addBehaviours( @getBehaviours() )

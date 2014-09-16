@@ -12,7 +12,7 @@ class Builder.LimeEnemyPlane extends Builder.EnemyPlane
 	create: ( ) ->
 	
 		if LimeEnemyPlane.SpriteSheet?
-			return ( new Game.EnemyPlane LimeEnemyPlane.SpriteSheet )
+			return super ( new Game.EnemyPlane LimeEnemyPlane.SpriteSheet )
 				.addBehaviours( @getBehaviours() )
 			
 		builder = new Builder.LimeEnemyPlane()
@@ -24,5 +24,5 @@ class Builder.LimeEnemyPlane extends Builder.EnemyPlane
 		builder.data.animations[ 'upside' ].frames.push _.last builder.data.animations[ 'loop' ].frames 
 		
 		LimeEnemyPlane.SpriteSheet = builder.createjs
-		return ( new Game.EnemyPlane LimeEnemyPlane.SpriteSheet )
+		return super ( new Game.EnemyPlane LimeEnemyPlane.SpriteSheet )
 			.addBehaviours( @getBehaviours() )
