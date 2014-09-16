@@ -25,15 +25,17 @@ class Game.Level extends Game.Container
 	#
 	onPlaneCreated: ( source ) ->		
 		@addTo 'level', _.uniqueId( 'plane' ), source
+		@level.planeCreated( source )
 		
 	# On plane destroyed
 	#
 	# @param source [Game.Plane] the plane
 	#
 	onPlaneDestroyed: ( source ) ->
+	
 		if source instanceof Game.EnemyPlane
-			@removeFrom 'level', @get( 'level' ).findKey source		
-			
+			@level.planeDestroyed source
+			@removeFrom 'level', @get( 'level' ).findKey source
 		else if source instanceof Game.Player
 			@game.die()
 			
@@ -84,10 +86,30 @@ class Game.Level extends Game.Container
 		@createLayers()
 		@createHeadsUpDisplay()
 		
+		@_load level
+		
 		#@pause()
 		# @TODO show mission
 		
 		return this
+		
+	#
+	#
+	#
+	_load: ( level ) ->
+
+		switch level
+			when 0
+				@_injectLevelData new Levels.Level0()
+			else
+				@_injectLevelData new Levels.Endless()
+				
+	#
+	#
+	#
+	_injectLevelData: ( level ) ->
+		@level = level
+		@level.injectInto @
 		
 	# Creates the background
 	#
@@ -107,34 +129,19 @@ class Game.Level extends Game.Container
 		@add 'above', new Game.Container()
 		
 		@addTo 'level', 'player', @player = Builder.PlayerPlane.create()
-		
-		greenEnemy = new Builder.GreenEnemyPlane().randomPosition().keepLooping()
-		whiteEnemy = new Builder.WhiteEnemyPlane().randomPosition().keepLooping()
-		orangeEnemy = new Builder.OrangeEnemyPlane().randomPosition().keepLooping()
-		blueEnemy = new Builder.BlueEnemyPlane().randomPosition().keepLooping()
-		limeEnemy = new Builder.LimeEnemyPlane().randomPosition().keepLooping()
-		
-		for i in [0...10]
-			@addTo 'level', 'enemy-' + i, enemy = greenEnemy.create()
-		for i in [10...20]
-			@addTo 'level', 'enemy-' + i, enemy = whiteEnemy.create()
-		for i in [20...30]
-			@addTo 'level', 'enemy-' + i, enemy = orangeEnemy.create()
-		for i in [30...40]
-			@addTo 'level', 'enemy-' + i, enemy = blueEnemy.create()
-		for i in [40...50]
-			@addTo 'level', 'enemy-' + i, enemy = limeEnemy.create()
-			
+					
 	#
 	#
 	#
 	pause: () ->
+		@level.pause()
 		Game.EventManager.trigger 'level.paused', @, [ on ]
 	
 	#
 	#
 	#
 	resume: () ->
+		@level.resume()
 		Game.EventManager.trigger 'level.paused', @, [ off ]
 		
 	# Creates the headsup display
@@ -181,8 +188,10 @@ class Game.Level extends Game.Container
 	clearLayers: () ->
 		@removeFrom 'level', 'player'
 		
-		for i in [0...50]
-			@removeFrom 'level', 'enemy-' + i
+		for key, object of @get( 'level' ).objects
+			@removeFrom 'level', key
+			
+		#@level.clear()
 			
 		@remove 'above'
 		@remove 'level'
@@ -204,3 +213,18 @@ class Game.Level extends Game.Container
 		@clear()
 		@create()
 		return this
+		
+	#
+	#
+	#
+	update: ( event ) ->
+		return this if event.paused or @level is undefined or @level.isPaused is on
+		super
+		@level.update event
+		return this
+		
+	#
+	#
+	#
+	#input : -> esc -> pause etc
+	

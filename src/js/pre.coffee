@@ -1,5 +1,6 @@
 'use strict'
 ( exports ? this ).Game = {}
+( exports ? this ).Levels = {}
 ( exports ? this ).Display = {}
 ( exports ? this ).Builder = {}
 
