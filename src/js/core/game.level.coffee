@@ -24,7 +24,7 @@ class Game.Level extends Game.Container
 	# @param source [Game.Plane] the plane
 	#
 	onPlaneCreated: ( source ) ->		
-		@addTo 'level', _( 'plane' ).uniqueId(), source
+		@addTo 'level', _.uniqueId( 'plane' ), source
 		
 	# On plane destroyed
 	#
@@ -51,7 +51,7 @@ class Game.Level extends Game.Container
 	# @param buller [Game.Bullet] the bullet
 	#
 	onBulletCreated: ( source, bullet ) ->
-		@addTo 'below', _( 'bullet' ).uniqueId(), bullet
+		@addTo 'below', _.uniqueId( 'bullet' ), bullet
 		
 	# On bullet destroyed
 	#
@@ -65,7 +65,7 @@ class Game.Level extends Game.Container
 	# @param source [Game.Shard] the shard
 	#
 	onShardCreated: ( source ) ->
-		@addTo 'below', _( 'shard' ).uniqueId(), source
+		@addTo 'below', _.uniqueId( 'shard' ), source
 	
 	# On shard destroyed
 	#
@@ -84,6 +84,8 @@ class Game.Level extends Game.Container
 		@createLayers()
 		@createHeadsUpDisplay()
 		
+		@pause()
+			
 		return this
 		
 	# Creates the background
@@ -115,6 +117,18 @@ class Game.Level extends Game.Container
 			@addTo 'level', 'enemy-' + i, enemy = Builder.BlueEnemyPlane.create()
 		for i in [40...50]
 			@addTo 'level', 'enemy-' + i, enemy = Builder.LimeEnemyPlane.create()
+			
+	#
+	#
+	#
+	pause: () ->
+		Game.EventManager.trigger 'level.paused', @, [ on ]
+	
+	#
+	#
+	#
+	resume: () ->
+		Game.EventManager.trigger 'level.paused', @, [ off ]
 		
 	# Creates the headsup display
 	#

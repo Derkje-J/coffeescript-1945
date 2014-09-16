@@ -33,6 +33,7 @@ class Game.Island extends Game.Movable
 	# @param event [Object] the update event
 	#
 	update: ( event ) ->
+		return this if event.paused or @isLevelPaused is on
 		super event
 		if @y > Game.Canvas1945.Height + Island.Padding
 			@y = -Island.Padding

@@ -35,12 +35,22 @@ class Game.Movable extends Game.Sprite
 			x: vx
 			y: vy
 			
+		@_levelPaused = off
+		Game.EventManager.on 'level.paused', @, @onPaused
+		
+	#
+	#
+	#
+	onPaused: ( source, state ) ->
+		@_levelPaused = state
+		return true
+			
 	# Updates the movable sprite
 	#
 	# @param event [TickEvent] the tick event
 	#
 	update: ( event ) ->
-		return this if event.paused
+		return this if event.paused or @_levelPaused is on
 		dt = event.delta / 1000
 		for prop, value of @velocity
 			@[ prop ] += dt * value

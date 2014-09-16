@@ -36,13 +36,13 @@ class Game.Player extends Game.Plane
 	# @param spritesheet [createjs.SpriteSheet] the spritesheet for this sprite
 	#
 	constructor: ( spritesheet ) ->
-		super spritesheet, undefined, Game.Canvas1945.LevelHeight
+		super spritesheet, undefined, Game.Canvas1945.LevelHeight - Player.Padding
 		@health = 100
 		@face Game.Movable.Direction.up
 		@move()		
 		
 		@speed.forward = 2
-		
+
 		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.Player, @ ]
 	
 	# Updates the player
@@ -51,7 +51,7 @@ class Game.Player extends Game.Plane
 	# @return [self] the chainable self
 	#
 	update: ( event ) ->
-		return if event.paused
+		return this if event.paused or @isLevelPaused is on
 		super event
 		
 		# Bound movement
@@ -67,6 +67,7 @@ class Game.Player extends Game.Plane
 	collide: ( group, object ) ->
 		if @inflict object.damage
 			Game.EventManager.trigger 'collidable.destroy', @, [ Game.CollisionManager.Groups.Player, @ ]
+			
 		
 	# Update input for the player
 	#
@@ -75,9 +76,12 @@ class Game.Player extends Game.Plane
 	# @return [self] the chainable self
 	#
 	input: ( event, state ) ->
+		
+		if @isLevelPaused is on
+			return this
 			
 		# Not movable if dead
-		if @health <= 0
+		unless @isAlive
 			return this
 		
 		dir = null
@@ -102,8 +106,8 @@ class Game.Player extends Game.Plane
 		
 		# Update the direction array
 		unless state
-			@direction = _( @direction ).without dir 
-		else unless _( @direction ).contains dir
+			@direction = _.without @direction, dir 
+		else unless _.contains @direction, dir
 			@direction.push dir
 		
 		@setVelocity()

@@ -52,7 +52,7 @@ class Game.EnemyPlane extends Game.Plane
 	# @return [self] the chainable self
 	#
 	update: ( event ) ->
-		return if event.paused
+		return if event.paused or @isLevelPaused is on
 		super event
 		
 		# Out of bounds

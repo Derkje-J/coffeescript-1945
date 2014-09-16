@@ -25,7 +25,7 @@ class Game.Bullet extends Game.Movable
 	# @return [self] the chainable self
 	#
 	update: ( event ) ->
-		return if event.paused
+		return this if event.paused or @isLevelPaused is on
 		super event
 		
 		if @y < -64 or @y > Game.Canvas1945.Height or @x < -64 or @x > Game.Canvas1945.Width + 64

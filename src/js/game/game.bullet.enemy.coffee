@@ -15,7 +15,7 @@ class Game.EnemyBullet extends Game.Bullet
 	# @param args [Object] additional arguments
 	#
 	constructor: ( spritesheet, x, y, vx, vy = 150, type = 'point', damage = 1, args = {} ) ->
-		super spritesheet, x, y, vx, vy, type, damage, args	
+		super spritesheet, x, y, vx, vy, type, damage, args
 		Game.EventManager.trigger 'collidable.create', @, [ Game.CollisionManager.Groups.EnemyBullet, @ ]
 
 	# Destroys the bullet
