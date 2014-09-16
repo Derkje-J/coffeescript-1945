@@ -96,9 +96,9 @@ class Game.Level extends Game.Container
 	#
 	#
 	#
-	_load: ( level ) ->
-
-		switch level
+	_load: ( @levelName = @levelName ) ->
+		console.log "Loading level #{ @levelName }"
+		switch @levelName
 			when 0
 				@_injectLevelData new Levels.Level0()
 			else
@@ -143,6 +143,15 @@ class Game.Level extends Game.Container
 	resume: () ->
 		@level.resume()
 		Game.EventManager.trigger 'level.paused', @, [ off ]
+		
+	#
+	#
+	#
+	finish: ( nextLevel ) =>
+		@clear()
+		Game.EventManager.trigger 'level.finish', @, [ nextLevel ]
+		@game.finishLevel nextLevel
+		
 		
 	# Creates the headsup display
 	#
