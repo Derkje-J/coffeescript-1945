@@ -56,7 +56,8 @@ class Game.Canvas1945 extends Game.Container
 	#
 	# @TODO asset manager and loading bar. For now this will do
 	ready: =>
-		@level.create @data.level
+		@get( 'menu' ).ready()
+		#@level.create @data.level
 		
 	# Sets the ticker
 	#
@@ -143,13 +144,24 @@ class Game.Canvas1945 extends Game.Container
 		@remove 'background'
 		return this
 		
+	#
+	#
+	#
+	createLevel: ( level ) ->
+		console.log "Starting level #{level}"
+		@level.create level
+		@remove 'menu'
+		
 	# On Player died
 	#
 	die: ->
 		if ( --@data.lives ) > 0
+			@data.save()
 			@level.restart()
 		else
 			@pause()
+			@data.truncate()
+			# @TODO show dead screen and ask for restart
 		
 	#
 	#
